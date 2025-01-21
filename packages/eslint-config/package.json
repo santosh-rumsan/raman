@@ -5,9 +5,10 @@
   "private": true,
   "exports": {
     "./base": "./base.js",
-     "./react-internal": "./react-internal.js",
+    "./nest-js": "./nestjs.js",
+    "./react-internal": "./react-internal.js",
     "./next-js": "./next.js",
-    "./prettier-base":  "./prettier-base.js"
+    "./prettier-base": "./prettier-base.js"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^15.1.0",
