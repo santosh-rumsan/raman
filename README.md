@@ -10,7 +10,7 @@ pnpm run dev
 
 ## Adding libraries
 
-- Create package.json as show in textparser folder (Change the name as required)
+- Create package.json as show in sdk folder (Change the name as required)
   - Take note of the following. These are what gets imported in the applications.
 
 ```
