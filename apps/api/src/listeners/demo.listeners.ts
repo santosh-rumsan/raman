@@ -2,7 +2,7 @@ import {Injectable, Logger} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import {OnEvent} from '@nestjs/event-emitter';
 import {tRC} from '@rumsan/sdk';
-import {EVENTS} from '@workspace/sdk/events';
+import {EVENTS} from '@workspace/sdk/constants/events';
 import {WebSocketService} from '../app/websocket.service';
 
 @Injectable()

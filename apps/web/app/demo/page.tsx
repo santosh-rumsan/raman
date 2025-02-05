@@ -2,7 +2,7 @@
 
 import {useWebSocketEvent} from '@/hooks/ws-event.hook';
 import {usePing} from '@/queries/demo.query';
-import {EVENTS} from '@workspace/sdk/events';
+import {EVENTS} from '@workspace/sdk/constants/events';
 import {Alert, AlertDescription} from '@workspace/ui/components/alert';
 import {Button} from '@workspace/ui/components/button';
 

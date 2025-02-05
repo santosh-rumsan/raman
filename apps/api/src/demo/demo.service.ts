@@ -1,8 +1,8 @@
 import {Injectable} from '@nestjs/common';
 import {EventEmitter2} from '@nestjs/event-emitter';
 import {tRC} from '@rumsan/sdk';
-import {allCaps} from '@workspace/sdk';
-import {EVENTS} from '@workspace/sdk/events';
+import {EVENTS} from '@workspace/sdk/constants/events';
+import {allCaps} from '@workspace/sdk/utils/misc';
 
 @Injectable()
 export class DemoService {
