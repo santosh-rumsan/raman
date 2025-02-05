@@ -1,17 +1,24 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import {Geist, Geist_Mono} from 'next/font/google';
 
-import "@workspace/ui/globals.css";
-import { Providers } from "@/components/providers";
+import {Providers} from '@/components/providers';
+import '@workspace/ui/globals.css';
 
 const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+  subsets: ['latin'],
+  variable: '--font-mono',
 });
+
+//TODO: Update app metadata
+export const metadata = {
+  title: '[App Name]',
+  description:
+    'This is a Rumsan sample app. Update this description for SEO friendliness.',
+};
 
 export default function RootLayout({
   children,
