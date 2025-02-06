@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@workspace/ui/components",
-    "utils": "@workspace/ui/lib/utils",
-    "hooks": "@workspace/ui/hooks",
-    "lib": "@workspace/ui/lib",
-    "ui": "@workspace/ui/components"
+    "components": "@rumsan/shadcn-ui/components",
+    "utils": "@rumsan/shadcn-ui/lib/utils",
+    "hooks": "@rumsan/shadcn-ui/hooks",
+    "lib": "@rumsan/shadcn-ui/lib",
+    "ui": "@rumsan/shadcn-ui/components"
   }
 }

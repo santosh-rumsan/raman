@@ -1,7 +1,7 @@
 'use client';
 
-import {Button} from '@workspace/ui/components/button';
-import {useRouter} from 'next/navigation';
+import { Button } from '@rumsan/shadcn-ui/components/button';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const router = useRouter();

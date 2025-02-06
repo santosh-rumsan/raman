@@ -2,9 +2,9 @@
 
 import {useWebSocketEvent} from '@/hooks/ws-event.hook';
 import {usePing} from '@/queries/demo.query';
+import {Alert, AlertDescription} from '@rumsan/shadcn-ui/components/alert';
+import {Button} from '@rumsan/shadcn-ui/components/button';
 import {EVENTS} from '@workspace/sdk/constants/events';
-import {Alert, AlertDescription} from '@workspace/ui/components/alert';
-import {Button} from '@workspace/ui/components/button';
 
 import {useState} from 'react';
 
