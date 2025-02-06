@@ -1,4 +1,4 @@
-import {formatResponse} from '@rumsan/sdk/utils';
+import {formatResponse, FormattedResponse} from '@rumsan/sdk/utils';
 import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export class DemoClient {
@@ -9,8 +9,10 @@ export class DemoClient {
     this._client = apiClient;
   }
 
-  async hello(config?: AxiosRequestConfig) {
+  async hello(
+    config?: AxiosRequestConfig,
+  ): Promise<FormattedResponse<Record<string, string>>> {
     const response = await this._client.get(`${this._prefix}/hello`, config);
-    return formatResponse<Record<string, string>>(response);
+    return formatResponse<Record<string, string>>(response as any);
   }
 }

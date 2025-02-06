@@ -1,12 +1,15 @@
 'use client';
 
-import { OTPInput, OTPInputContext } from 'input-otp';
-import { Minus } from 'lucide-react';
+import {OTPInput, OTPInputContext, SlotProps} from 'input-otp';
+import {Minus} from 'lucide-react';
 import * as React from 'react';
 
-import { cn } from '@rumsan/shadcn-ui/lib/utils';
+import {cn} from '@rumsan/shadcn-ui/lib/utils';
 
-const InputOTP = React.forwardRef<
+const InputOTP: React.ForwardRefExoticComponent<
+  React.ComponentPropsWithoutRef<typeof OTPInput> &
+    React.RefAttributes<React.ElementRef<typeof OTPInput>>
+> = React.forwardRef<
   React.ElementRef<typeof OTPInput>,
   React.ComponentPropsWithoutRef<typeof OTPInput>
 >(({className, containerClassName, ...props}, ref) => (
@@ -35,7 +38,9 @@ const InputOTPSlot = React.forwardRef<
   React.ComponentPropsWithoutRef<'div'> & {index: number}
 >(({index, className, ...props}, ref) => {
   const inputOTPContext = React.useContext(OTPInputContext);
-  const {char, hasFakeCaret, isActive} = inputOTPContext.slots[index];
+  const {char, hasFakeCaret, isActive} = inputOTPContext.slots[
+    index
+  ] as SlotProps;
 
   return (
     <div
@@ -68,5 +73,4 @@ const InputOTPSeparator = React.forwardRef<
 ));
 InputOTPSeparator.displayName = 'InputOTPSeparator';
 
-export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
-
+export {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot};

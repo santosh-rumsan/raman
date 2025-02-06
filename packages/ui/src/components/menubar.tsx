@@ -1,20 +1,22 @@
 'use client';
 
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
-import { Check, ChevronRight, Circle } from 'lucide-react';
+import {Check, ChevronRight, Circle} from 'lucide-react';
 import * as React from 'react';
 
-import { cn } from '@rumsan/shadcn-ui/lib/utils';
+import {cn} from '@rumsan/shadcn-ui/lib/utils';
 
-const MenubarMenu = MenubarPrimitive.Menu;
+type MenubarMenuType = typeof MenubarPrimitive.Menu;
+type MenubarGroupType = typeof MenubarPrimitive.Group;
+type MenubarPortalType = typeof MenubarPrimitive.Portal;
+type MenubarSubType = typeof MenubarPrimitive.Sub;
+type MenubarRadioGroupType = typeof MenubarPrimitive.RadioGroup;
 
-const MenubarGroup = MenubarPrimitive.Group;
-
-const MenubarPortal = MenubarPrimitive.Portal;
-
-const MenubarSub = MenubarPrimitive.Sub;
-
-const MenubarRadioGroup = MenubarPrimitive.RadioGroup;
+const MenubarMenu: MenubarMenuType = MenubarPrimitive.Menu;
+const MenubarGroup: MenubarGroupType = MenubarPrimitive.Group;
+const MenubarPortal: MenubarPortalType = MenubarPrimitive.Portal;
+const MenubarSub: MenubarSubType = MenubarPrimitive.Sub;
+const MenubarRadioGroup: MenubarRadioGroupType = MenubarPrimitive.RadioGroup;
 
 const Menubar = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Root>,
@@ -232,6 +234,5 @@ export {
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-  MenubarTrigger
+  MenubarTrigger,
 };
-

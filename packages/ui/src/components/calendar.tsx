@@ -1,20 +1,30 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {ChevronLeft, ChevronRight} from 'lucide-react';
 import * as React from 'react';
-import { DayPicker } from 'react-day-picker';
+import {DayPicker} from 'react-day-picker';
 
-import { buttonVariants } from '@rumsan/shadcn-ui/components/button';
-import { cn } from '@rumsan/shadcn-ui/lib/utils';
+import {buttonVariants} from '@rumsan/shadcn-ui/components/button';
+import {cn} from '@rumsan/shadcn-ui/lib/utils';
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+interface CustomComponents {
+  IconLeft?: React.ComponentType<{className?: string; [key: string]: any}>;
+  IconRight?: React.ComponentType<{className?: string; [key: string]: any}>;
+  // other custom components...
+}
 
-function Calendar({
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  classNames?: {[key: string]: string};
+  components?: CustomComponents;
+};
+
+const Calendar: React.FC<CalendarProps> = ({
   className,
   classNames,
   showOutsideDays = true,
+  components,
   ...props
-}: CalendarProps) {
+}) => {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -60,18 +70,19 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({className, ...props}) => (
+        IconLeft: ({className, ...props}: {className?: string}) => (
           <ChevronLeft className={cn('h-4 w-4', className)} {...props} />
         ),
-        IconRight: ({className, ...props}) => (
+        IconRight: ({className, ...props}: {className?: string}) => (
           <ChevronRight className={cn('h-4 w-4', className)} {...props} />
         ),
+        ...components,
       }}
       {...props}
     />
   );
-}
+};
+
 Calendar.displayName = 'Calendar';
 
-export { Calendar };
-
+export {Calendar};
