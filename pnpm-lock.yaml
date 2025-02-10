@@ -63,12 +63,15 @@ importers:
       '@rumsan/extensions':
         specifier: ^0.1.148
         version: 0.1.148
+      '@rumsan/prisma':
+        specifier: ^1.0.140
+        version: 1.0.140
+      '@rumsan/raman':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@rumsan/sdk':
         specifier: ^0.1.152
         version: 0.1.152
-      '@workspace/sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdk
       nest-winston:
         specifier: ^1.10.2
         version: 1.10.2(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(winston@3.17.0)
@@ -172,6 +175,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: ^2.2.2
         version: 2.2.2
+      '@rumsan/raman':
+        specifier: workspace:*
+        version: link:../../packages/sdk
       '@rumsan/react-query':
         specifier: ^0.0.70
         version: 0.0.70
@@ -184,9 +190,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.66.0
         version: 5.66.0(react@18.3.1)
-      '@workspace/sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdk
       lucide-react:
         specifier: 0.456.0
         version: 0.456.0(react@18.3.1)
@@ -279,8 +282,8 @@ importers:
         specifier: ^0.1.152
         version: 0.1.152
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: ^1.7.9
+        version: 1.7.9
     devDependencies:
       '@workspace/typescript-config':
         specifier: workspace:*
@@ -2147,11 +2150,17 @@ packages:
   '@rumsan/prisma@1.0.131':
     resolution: {integrity: sha512-/sAC3GRj9PctLvLDVOV/J9UH5CIhxe7XocvtRmJXHGZ3LG+UwOdHYK+1LGIWAUvipFQ4lmXeWITjOWM4rsLJkg==, tarball: https://npm.pkg.github.com/download/@rumsan/prisma/1.0.131/a611bf9e3a955a90a5e0c0ee3e466dfe74a65cf6}
 
+  '@rumsan/prisma@1.0.140':
+    resolution: {integrity: sha512-n44tzjMAV4Mr+TpAwgBblkAwnSgnkOcltUf9KUdgWsQnhQh+ubaKiRC4dYhKT+Zgvzat2WlVNOLnk9yB3a4KDg==, tarball: https://npm.pkg.github.com/download/@rumsan/prisma/1.0.140/1667eb935135054a7858e0e567e8054a825d5b0d}
+
   '@rumsan/react-query@0.0.70':
     resolution: {integrity: sha512-bZYFJ0fwNb7Cd/CQxEXATOf86XU1ilP8AdzX1OqLWT2rMJBN+ygHTrnbt83mhumxs4xThfvabIDA7n3PLO3E6Q==, tarball: https://npm.pkg.github.com/download/@rumsan/react-query/0.0.70/baec5e094b88519ac58600c53c7fa890688ae03d}
 
   '@rumsan/sdk@0.1.106':
     resolution: {integrity: sha512-OAa+T7WIh7w41PvLmPq72H71CBWTWYyJTXiJ0qZvsn5xTNfcZ0bzT7aJe3j+2LTGd5R1vt249R+pz9G7MMSrEQ==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.106/107a44093c51b62e0e4ae721a770290e9239ad19}
+
+  '@rumsan/sdk@0.1.107':
+    resolution: {integrity: sha512-X8Qj1u5tTruwSEC9tXkvJ3/LDofdpFliq6t0WCnVtCcojtIm/nxwUlwB/To4vCcvnvTcVHGYu63oQRLL8y/Sdw==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.107/ecc06e617b87236aec6b1c2000f9e4aa4baa94b6}
 
   '@rumsan/sdk@0.1.151':
     resolution: {integrity: sha512-aFVjQctRzhtJNd0PvXLAshBeUBoDmVMVWYHBqkFrEqMnDmITli4MxyZrSApc3+qwzuvmoc60PhuCRFK+DobiPA==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.151/400b01ab61c09cdc9186285c1011264001934675}
@@ -2811,8 +2820,8 @@ packages:
   avvio@9.1.0:
     resolution: {integrity: sha512-fYASnYi600CsH/j9EQov7lECAniYiBFiiAtBNuZYLA2leLe9qOvZzqYHFjtIj6gD2VMoMLP14834LFWvr4IfDw==}
 
-  axios@1.7.7:
-    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
+  axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
@@ -8349,11 +8358,17 @@ snapshots:
     dependencies:
       '@rumsan/sdk': 0.1.106
 
+  '@rumsan/prisma@1.0.140':
+    dependencies:
+      '@rumsan/sdk': 0.1.107
+
   '@rumsan/react-query@0.0.70':
     dependencies:
       '@rumsan/sdk': 0.1.152
 
   '@rumsan/sdk@0.1.106': {}
+
+  '@rumsan/sdk@0.1.107': {}
 
   '@rumsan/sdk@0.1.151': {}
 
@@ -9127,7 +9142,7 @@ snapshots:
       '@fastify/error': 4.0.0
       fastq: 1.19.0
 
-  axios@1.7.7:
+  axios@1.7.9:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.1

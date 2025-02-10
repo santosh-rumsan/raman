@@ -1,9 +1,9 @@
 'use client';
 
 import {CONFIG} from '@/lib/config';
+import {ApiClient} from '@rumsan/raman/clients/index';
 import {RumsanProvider, useRumsanAppStore} from '@rumsan/react-query';
 import {QueryClient} from '@tanstack/react-query';
-import {ApiClient} from '@workspace/sdk/clients/index';
 import {ThemeProvider as NextThemesProvider} from 'next-themes';
 import * as React from 'react';
 import {WebSocketProvider} from './websocket.provider';

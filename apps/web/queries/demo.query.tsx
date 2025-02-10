@@ -1,4 +1,4 @@
-import {ApiClient} from '@workspace/sdk/clients/index';
+import {ApiClient} from '@rumsan/raman/clients/index';
 
 import {useRumsan} from '@rumsan/react-query';
 import {useQuery} from '@tanstack/react-query';

@@ -13,6 +13,455 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  cuid       String  @id @unique @default(cuid())
+  name       String
+  currency   String  @default("NPR")
+  acctNumber String?
+  bankCode   String?
+  balance    Int     @default(0)
+
+  Expenses            Expense[]
+  AccountTransactions AccountTransaction[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_accounts")
+}
+
+enum AccountTxnStatus {
+  UNRECONCILED
+  RECONCILED
+  DISCARDED
+}
+
+enum AccountTxnType {
+  INCOME
+  EXPENSE
+  TRANSFER
+  ADJUSTMENT
+}
+
+model AccountTransaction {
+  cuid      String           @id @unique @default(cuid())
+  accountId String
+  expenseId String?
+  status    AccountTxnStatus @default(UNRECONCILED)
+  type      AccountTxnType?
+
+  pstdDate        DateTime
+  txnCurrencyCode String
+  description     String
+  txnType         String
+  debitAmount     Float
+  creditAmount    Float
+  balanceAmount   Float
+  chequeNumber    String?
+  txnAmount       Float
+  txnDate         DateTime
+  txnId           String
+
+  Account Account  @relation(fields: [accountId], references: [cuid])
+  Expense Expense? @relation(fields: [expenseId], references: [cuid])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  @@unique([accountId, txnId], name: "AccountTxnIdentifier")
+  @@map("tbl_accounts_txns")
+}
+
+model Category {
+  cuid   String  @id @unique @default(cuid())
+  name   String
+  group  String?
+  meta   Json?   @db.JsonB()
+  extras Json?   @db.JsonB()
+
+  Invoices Invoice[]
+  Expenses Expense[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@unique([name, group], name: "CategoryNameGroupIdentifier")
+  @@map("tbl_categories")
+}
+
+model Project {
+  cuid         String  @id @unique @default(cuid())
+  name         String  @unique
+  departmentId String
+  owner        String?
+  meta         Json?   @db.JsonB()
+  extras       Json?   @db.JsonB()
+
+  Invoices     Invoice[]
+  Expenses     Expense[]
+  Department   Department   @relation(fields: [departmentId], references: [cuid])
+  ProjectOwner UserDetails? @relation("ProjectOwner", fields: [owner], references: [cuid])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  // User      User?     @relation(fields: [userId], references: [id])
+  // userId           Int?
+
+  @@map("tbl_projects")
+}
+
+enum Currency {
+  NPR
+  USD
+  GBP
+  EUR
+  USDC
+}
+
+model Expense {
+  cuid         String       @id @unique @default(cuid())
+  date         DateTime
+  description  String
+  departmentId String
+  categoryId   String
+  amount       Int
+  currency     Currency     @default(NPR)
+  vatAmount    Int?
+  projectId    String?
+  invoiceType  InvoiceType? @default(ESTIMATE)
+  accountId    String?
+  attachments  Json?        @db.JsonB()
+  source       String       @default("manual")
+  remarks      String?
+  isPending    Boolean      @default(true)
+  extras       Json?        @db.JsonB()
+
+  AccountTransaction AccountTransaction[]
+  Salaries           Salary[]
+  Invoices           Invoice[]
+  Project            Project?             @relation(fields: [projectId], references: [cuid])
+  Category           Category?            @relation(fields: [categoryId], references: [cuid])
+  Account            Account?             @relation(fields: [accountId], references: [cuid])
+  Department         Department           @relation(fields: [departmentId], references: [cuid])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_expenses")
+}
+
+model SalaryDraft {
+  cuid                 String      @id @unique @default(cuid())
+  month                Int
+  year                 Int
+  status               DraftStatus @default(OPEN)
+  numberOfEmployee     Int
+  numberOfEmployeePaid Int         @default(0)
+  totalAmountDue       Int?
+  totalAmountPaid      Int?        @default(0)
+
+  Salary Salary[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@unique([month, year])
+  @@index([month, year])
+  @@map("tbl_salaries_draft")
+}
+
+model Salary {
+  cuid          String       @id @unique @default(cuid())
+  employeeId    String?
+  salaryDraftId String?
+  amountDue     Int?
+  amountPaid    Int?         @default(0)
+  isPartial     Boolean      @default(false)
+  expenseId     String?
+  status        SalaryStatus @default(UNPAID)
+  isArchived    Boolean      @default(false)
+
+  Employee UserDetails? @relation(fields: [employeeId], references: [cuid])
+  Draft    SalaryDraft? @relation(fields: [salaryDraftId], references: [cuid])
+  Expense  Expense?     @relation(fields: [expenseId], references: [cuid])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_salaries")
+}
+
+model Client {
+  cuid    String  @id @unique @default(cuid())
+  name    String
+  country String  @db.VarChar(2)
+  email   String?
+  extras  Json?   @db.JsonB()
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_clients")
+}
+
+model Invoice {
+  cuid              String            @id @unique @default(cuid())
+  date              DateTime
+  description       String
+  amount            Int
+  categoryId        String
+  userId            String
+  currency          Currency          @default(NPR)
+  status            InvoiceStatusType @default(PENDING)
+  projectId         String?
+  isApproved        Boolean           @default(false)
+  receipts          Json?             @db.JsonB()
+  approvalChallenge String?           @unique @default(cuid())
+  invoiceType       InvoiceType?      @default(ESTIMATE)
+  vatAmount         Int?
+  expenseId         String?
+  reason            String?
+  reimbursedDate    DateTime?
+  reimbursedRemarks String?
+  extras            Json?             @db.JsonB()
+
+  Category Category    @relation(fields: [categoryId], references: [cuid])
+  Project  Project?    @relation(fields: [projectId], references: [cuid])
+  User     UserDetails @relation(fields: [userId], references: [cuid])
+  Expense  Expense?    @relation(fields: [expenseId], references: [cuid])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_invoices")
+}
+
+model Department {
+  cuid   String  @id @unique @default(cuid())
+  name   String  @unique
+  group  String?
+  owner  String
+  meta   Json?   @db.JsonB()
+  extras Json?   @db.JsonB()
+
+  Owner       User          @relation("DepartmentOwner", fields: [owner], references: [cuid])
+  Expenses    Expense[]
+  Projects    Project[]
+  UserDetails UserDetails[] @relation("UserDepartment")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_departments")
+}
+
+model UserDetails {
+  cuid         String    @unique
+  name         String?
+  departmentId String?
+  salary       Int       @default(0)
+  accountId    String?
+  userType     UserType?
+  managerId    String?
+  isApproved   Boolean   @default(false)
+  isEmployee   Boolean   @default(true)
+  extras       Json?     @db.JsonB()
+
+  Manager    User?       @relation("Manager", fields: [cuid], references: [cuid], map: "UserDetails_Manager_fkey")
+  User       User        @relation("UserDetails", fields: [cuid], references: [cuid])
+  Department Department? @relation("UserDepartment", fields: [departmentId], references: [cuid], map: "UserDetails_Department_fkey")
+
+  Salaries Salary[]
+  Invoices Invoice[]
+  Projects Project[] @relation("ProjectOwner")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_users_details")
+}
+
+// ++++++++++++++++++ START: @rumsan/user - User +++++++++++++++++++++++++++++++
+
+// ===================User Model==================
+model User {
+  id        Int          @id @default(autoincrement())
+  cuid      String       @unique @default(cuid())
+  gender    Gender       @default(UNKNOWN)
+  email     String?
+  phone     String?
+  wallet    String?
+  notes     String?      @db.Text()
+  sessionId String?
+  details   UserDetails? @relation("UserDetails")
+
+  Auths     Auth[]
+  UserRoles UserRole[]
+
+  ManagedUsers     UserDetails[] @relation("Manager")
+  DepartmentsOwned Department[]  @relation("DepartmentOwner")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+  deletedAt DateTime?
+  createdBy String?
+  updatedBy String?
+
+  @@map("tbl_users")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  UNKNOWN
+}
+
+enum InvoiceType {
+  VAT
+  PAN
+  ESTIMATE
+}
+
+// ++++++++++++++++++ END: @rumsan/user - User +++++++++++++++++++++++++++++++
+// ++++++++++++++++++ START: @rumsan/user - Role/Auth ++++++++++++++++++++++++
+
+// ===================Role Model==================
+model Role {
+  cuid     String  @id @unique @default(cuid())
+  name     String  @unique @db.VarChar()
+  isSystem Boolean @default(false)
+
+  Permissions Permission[]
+  UserRoles   UserRole[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+  createdBy Int?
+  updatedBy Int?
+
+  @@map("tbl_auth_roles")
+}
+
+// ===================Permission Model==================
+model Permission {
+  cuid       String  @id @unique @default(cuid())
+  roleId     String
+  action     String  @db.VarChar()
+  subject    String  @db.VarChar()
+  inverted   Boolean @default(false)
+  conditions Json?   @db.JsonB()
+  reason     String? @db.Text()
+
+  Role Role @relation(fields: [roleId], references: [cuid])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+
+  @@map("tbl_auth_permissions")
+}
+
+model UserRole {
+  id     Int       @id @default(autoincrement())
+  userId String
+  roleId String
+  expiry DateTime?
+
+  User User @relation(fields: [userId], references: [cuid])
+  Role Role @relation(fields: [roleId], references: [cuid])
+
+  createdAt DateTime @default(now())
+  createdBy Int?
+
+  @@unique([userId, roleId], name: "UserRoleIdentifier")
+  @@map("tbl_users_roles")
+}
+
+model Auth {
+  id            Int       @id @default(autoincrement())
+  userId        String
+  service       Service
+  serviceId     String
+  details       Json?     @db.JsonB()
+  challenge     String?
+  falseAttempts Int       @default(0)
+  isLocked      Boolean   @default(false)
+  lockedOnAt    DateTime?
+  lastLoginAt   DateTime?
+
+  User     User          @relation(fields: [userId], references: [cuid])
+  AuthLogs AuthSession[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt()
+  deletedAt DateTime?
+
+  @@unique([service, serviceId], name: "AuthServiceIdentifier")
+  @@map("tbl_auth")
+}
+
+model AuthSession {
+  id        Int     @id @default(autoincrement())
+  clientId  String
+  sessionId String  @unique @default(uuid())
+  authId    Int
+  ip        String?
+  details   Json?   @db.JsonB()
+  userAgent String?
+
+  Auth Auth @relation(fields: [authId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@map("tbl_auth_sessions")
+}
+
+enum Service {
+  API
+  EMAIL
+  PHONE
+  WALLET
+  GOOGLE
+  APPLE
+  FACEBOOK
+  TWITTER
+  GITHUB
+  LINKEDIN
+}
+
+// ++++++++++++++++++ END: @rumsan/user - Role/Auth ++++++++++++++++++++++++
+
 // ++++++++++++++++++ START: @rumsan/extensions/settings +++++++++++++++++++++++++++
 
 model Setting {
@@ -34,3 +483,35 @@ enum SettingDataType {
 }
 
 // ++++++++++++++++++ END: @rumsan/extensions/settings +++++++++++++++++++++++++++
+
+enum TxType {
+  EXPENSE
+  ADJUSTMENT
+  TRANSFER
+  INCOME
+}
+
+enum UserType {
+  EMPLOYEE
+  VOLUNTEER
+  CONTRACTOR
+  INTERN
+}
+
+enum DraftStatus {
+  OPEN
+  CLOSE
+}
+
+enum SalaryStatus {
+  PAID
+  PARTIAL
+  UNPAID
+}
+
+enum InvoiceStatusType {
+  PENDING
+  APPROVED
+  REJECTED
+  REIMBURSED
+}
