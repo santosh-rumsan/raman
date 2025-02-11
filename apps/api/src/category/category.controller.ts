@@ -11,10 +11,9 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { xRC } from '@rumsan/extensions/decorators';
+import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants/index';
 import { tRC } from '@rumsan/sdk/types';
-import { AbilitiesGuard, CheckAbilities } from '@rumsan/user';
-import { ACTIONS, APP, SUBJECTS } from '../constants';
-import { JwtGuard } from '../guards';
+import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {
@@ -65,7 +64,6 @@ export class CategoryController {
     @Body() deleteCategoryDto: DeleteCategoryDto,
     @xRC() rc: tRC,
   ) {
-    deleteCategoryDto.deletedAt = new Date();
     return this.categoryService.delete(id, deleteCategoryDto, rc);
   }
 }

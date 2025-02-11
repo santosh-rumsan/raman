@@ -9,3 +9,6 @@ export interface CategoryBase {
 }
 
 export type Category = CategoryBase & CommonFields & { cuid?: string };
+
+export type CreateCategoryDto = CategoryBase;
+export type EditCategoryDto = Partial<CreateCategoryDto>;

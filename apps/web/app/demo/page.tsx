@@ -1,16 +1,16 @@
 'use client';
 
-import {useWebSocketEvent} from '@/hooks/ws-event.hook';
-import {usePing} from '@/queries/demo.query';
-import {EVENTS} from '@rumsan/raman/constants/events';
-import {Alert, AlertDescription} from '@rumsan/shadcn-ui/components/alert';
-import {Button} from '@rumsan/shadcn-ui/components/button';
+import { useWebSocketEvent } from '@/hooks/ws-event.hook';
+import { usePing } from '@/queries/demo.query';
+import { EVENTS } from '@rumsan/raman/constants';
+import { Alert, AlertDescription } from '@rumsan/shadcn-ui/components/alert';
+import { Button } from '@rumsan/shadcn-ui/components/button';
 
-import {useState} from 'react';
+import { useState } from 'react';
 
 export default function Page() {
   const [wsResponse, setWsResponse] = useState();
-  const {data, refetch, isFetching} = usePing();
+  const { data, refetch, isFetching } = usePing();
   useWebSocketEvent(EVENTS.DEMO.PONG, (data) => {
     setWsResponse(data);
   });

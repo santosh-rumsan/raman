@@ -72,6 +72,12 @@ importers:
       '@rumsan/sdk':
         specifier: ^0.1.152
         version: 0.1.152
+      '@rumsan/user':
+        specifier: ^3.1.148
+        version: 3.1.148
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.1
       nest-winston:
         specifier: ^1.10.2
         version: 1.10.2(@nestjs/common@11.0.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(winston@3.17.0)
@@ -2144,6 +2150,9 @@ packages:
   '@radix-ui/rect@1.1.0':
     resolution: {integrity: sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg==}
 
+  '@rumsan/extensions@0.1.147':
+    resolution: {integrity: sha512-YxMujPYiJWyI7KRRQXg9yFKM/0gxQOHXcLYxe1tluBDAAX7h5exdSUYHxCAdGRfL8gksSlWYTlC/LV0lB38WOg==, tarball: https://npm.pkg.github.com/download/@rumsan/extensions/0.1.147/71af199075201f303f9e1a7cbe01a4b409a14b04}
+
   '@rumsan/extensions@0.1.148':
     resolution: {integrity: sha512-YuSxHH6QbgxmCCuw9e0SlUWQ9tINnuWDPedFWQVL4hIiEffLPzDKgXHtVi9JGGGgLWTtBjt6NUGYoCf4GnB4WA==, tarball: https://npm.pkg.github.com/download/@rumsan/extensions/0.1.148/f5955f0e4001abfc84f1a2cc541c2f44ab3601c3}
 
@@ -2162,11 +2171,17 @@ packages:
   '@rumsan/sdk@0.1.107':
     resolution: {integrity: sha512-X8Qj1u5tTruwSEC9tXkvJ3/LDofdpFliq6t0WCnVtCcojtIm/nxwUlwB/To4vCcvnvTcVHGYu63oQRLL8y/Sdw==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.107/ecc06e617b87236aec6b1c2000f9e4aa4baa94b6}
 
+  '@rumsan/sdk@0.1.147':
+    resolution: {integrity: sha512-ura+VHwIt+S4OZ5wF5fsfrecd0IOeNWN9slX8rFu8DJMiIRK+l+brrre967mUmONq3MIBkwmIg2RqVVbHb6Lpg==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.147/10cdecad4123abb5e23b4ffbd3765491f58e9f44}
+
   '@rumsan/sdk@0.1.151':
     resolution: {integrity: sha512-aFVjQctRzhtJNd0PvXLAshBeUBoDmVMVWYHBqkFrEqMnDmITli4MxyZrSApc3+qwzuvmoc60PhuCRFK+DobiPA==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.151/400b01ab61c09cdc9186285c1011264001934675}
 
   '@rumsan/sdk@0.1.152':
     resolution: {integrity: sha512-nyojB4JiMM9MT3NhKX1ZS9574AmiXgGSKTldjrshDOllgk8DRUkiA+y/Lkwf1QrbN5Bq+kNFd7C2gvrvNicgUw==, tarball: https://npm.pkg.github.com/download/@rumsan/sdk/0.1.152/5030b0d1589a07e951678af164a844a9e718569b}
+
+  '@rumsan/user@3.1.148':
+    resolution: {integrity: sha512-4DCj4+04Ne3Z2ws7paSh9D75T2HWN75zT3J1r29bGF923NceJW26sQVjp8XGWMUwAs7VawCmvavOAQiGUG0/hg==, tarball: https://npm.pkg.github.com/download/@rumsan/user/3.1.148/483eabdcc6dd2209eda7f9e1c89d2270e1c57f6d}
 
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
@@ -8347,6 +8362,13 @@ snapshots:
 
   '@radix-ui/rect@1.1.0': {}
 
+  '@rumsan/extensions@0.1.147':
+    dependencies:
+      '@rumsan/prisma': 1.0.131
+      '@rumsan/sdk': 0.1.147
+      class-transformer: 0.5.1
+      class-validator: 0.14.1
+
   '@rumsan/extensions@0.1.148':
     dependencies:
       '@rumsan/prisma': 1.0.131
@@ -8370,9 +8392,17 @@ snapshots:
 
   '@rumsan/sdk@0.1.107': {}
 
+  '@rumsan/sdk@0.1.147': {}
+
   '@rumsan/sdk@0.1.151': {}
 
   '@rumsan/sdk@0.1.152': {}
+
+  '@rumsan/user@3.1.148':
+    dependencies:
+      '@rumsan/extensions': 0.1.147
+      '@rumsan/prisma': 1.0.131
+      '@rumsan/sdk': 0.1.147
 
   '@scarf/scarf@1.4.0': {}
 

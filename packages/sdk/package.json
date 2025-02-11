@@ -12,6 +12,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./clients/*": "./src/clients/*.ts",
+    "./constants": "./src/constants/index.ts",
     "./constants/*": "./src/constants/*.ts",
     "./dtos/*": "./src/dtos/*.ts",
     "./types": "./src/types/index.ts",

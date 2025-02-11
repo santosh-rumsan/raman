@@ -1,8 +1,8 @@
-import {Injectable} from '@nestjs/common';
-import {EventEmitter2} from '@nestjs/event-emitter';
-import {EVENTS} from '@rumsan/raman/constants/events';
-import {allCaps} from '@rumsan/raman/utils/misc';
-import {tRC} from '@rumsan/sdk';
+import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EVENTS } from '@rumsan/raman/constants/events';
+import { allCaps } from '@rumsan/raman/utils/misc';
+import { tRC } from '@rumsan/sdk';
 
 @Injectable()
 export class DemoService {

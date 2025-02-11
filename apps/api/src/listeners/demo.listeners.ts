@@ -1,9 +1,9 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {OnEvent} from '@nestjs/event-emitter';
-import {EVENTS} from '@rumsan/raman/constants/events';
-import {tRC} from '@rumsan/sdk';
-import {WebSocketService} from '../app/websocket.service';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
+import { EVENTS } from '@rumsan/raman/constants/events';
+import { tRC } from '@rumsan/sdk';
+import { WebSocketService } from '../app/websocket.service';
 
 @Injectable()
 export class DemoListener {

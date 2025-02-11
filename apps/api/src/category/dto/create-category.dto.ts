@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-import { CreateCategoryDto as dto } from '@rumsan/raman';
+import { CreateCategoryDto as dto } from '@rumsan/raman/types/category.type';
 
 export class CreateCategoryDto implements dto {
   @IsString()

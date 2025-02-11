@@ -1,12 +1,12 @@
 'use client';
 
-import {CONFIG} from '@/lib/config';
-import {ApiClient} from '@rumsan/raman/clients/index';
-import {RumsanProvider, useRumsanAppStore} from '@rumsan/react-query';
-import {QueryClient} from '@tanstack/react-query';
-import {ThemeProvider as NextThemesProvider} from 'next-themes';
+import { CONFIG } from '@/lib/config';
+import { ApiClient } from '@rumsan/raman/clients/index';
+import { RumsanProvider, useRumsanAppStore } from '@rumsan/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import * as React from 'react';
-import {WebSocketProvider} from './websocket.provider';
+import { WebSocketProvider } from './websocket.provider';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,8 +24,8 @@ export const apiClient = new ApiClient({
   baseURL: CONFIG.API_URL,
 });
 
-export function Providers({children}: {children: React.ReactNode}) {
-  const {isInitialized, initialize} = useRumsanAppStore();
+export function Providers({ children }: { children: React.ReactNode }) {
+  const { isInitialized, initialize } = useRumsanAppStore();
 
   React.useEffect(() => {
     if (!isInitialized) {
