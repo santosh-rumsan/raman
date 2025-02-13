@@ -1,9 +1,9 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {OnEvent} from '@nestjs/event-emitter';
-import {tRC} from '@rumsan/sdk';
-import {EVENTS} from '@workspace/sdk/constants/events';
-import {WebSocketService} from '../app/websocket.service';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
+import { tRC } from '@rumsan/sdk';
+import { EVENTS } from '@workspace/sdk/constants/events';
+import { WebSocketService } from '../app/websocket.service';
 
 @Injectable()
 export class DemoListener {
@@ -19,6 +19,10 @@ export class DemoListener {
     console.log('PING EVENT RECEIVED:', message);
 
     if (rc.clientId) {
+      this.ws.sendToClient(rc.clientId, EVENTS.DEMO.PONG, {
+        message: 'Please wait for a response via Websocket after 3 seconds',
+      });
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       this.ws.sendToClient(rc.clientId, EVENTS.DEMO.PONG, {
         message,
         clientId: rc.clientId,
