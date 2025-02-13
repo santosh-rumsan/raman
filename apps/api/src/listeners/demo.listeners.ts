@@ -18,14 +18,16 @@ export class DemoListener {
   async hello(message: string, rc: tRC) {
     console.log('PING EVENT RECEIVED:', message);
 
-    setTimeout(() => {
-      if (rc.clientId) {
-        this.ws.sendToClient(rc.clientId, EVENTS.DEMO.PONG, {
-          message,
-          clientId: rc.clientId,
-          serverTime: new Date().toISOString(),
-        });
-      }
-    }, 5000);
+    if (rc.clientId) {
+      this.ws.sendToClient(rc.clientId, EVENTS.DEMO.PONG, {
+        message: 'Please wait for a response via Websocket after 3 seconds',
+      });
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      this.ws.sendToClient(rc.clientId, EVENTS.DEMO.PONG, {
+        message,
+        clientId: rc.clientId,
+        serverTime: new Date().toISOString(),
+      });
+    }
   }
 }
