@@ -7,3 +7,6 @@ export type DepartmentBase = {
   extras?: Record<string, any>;
 };
 export type Department = DepartmentBase & CommonFields & { cuid: string };
+
+export type CreateDepartment = DepartmentBase;
+export type EditDepartment = Partial<CreateDepartment>;

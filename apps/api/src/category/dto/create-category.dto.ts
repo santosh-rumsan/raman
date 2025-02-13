@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-import { CreateCategoryDto as dto } from '@rumsan/raman/types/category.type';
+import { CreateCategory } from '@rumsan/raman/types/category.type';
 
-export class CreateCategoryDto implements dto {
+export class CreateCategoryDto implements CreateCategory {
   @IsString()
   @ApiProperty({
     description: 'Name of the category',
