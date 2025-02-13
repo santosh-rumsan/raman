@@ -11,3 +11,5 @@ export interface ProjectBase {
 }
 
 export type Project = ProjectBase & CommonFields & { cuid?: string };
+export type CreateProject = ProjectBase;
+export type EditProject = Partial<CreateProject>;
