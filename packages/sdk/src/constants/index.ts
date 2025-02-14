@@ -1,3 +1,4 @@
+export * from '@rumsan/raman/constants';
 export * from '@rumsan/raman/constants/events';
 export * from '@rumsan/raman/constants/subjects';
 
