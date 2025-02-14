@@ -5,9 +5,9 @@ import { AuthsModule, RolesModule, UsersModule } from '@rumsan/user';
 import { CatergoryModule } from '../category/category.module';
 import { DemoModule } from '../demo/demo.module';
 import { DepartmentModule } from '../department/department.module';
-import { ProjectModule } from '../project/project.module';
-
+import { ExpenseModule } from '../expense/expense.module';
 import { ListenerModule } from '../listeners/listener.module';
+import { ProjectModule } from '../project/project.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebSocketService } from './websocket.service';
@@ -27,6 +27,7 @@ import { WebSocketService } from './websocket.service';
     CatergoryModule,
     DepartmentModule,
     ProjectModule,
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [AppService, WebSocketService],
