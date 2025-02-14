@@ -13,7 +13,7 @@
   "aliases": {
     "components": "@rumsan/shadcn-ui/components",
     "utils": "@rumsan/shadcn-ui/lib/utils",
-    "hooks": "@rumsan/shadcn-ui/hooks",
+    "hooks": "@rumsan/shadcn-ui/lib/hooks",
     "lib": "@rumsan/shadcn-ui/lib",
     "ui": "@rumsan/shadcn-ui/components"
   }

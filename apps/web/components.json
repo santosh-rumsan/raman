@@ -4,8 +4,8 @@
   "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "../../packages/ui/tailwind.config.ts",
-    "css": "../../packages/ui/src/styles/globals.css",
+    "config": "../../packages/shadcn-ui/tailwind.config.ts",
+    "css": "../../packages/shadcn-ui/src/styles/globals.css",
     "baseColor": "zinc",
     "cssVariables": true
   },
