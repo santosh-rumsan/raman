@@ -27,16 +27,4 @@ export class CreateProjectDto implements CreateProject {
     type: String,
   })
   owner: string;
-
-  @ApiProperty({ example: '2024-09-06T09:50:59.336Z' })
-  @IsOptional()
-  deletedAt: Date;
-
-  @IsOptional()
-  @IsString()
-  createdBy: string;
-
-  @IsString()
-  @IsOptional()
-  updatedBy: string;
 }

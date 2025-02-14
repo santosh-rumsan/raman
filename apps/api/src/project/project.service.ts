@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
 import { Project } from '@rumsan/raman/types';
 import { tRC } from '@rumsan/sdk/types';
@@ -19,8 +19,7 @@ export class ProjectService {
     const result = await this.prisma.project.findUnique({
       where: { name: payload.name },
     });
-    if (result)
-      throw new HttpException('Project already exist', HttpStatus.BAD_REQUEST);
+    if (result) throw new Error('Project with this name already exists');
     return this.prisma.project.create({
       data: {
         ...payload,
@@ -55,8 +54,7 @@ export class ProjectService {
       include: { ProjectOwner: true },
     });
 
-    if (!result)
-      throw new HttpException('Project not found', HttpStatus.BAD_REQUEST);
+    if (!result) throw new Error('Project not found');
     return result as Project;
   }
 
@@ -65,13 +63,11 @@ export class ProjectService {
     data: UpdateProjectDto,
     ctx: tRC,
   ): Promise<Project> {
-    data.updatedBy = ctx.currentUserId;
     const result = await this.prisma.project.findUnique({ where: { cuid } });
-    if (!result)
-      throw new HttpException('Project not found', HttpStatus.BAD_REQUEST);
+    if (!result) throw new Error('Project not found');
     return this.prisma.project.update({
       where: { cuid, deletedAt: null },
-      data: data,
+      data: { ...data, updatedBy: ctx.currentUserId },
     }) as unknown as Project;
   }
 
@@ -81,8 +77,8 @@ export class ProjectService {
     ctx: tRC,
   ): Promise<Project> {
     const result = await this.prisma.project.findUnique({ where: { cuid } });
-    if (!result)
-      throw new HttpException('Project not found', HttpStatus.BAD_REQUEST);
+    if (!result) throw new Error('Project not found');
+
     return this.prisma.project.update({
       where: { cuid },
       data: {
