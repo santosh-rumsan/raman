@@ -5,6 +5,8 @@ import { AuthsModule, RolesModule, UsersModule } from '@rumsan/user';
 import { CatergoryModule } from '../category/category.module';
 import { DemoModule } from '../demo/demo.module';
 import { DepartmentModule } from '../department/department.module';
+import { ProjectModule } from '../project/project.module';
+
 import { ListenerModule } from '../listeners/listener.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +26,7 @@ import { WebSocketService } from './websocket.service';
     ListenerModule,
     CatergoryModule,
     DepartmentModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService, WebSocketService],
