@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { z } from 'zod';
 
 export const csvSchema = z.object({
@@ -5,7 +6,7 @@ export const csvSchema = z.object({
   amount: z.string().transform((str) => {
     const number = Number(str);
     if (isNaN(number)) {
-      throw new Error('Invalid number');
+      throw new HttpException('Invalid number', HttpStatus.BAD_REQUEST);
     }
     return number;
   }),
