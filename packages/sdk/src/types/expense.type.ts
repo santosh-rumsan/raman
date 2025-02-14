@@ -33,3 +33,6 @@ export interface ExpenseBase<T = string> {
 
 export type Expense<T = string> = ExpenseBase<T> &
   CommonFields & { cuid?: string | null };
+
+export type CreateExpense = ExpenseBase;
+export type EditExpense = Partial<CreateExpense>;
