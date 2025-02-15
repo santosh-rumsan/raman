@@ -6,31 +6,36 @@ export const EVENTS = {
     PING: 'ping',
     PONG: 'pong',
   },
+  ACCOUNT: {
+    CREATED: 'account.created',
+    UPDATED: 'account.updated',
+    ARCHIVED: 'account.archived',
+  },
   DEPARTMENT: {
     CREATED: 'department.created',
     UPDATED: 'department.updated',
-    DELETED: 'department.deleted',
+    ARCHIVED: 'department.archived',
   },
   PROJECT: {
     CREATED: 'project.created',
     UPDATED: 'project.updated',
-    DELETED: 'project.deleted',
+    ARCHIVED: 'project.archived',
   },
   CATEGORY: {
     CREATED: 'category.created',
     UPDATED: 'category.updated',
-    DELETED: 'category.deleted',
+    ARCHIVED: 'category.archived',
   },
   INVOICE: {
     CREATED: 'invoice.created',
     UPDATED: 'invoice.updated',
-    DELETED: 'invoice.deleted',
+    ARCHIVED: 'invoice.archived',
     UPLOAD: 'invoice.upload',
   },
   EXPENSE: {
     CREATED: 'expense.created',
     UPDATED: 'expense.updated',
-    DELETED: 'expense.deleted',
+    ARCHIVED: 'expense.archived',
     UPLOAD: 'expense.upload',
   },
 };

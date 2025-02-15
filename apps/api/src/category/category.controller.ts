@@ -11,15 +11,12 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { xRC } from '@rumsan/extensions/decorators';
-import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants/index';
+import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants';
 import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import {
-  DeleteCategoryDto,
-  UpdateCategoryDto,
-} from './dto/update-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 @ApiTags('Category')
@@ -59,11 +56,7 @@ export class CategoryController {
 
   @Delete(':id')
   @CheckAbilities({ actions: ACTIONS.DELETE, subject: SUBJECTS.CATEGORY })
-  deleteCategory(
-    @Param('id') id: string,
-    @Body() deleteCategoryDto: DeleteCategoryDto,
-    @xRC() rc: tRC,
-  ) {
-    return this.categoryService.delete(id, deleteCategoryDto, rc);
+  deleteCategory(@Param('id') id: string, @xRC() rc: tRC) {
+    return this.categoryService.delete(id, rc);
   }
 }

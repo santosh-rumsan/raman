@@ -16,11 +16,7 @@ import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants/index';
 import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { CreateProjectDto } from './dto/create-project.dto';
-import {
-  DeleteProjectDto,
-  GetProjectDto,
-  UpdateProjectDto,
-} from './dto/update-project.dto';
+import { GetProjectDto, UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectService } from './project.service';
 
 @Controller('projects')
@@ -51,7 +47,7 @@ export class ProjectController {
   }
 
   @Put(':id')
-  @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.DEPARTMENT })
+  @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.PROJECT })
   updateEntity(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
@@ -61,12 +57,8 @@ export class ProjectController {
   }
 
   @Delete(':id')
-  @CheckAbilities({ actions: ACTIONS.DELETE, subject: SUBJECTS.DEPARTMENT })
-  deleteCategory(
-    @Param('id') id: string,
-    @Body() deleteProjectDto: DeleteProjectDto,
-    @xRC() rc: tRC,
-  ) {
-    return this.projectService.delete(id, deleteProjectDto, rc);
+  @CheckAbilities({ actions: ACTIONS.DELETE, subject: SUBJECTS.PROJECT })
+  deleteCategory(@Param('id') id: string, @xRC() rc: tRC) {
+    return this.projectService.delete(id, rc);
   }
 }

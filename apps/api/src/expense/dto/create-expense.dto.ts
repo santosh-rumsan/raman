@@ -49,7 +49,7 @@ export class CreateExpenseDto implements CreateExpense {
   })
   projectId?: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({
     example: 'ESTIMATE',
   })
@@ -71,7 +71,7 @@ export class CreateExpenseDto implements CreateExpense {
   categoryId: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({
     description: 'Account Id of the User',
     example: '2131ddw3a',
@@ -80,6 +80,7 @@ export class CreateExpenseDto implements CreateExpense {
   accountId: string;
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     description: 'Department Id of the User',
     example: '2131ddw3a',

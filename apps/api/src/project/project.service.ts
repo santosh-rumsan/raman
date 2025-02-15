@@ -1,31 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
+import { EVENTS } from '@rumsan/raman/constants';
 import { Project } from '@rumsan/raman/types';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateProjectDto } from './dto/create-project.dto';
-import {
-  DeleteProjectDto,
-  GetProjectDto,
-  UpdateProjectDto,
-} from './dto/update-project.dto';
+import { GetProjectDto, UpdateProjectDto } from './dto/update-project.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
 @Injectable()
 export class ProjectService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private eventMgr: EventEmitter2,
+  ) {}
 
-  async create(payload: CreateProjectDto, ctx: tRC): Promise<Project> {
-    const result = await this.prisma.project.findUnique({
+  async create(payload: CreateProjectDto, ctx: tRC) {
+    const result = await this.prisma.project.findFirst({
       where: { name: payload.name },
     });
     if (result) throw new Error('Project with this name already exists');
-    return this.prisma.project.create({
-      data: {
-        ...payload,
-        createdBy: ctx.currentUserId,
-      },
-    }) as unknown as Project;
+
+    const data: Project = {
+      ...payload,
+      createdBy: ctx.currentUserId,
+      updatedBy: ctx.currentUserId,
+    };
+    this.eventMgr.emit(EVENTS.PROJECT.CREATED, data);
+    return (await this.prisma.project.create({
+      data,
+    })) as Project;
   }
 
   async findAll(query: GetProjectDto) {
@@ -49,43 +54,46 @@ export class ProjectService {
   }
 
   async findOne(cuid: string): Promise<Project> {
-    const result = await this.prisma.project.findUnique({
-      where: { cuid },
-      include: { ProjectOwner: true },
+    return (await this.findFirstOrThrow(cuid)) as Project;
+  }
+
+  async update(cuid: string, payload: UpdateProjectDto, ctx: tRC) {
+    await this.findFirstOrThrow(cuid);
+
+    const data = { ...payload, updatedBy: ctx.currentUserId };
+    this.eventMgr.emit(EVENTS.PROJECT.UPDATED, data);
+    return (await this.prisma.project.update({
+      where: { cuid, deletedAt: null },
+      data,
+    })) as Project;
+  }
+
+  async delete(cuid: string, ctx: tRC) {
+    await this.findFirstOrThrow(cuid);
+
+    const data = { updatedBy: ctx.currentUserId, deletedAt: new Date() };
+    this.eventMgr.emit(EVENTS.PROJECT.ARCHIVED, {
+      cuid,
+      ...data,
     });
 
-    if (!result) throw new Error('Project not found');
-    return result as Project;
-  }
-
-  async update(
-    cuid: string,
-    data: UpdateProjectDto,
-    ctx: tRC,
-  ): Promise<Project> {
-    const result = await this.prisma.project.findUnique({ where: { cuid } });
-    if (!result) throw new Error('Project not found');
-    return this.prisma.project.update({
-      where: { cuid, deletedAt: null },
-      data: { ...data, updatedBy: ctx.currentUserId },
-    }) as unknown as Project;
-  }
-
-  async delete(
-    cuid: string,
-    payload: DeleteProjectDto,
-    ctx: tRC,
-  ): Promise<Project> {
-    const result = await this.prisma.project.findUnique({ where: { cuid } });
-    if (!result) throw new Error('Project not found');
-
-    return this.prisma.project.update({
+    return (await this.prisma.project.update({
       where: { cuid },
-      data: {
-        ...payload,
-        updatedBy: ctx.currentUserId,
-        deletedAt: new Date(),
-      },
-    }) as unknown as Project;
+      data,
+    })) as Project;
+  }
+
+  private async findFirstOrThrow(cuid: string, getDeleted = false) {
+    const where = { cuid };
+    if (!getDeleted) {
+      where['deletedAt'] = null;
+    }
+    return this.prisma.project
+      .findFirstOrThrow({
+        where,
+      })
+      .catch((error) => {
+        throw new Error('Category does not exists');
+      });
   }
 }

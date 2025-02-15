@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
@@ -9,11 +8,7 @@ import { tRC } from '@rumsan/sdk/types';
 import { GDriveService } from '../utils/gdrive.utils';
 import { createIpfsHash } from '../utils/ipfs.utils';
 import { CreateExpenseDto } from './dto/create-expense.dto';
-import {
-  DeleteExpenseDto,
-  GetExpenseDto,
-  UpdateExpenseDto,
-} from './dto/update-expense.dto';
+import { GetExpenseDto, UpdateExpenseDto } from './dto/update-expense.dto';
 import { ErrorManager } from './errorHandling';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
@@ -22,7 +17,6 @@ const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 export class ExpenseService {
   constructor(
     private prisma: PrismaService,
-    private config: ConfigService,
     private eventEmitter: EventEmitter2,
     private gdrive: GDriveService,
   ) {}
@@ -63,22 +57,22 @@ export class ExpenseService {
       );
     }
 
+    this.eventEmitter.emit(EVENTS.EXPENSE.CREATED, newExpense);
     return newExpense as Expense;
   }
 
   async update(cuid: string, payload: UpdateExpenseDto, ctx: tRC) {
-    const expenseData = await this.prisma.expense.findUnique({
-      where: { cuid },
-    });
+    await this.findFirstOrThrow(cuid);
 
-    if (!expenseData) throw new Error('Expense not found');
+    const data = {
+      ...payload,
+      updatedBy: ctx.currentUserId,
+    };
+    this.eventEmitter.emit(EVENTS.EXPENSE.UPDATED, data);
 
     return this.prisma.expense.update({
       where: { cuid },
-      data: {
-        ...payload,
-        updatedBy: ctx.currentUser ? ctx.currentUser.cuid : null,
-      },
+      data,
     });
   }
 
@@ -175,21 +169,18 @@ export class ExpenseService {
     );
   }
 
-  async delete(
-    cuid: string,
-    payload: DeleteExpenseDto,
-    ctx: tRC,
-  ): Promise<DeleteExpenseDto> {
-    const result = await this.prisma.expense.findUnique({ where: { cuid } });
-    if (!result) throw new Error('Expense not found');
-    return await this.prisma.expense.update({
+  async delete(cuid: string, ctx: tRC) {
+    await this.findFirstOrThrow(cuid);
+    const data = {
+      cuid,
+      updatedBy: ctx.currentUserId,
+      deletedAt: new Date(),
+    };
+    this.eventEmitter.emit(EVENTS.EXPENSE.ARCHIVED, data);
+    return (await this.prisma.expense.update({
       where: { cuid },
-      data: {
-        ...payload,
-        updatedBy: ctx.currentUserId,
-        deletedAt: new Date(),
-      },
-    });
+      data,
+    })) as Expense;
   }
 
   async csvCreate(file: any[]) {
@@ -288,4 +279,18 @@ export class ExpenseService {
   //     }
   //   });
   // }
+
+  private async findFirstOrThrow(cuid: string, getDeleted = false) {
+    const where = { cuid };
+    if (!getDeleted) {
+      where['deletedAt'] = null;
+    }
+    return this.prisma.expense
+      .findFirstOrThrow({
+        where,
+      })
+      .catch((error) => {
+        throw new Error('Category does not exists');
+      });
+  }
 }

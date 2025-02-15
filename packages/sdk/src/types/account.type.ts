@@ -4,7 +4,7 @@ import { Expense } from './expense.type';
 
 export type AccountBase = {
   name: string;
-  number?: string;
+  acctNumber?: string;
   currency: string;
   balance?: number;
   balanceLastUpdatedAt?: Date;
@@ -13,3 +13,6 @@ export type AccountBase = {
 };
 
 export type Account = AccountBase & CommonFields & { cuid: string };
+
+export type CreateAccount = AccountBase;
+export type EditAccount = Partial<CreateAccount>;

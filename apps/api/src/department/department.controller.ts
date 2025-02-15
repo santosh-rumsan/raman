@@ -17,7 +17,6 @@ import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
-  DeleteDepartmentDto,
   GetDepartmentDto,
   UpdateDepartmentDto,
 } from './dto/update-department.dto';
@@ -63,11 +62,7 @@ export class DepartmentController {
 
   @Delete(':id')
   @CheckAbilities({ actions: ACTIONS.DELETE, subject: SUBJECTS.DEPARTMENT })
-  deleteCategory(
-    @Param('id') id: string,
-    @Body() deleteDepartmentDto: DeleteDepartmentDto,
-    @xRC() rc: tRC,
-  ) {
-    return this.departmentService.delete(id, deleteDepartmentDto, rc);
+  deleteCategory(@Param('id') id: string, @xRC() rc: tRC) {
+    return this.departmentService.delete(id, rc);
   }
 }

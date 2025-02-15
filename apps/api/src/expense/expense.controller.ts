@@ -22,11 +22,7 @@ import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { ApiFile } from '../decorator/ApiBody';
 import { CreateExpenseDto } from './dto/create-expense.dto';
-import {
-  DeleteExpenseDto,
-  GetExpenseDto,
-  UpdateExpenseDto,
-} from './dto/update-expense.dto';
+import { GetExpenseDto, UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseService } from './expense.service';
 
 @Controller('expenses')
@@ -92,12 +88,8 @@ export class ExpenseController {
 
   @Delete(':id')
   @CheckAbilities({ actions: ACTIONS.DELETE, subject: SUBJECTS.EXPENSE })
-  deleteExpense(
-    @Param('id') id: string,
-    @Body() deleteExpenseDto: DeleteExpenseDto,
-    @xRC() rc: tRC,
-  ) {
-    return this.expenseService.delete(id, deleteExpenseDto, rc);
+  deleteExpense(@Param('id') id: string, @xRC() rc: tRC) {
+    return this.expenseService.delete(id, rc);
   }
 
   @Get(':cuid')
