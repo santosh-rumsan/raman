@@ -3,7 +3,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/index';
-import { Expense, FileAttachment } from '@rumsan/raman/types';
+import { FileAttachment } from '@rumsan/raman/types';
+import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';
 import { GDriveService } from '../utils/gdrive.utils';
 import { createIpfsHash } from '../utils/ipfs.utils';
@@ -26,35 +27,27 @@ export class ExpenseService {
     files: Express.Multer.File[],
     ctx: tRC,
   ): Promise<Expense> {
-    const expense = {
+    const data: Expense = {
       cuid: createId(),
       ...expenseData,
+      createdBy: ctx.currentUser?.cuid,
+      updatedBy: ctx.currentUser?.cuid,
     };
-
-    let attachments: any = null;
-    if (files.length > 0) {
-      attachments = 'pending';
-    }
 
     const newExpense = await this.prisma.$transaction(async (prisma) => {
       return prisma.expense.create({
         data: {
-          ...expense,
-          attachments,
-          createdBy: ctx.currentUser ? ctx.currentUser.cuid : null,
+          ...data,
+          attachments: files.length > 0 ? 'pending' : undefined,
         },
       });
     });
 
     if (files.length > 0) {
-      this.eventEmitter.emit(
-        EVENTS.EXPENSE.UPLOAD,
-        {
-          cuid: expense.cuid,
-          files: files, // Send all files at once
-        },
-        { clientId: ctx.clientId, currentUser: ctx.currentUser },
-      );
+      this.eventEmitter.emit(EVENTS.EXPENSE.UPLOAD, data, files, {
+        clientId: ctx.clientId,
+        currentUser: ctx.currentUser,
+      });
     }
 
     this.eventEmitter.emit(EVENTS.EXPENSE.CREATED, newExpense);

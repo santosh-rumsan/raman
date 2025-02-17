@@ -4,10 +4,9 @@ import { createIpfsHash } from './ipfs.utils';
 
 export const UploadFileToGdrive = async (
   file: Express.Multer.File,
-  record: any,
   gdrive: GDriveService,
 ) => {
-  const attachment: FileAttachment = {
+  const gFile: FileAttachment = {
     hash: await createIpfsHash(file.buffer),
     url: null,
     filename: file.originalname,
@@ -17,39 +16,13 @@ export const UploadFileToGdrive = async (
   };
 
   const { url, gdriveInfo } = await gdrive.upload({
-    hash: attachment.hash,
-    filename: attachment.filename,
+    hash: gFile.hash,
+    filename: gFile.filename,
     data: file.buffer,
     mimeType: file.mimetype,
   });
+  gFile.url = url;
+  gFile.cloudStorageId = gdriveInfo.id ?? undefined;
 
-  attachment.url = url;
-
-  attachment.cloudStorageId = gdriveInfo.id ?? undefined;
-
-  record =
-    typeof record === 'string' || record == null
-      ? []
-      : (record as [FileAttachment]);
-
-  const updatedRecord = record.map((attachmentItem: FileAttachment) =>
-    attachmentItem.hash === attachment.hash
-      ? {
-          ...attachmentItem,
-          url: attachment.url,
-          cloudStorageId: attachment.cloudStorageId,
-        }
-      : attachmentItem,
-  );
-
-  if (
-    !record.some(
-      (attachmentItem: FileAttachment) =>
-        attachmentItem.hash === attachment.hash,
-    )
-  ) {
-    updatedRecord.push(attachment);
-  }
-
-  return updatedRecord;
+  return gFile;
 };

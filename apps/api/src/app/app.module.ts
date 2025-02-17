@@ -7,6 +7,7 @@ import { CatergoryModule } from '../category/category.module';
 import { DemoModule } from '../demo/demo.module';
 import { DepartmentModule } from '../department/department.module';
 import { ExpenseModule } from '../expense/expense.module';
+import { InvoiceModule } from '../invoice/invoice.module';
 import { ListenerModule } from '../listeners/listener.module';
 import { ProjectModule } from '../project/project.module';
 import { AppController } from './app.controller';
@@ -30,6 +31,7 @@ import { WebSocketService } from './websocket.service';
     DepartmentModule,
     ProjectModule,
     ExpenseModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService, WebSocketService],

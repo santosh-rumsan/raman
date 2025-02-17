@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f6f6f6;
+        color: #333;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: left;
+        padding: 20px 20px 18px;
+        background: #f5f5f5;
+      }
+      .header img {
+        max-width: 120px;
+      }
+      .body {
+        padding: 20px;
+        text-align: left;
+      }
+      .body h2 {
+        margin-top: 4px;
+        font-size: 20px;
+        color: #333;
+      }
+      .body p {
+        margin: 0;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+      .details {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px;
+        background: #fafafa;
+        font-size: 14px;
+      }
+      .details .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .details .row div:nth-child(2) {
+        text-align: right;
+      }
+
+      .details .row:last-child {
+        margin-bottom: 0;
+      }
+
+      .track-btn,
+      .reject-btn {
+        display: inline-block;
+        margin: 5px 10px 0 0;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        transition: background-color 0.3s ease;
+      }
+      .track-btn {
+        background: #28a745;
+        color: #fafafa;
+        border: 1px solid #218838;
+        text-decoration: none;
+      }
+      .track-btn:hover {
+        background: #218838;
+        color: #fafafa;
+        text-decoration: none;
+      }
+      .reject-btn {
+        background: #dc3545;
+        border: 1px solid #c82333;
+      }
+      .reject-btn:hover {
+        background: #c82333;
+      }
+
+      .footer {
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #888;
+        background: #f5f5f5;
+      }
+      .action-container {
+        text-align: center;
+        margin: 5px auto 20px;
+      }
+
+      .item-left {
+        padding: 5px 0;
+        font-weight: bold;
+      }
+
+      .item-right {
+        padding: 5px 0;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <div style="width: 120px; height: 30px; overflow: hidden">
+          <img
+            src="https://rumsan.nyc3.cdn.digitaloceanspaces.com/rumsan-group/rumsan-logo-raha-footer.png"
+            alt="Rumsan"
+            style="width: 100%; height: auto"
+          />
+        </div>
+      </div>
+      <div class="body">
+        <h2>Hello, {{fullName}}</h2>
+        <p>
+          Please review this invoice for
+          <strong>{{amount}}</strong> {{currency}} billed to your project.
+          Please click the button below to approve or reject this.
+        </p>
+
+        <div class="details">
+          <table style="width: 100%; border-collapse: collapse">
+            <tr>
+              <td class="item-left">Amount</td>
+              <td class="item-right">
+                <span style="font-size: 10px; color: #888">{{currency}}</span>
+                <span style="font-size: 20px"><strong>{{amount}}</strong></span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 5px 0">Category</td>
+              <td class="item-right">{{category}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="details">
+          <table style="width: 100%; border-collapse: collapse">
+            <tr>
+              <td class="item-left">Requested by</td>
+              <td class="item-right">{{requestor}}</td>
+            </tr>
+            <tr>
+              <td class="item-left">Invoice Date</td>
+              <td class="item-right">{{date}}</td>
+            </tr>
+
+            <tr>
+              <td class="item-left">Project</td>
+              <td class="item-right">{{project}}</td>
+            </tr>
+            <tr>
+              <td class="item-left">Invoice ID</td>
+              <td class="item-right">{{invoiceId}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="action-container">
+        <a
+          href="{{publicUrl}}/invoices/{{challenge}}/approval"
+          class="track-btn"
+          >Go to Approval</a
+        >
+      </div>
+      <div class="footer">
+        For any questions, please email finance@rumsan.com.
+      </div>
+    </div>
+  </body>
+</html>
+
+gFile

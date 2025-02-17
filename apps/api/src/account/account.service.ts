@@ -5,7 +5,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
-import { Account } from '@rumsan/raman/types';
+import { Account } from '@rumsan/raman/types/account.type';
 import { tRC } from '@rumsan/sdk/types';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });

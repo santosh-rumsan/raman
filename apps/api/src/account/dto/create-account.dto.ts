@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CreateAccount } from '@rumsan/raman/types';
+import { CreateAccount } from '@rumsan/raman/types/account.type';
 import {
   IsInt,
   IsNotEmpty,

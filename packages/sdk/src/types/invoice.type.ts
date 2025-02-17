@@ -1,14 +1,14 @@
 import { CommonFields } from './common.type';
-import { InvoiceStatusType, InvoiceType } from './enums';
+import { Currency, InvoiceStatusType, InvoiceType } from './enums';
 
 export type InvoiceBase<T = string> = {
   date: Date;
   description: string;
   amount: number | 0;
   userId: string;
-  currency: string;
+  currency: Currency;
   approvalChallenge: string;
-  categoryId?: string | null;
+  categoryId: string;
   vatAmount?: number | 0;
   projectId?: string | null;
   receipts?: Record<string, string>;
@@ -24,4 +24,7 @@ export type InvoiceBase<T = string> = {
   extras?: Record<string, T>;
 };
 export type Invoice<T = string> = InvoiceBase<T> &
-  CommonFields & { cuid?: string | null };
+  CommonFields & { cuid: string };
+
+export type CreateInvoice = InvoiceBase;
+export type EditInvoice = Partial<CreateInvoice>;

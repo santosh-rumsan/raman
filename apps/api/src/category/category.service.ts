@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
-import { Category } from '@rumsan/raman/types';
+import { Category } from '@rumsan/raman/types/category.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';

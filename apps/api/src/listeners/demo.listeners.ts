@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EVENTS } from '@rumsan/raman/constants/events';
 import { tRC } from '@rumsan/sdk';
@@ -9,10 +8,7 @@ import { WebSocketService } from '../app/websocket.service';
 export class DemoListener {
   private otp: string;
   private readonly logger = new Logger(DemoListener.name);
-  constructor(
-    private config: ConfigService,
-    private ws: WebSocketService,
-  ) {}
+  constructor(private ws: WebSocketService) {}
 
   @OnEvent(EVENTS.DEMO.PING)
   async hello(message: string, rc: tRC) {

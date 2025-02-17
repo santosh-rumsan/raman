@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
-import { Project } from '@rumsan/raman/types';
+import { Project } from '@rumsan/raman/types/project.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectDto, UpdateProjectDto } from './dto/update-project.dto';

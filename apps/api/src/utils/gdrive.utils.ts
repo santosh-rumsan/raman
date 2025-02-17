@@ -92,7 +92,6 @@ export class GDriveService {
     }
 
     if (folderId && options.getIfExists) {
-      // Check if a file with the same name already exists in the parent folder
       const existingFiles = await this.drive.files.list({
         q: `'${folderId}' in parents and name='${fileData.hash}'`,
         fields: 'files(id, name, webViewLink)',
@@ -100,7 +99,6 @@ export class GDriveService {
       });
 
       if (existingFiles.data.files && existingFiles.data.files.length > 0) {
-        // File already exists, return its info
         const existingFile = existingFiles.data.files[0];
         return {
           url: existingFile.webViewLink || '',
@@ -109,12 +107,10 @@ export class GDriveService {
       }
     }
 
-    // Create a readable stream from the file data buffer
     const readableStream = new Readable();
     readableStream.push(fileData.data);
     readableStream.push(null);
 
-    // Upload the file to Google Drive
     const response = await this.drive.files.create({
       requestBody: {
         name: fileData.hash,
@@ -130,14 +126,38 @@ export class GDriveService {
       fields: 'id, webViewLink',
     });
 
+    const fileId = response.data.id;
+
+    if (!fileId) {
+      throw new Error('Failed to upload file to Google Drive.');
+    }
+
     // Make the file publicly accessible
     await this.drive.permissions.create({
-      fileId: response.data.id || '',
+      fileId,
       requestBody: {
         role: 'reader',
         type: 'anyone',
       },
     });
+
+    // Change ownership (only possible within the same Google Workspace domain)
+    // const newOwnerEmail = this.config.get('GOOGLE_FILE_OWNER'); // Add this to your .env file
+    // if (newOwnerEmail) {
+    //   try {
+    //     await this.drive.permissions.create({
+    //       fileId,
+    //       requestBody: {
+    //         role: 'owner',
+    //         type: 'user',
+    //         emailAddress: newOwnerEmail,
+    //       },
+    //       transferOwnership: true,
+    //     });
+    //   } catch (error) {
+    //     console.error('Failed to transfer ownership:', error);
+    //   }
+    // }
 
     return { url: response.data.webViewLink || '', gdriveInfo: response.data };
   }
