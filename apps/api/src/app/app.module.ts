@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthsModule, RolesModule, UsersModule } from '@rumsan/user';
+import { MiscModule } from 'src/misc/misc.module';
 import { AccountModule } from '../account/account.module';
 import { CatergoryModule } from '../category/category.module';
 import { DemoModule } from '../demo/demo.module';
@@ -32,6 +33,7 @@ import { WebSocketService } from './websocket.service';
     ProjectModule,
     ExpenseModule,
     InvoiceModule,
+    MiscModule,
   ],
   controllers: [AppController],
   providers: [AppService, WebSocketService],
