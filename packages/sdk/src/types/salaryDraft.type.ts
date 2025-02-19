@@ -14,3 +14,6 @@ export interface SalaryDraftBase {
 }
 
 export type SalaryDraft = SalaryDraftBase & CommonFields & { cuid: string };
+
+export type CreateSalaryDraft = SalaryDraftBase;
+export type EditSalaryDraft = Partial<CreateSalaryDraft>;

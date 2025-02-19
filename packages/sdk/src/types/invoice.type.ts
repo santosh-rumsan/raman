@@ -28,3 +28,11 @@ export type Invoice<T = string> = InvoiceBase<T> &
 
 export type CreateInvoice = InvoiceBase;
 export type EditInvoice = Partial<CreateInvoice>;
+
+export type InvoiceRejectionDto = {
+  reason: string;
+};
+export type InvoiceApprovalDto = Pick<
+  CreateInvoice,
+  'categoryId' | 'description'
+>;
