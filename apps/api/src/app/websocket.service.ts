@@ -1,4 +1,4 @@
-import {Injectable, Logger} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   MessageBody,
   OnGatewayConnection,
@@ -7,10 +7,10 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import {Server, Socket} from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @Injectable()
-@WebSocketGateway({cors: true})
+@WebSocketGateway({ cors: true })
 export class WebSocketService
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -54,7 +54,6 @@ export class WebSocketService
 
   // Send message to a specific client
   sendToClient(clientId: string, event: string, message: any): void {
-    console.log('Sending message to client:', event, clientId);
     const client = this.server.sockets.sockets.get(clientId);
 
     if (client) {

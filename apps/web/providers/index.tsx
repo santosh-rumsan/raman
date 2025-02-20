@@ -1,8 +1,10 @@
 'use client';
 
-import { CONFIG } from '@/lib/config';
+import { TitleProvider } from '@/contexts/title.context';
+import { CONFIG } from '@/misc/config';
 import { ApiClient } from '@rumsan/raman/clients/index';
 import { RumsanProvider, useRumsanAppStore } from '@rumsan/react-query';
+import { TooltipProvider } from '@rumsan/shadcn-ui/components/tooltip';
 import { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import * as React from 'react';
@@ -45,7 +47,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     >
       <WebSocketProvider url={CONFIG.WS.URL}>
         <RumsanProvider rumsanClient={apiClient} queryClient={queryClient}>
-          {children}
+          <TooltipProvider>
+            <TitleProvider>{children}</TitleProvider>
+          </TooltipProvider>
         </RumsanProvider>
       </WebSocketProvider>
     </NextThemesProvider>

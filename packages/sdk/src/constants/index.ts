@@ -1,6 +1,5 @@
-export * from '@rumsan/raman/constants';
-export * from '@rumsan/raman/constants/events';
-export * from '@rumsan/raman/constants/subjects';
+export * from './events';
+export * from './subjects';
 
 export const APP = {
   JWT_BEARER: 'JWT',

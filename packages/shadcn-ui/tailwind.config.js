@@ -1,11 +1,14 @@
 import tailwindcssAnimate from 'tailwindcss-animate';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+
 const config = {
   darkMode: ['class'],
   content: [
     'app/**/*.{ts,tsx}',
-    'components/**/*.{ts,tsx}',
-    '../../packages/shadcn-ui/src/components/**/*.{ts,tsx}',
+    'layouts/**/*.{ts,tsx}',
+    'hooks/**/*.{ts,tsx}',
+    'sections/**/*.{ts,tsx}',
+    'node_modules/@rumsan/shadcn-ui/src/components/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
