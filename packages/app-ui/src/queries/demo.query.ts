@@ -1,4 +1,4 @@
-import { ApiClient } from '@rumsan/raman/clients/index';
+import { ApiClient } from '@rumsan/raman/clients';
 
 import { useRumsan } from '@rumsan/react-query';
 import { useQuery } from '@tanstack/react-query';

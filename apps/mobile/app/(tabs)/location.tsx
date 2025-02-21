@@ -1,6 +1,6 @@
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { IconSymbol } from '@rumsan/shadcn-ui/components/IconSymbol';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';

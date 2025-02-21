@@ -1,8 +1,8 @@
 'use client';
 
 import { useWebSocketEvent } from '@/hooks/ws-event.hook';
-import { usePing } from '@/queries/demo.query';
-import { EVENTS } from '@rumsan/raman/constants';
+import { usePing } from '@rumsan/raman-ui/queries/demo.query';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { Alert, AlertDescription } from '@rumsan/shadcn-ui/components/alert';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 

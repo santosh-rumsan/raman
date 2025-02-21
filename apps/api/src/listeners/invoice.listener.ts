@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { EmailInvoiceApproval } from '../email/invoice-approval.email';
 import { UploadFileToGdrive } from '../utils/file-attachment.utils';

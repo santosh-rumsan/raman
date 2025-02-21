@@ -3,6 +3,7 @@ import { CreateAxiosDefaults } from 'axios';
 import { AccountTransactionClient } from './account-transaction.client';
 import { AccountClient } from './account.client';
 import { CategoryClient } from './category.client';
+import { DemoClient } from './demo.client';
 import { DepartmentClient } from './department.client';
 import { ExpenseClient } from './expense.client';
 import { InvoiceClient } from './invoice.client';
@@ -11,10 +12,14 @@ import { MyInvoiceClient } from './my-invoice.client';
 import { ProjectClient } from './project.client';
 import { PublicClient } from './public.client';
 
-export class RamanClient extends RumsanClient {
+export class ApiClient extends RumsanClient {
   constructor(config: CreateAxiosDefaults) {
     super(config);
     //this.apiClient = axios.create(config);
+  }
+
+  public get Demo() {
+    return new DemoClient(this.apiClient);
   }
 
   public get Account() {
@@ -58,4 +63,4 @@ export class RamanClient extends RumsanClient {
   }
 }
 
-export const RamanService = new RamanClient({});
+export const ApiService = new ApiClient({});

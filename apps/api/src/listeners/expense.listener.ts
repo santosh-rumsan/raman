@@ -3,7 +3,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { EventMeta } from '@rumsan/sdk/types/event.types';
 
 import { PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { WebSocketService } from '../app/websocket.service';
 import { UploadFileToGdrive } from '../utils/file-attachment.utils';
@@ -25,7 +25,11 @@ export class ExpenseListener {
     files: Express.Multer.File[],
     meta: EventMeta,
   ) {
-    await this.addAttachmentsToExpense(expense.cuid, files, meta.clientId);
+    await this.addAttachmentsToExpense(
+      expense.cuid,
+      files,
+      meta.clientId as string,
+    );
   }
 
   async addAttachmentsToExpense(

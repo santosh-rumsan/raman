@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { Category } from '@rumsan/raman/types/category.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateCategoryDto } from './dto/create-category.dto';

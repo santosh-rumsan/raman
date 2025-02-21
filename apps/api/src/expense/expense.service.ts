@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/index';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { FileAttachment } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';

@@ -24,6 +24,10 @@ export const queryClient = new QueryClient({
 
 export const apiClient = new ApiClient({
   baseURL: CONFIG.API_URL,
+  headers: {
+    Authorization:
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDksImN1aWQiOiJ6azR6dHJzZTAxajdwaWVzenZvODRpZTIiLCJlbWFpbCI6InNhbnRvc2hAbWFpbGUudWsiLCJwaG9uZSI6Ijk4MDExMDk2NzAiLCJ3YWxsZXQiOm51bGwsInJvbGVzIjpbIkFkbWluIl0sInBlcm1pc3Npb25zIjpbeyJhY3Rpb24iOiJtYW5hZ2UiLCJzdWJqZWN0IjoiYWxsIiwiaW52ZXJ0ZWQiOmZhbHNlLCJjb25kaXRpb25zIjpudWxsfV0sInNlc3Npb25JZCI6ImUzZDYzNDY0LWM5ZTgtNGUyMC1iZWNiLWJlMmUyZDQzZDk0NCIsImlhdCI6MTc0MDExNTc1MSwiZXhwIjoxNzQwMjAyMTUxfQ.8_RXg9ushrda6cqsqs1n8CyJ_qfV1VIdEibGIego1Tg',
+  },
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {

@@ -1,6 +1,3 @@
-export * from './events';
-export * from './subjects';
-
 export const APP = {
   JWT_BEARER: 'JWT',
 };
@@ -14,6 +11,26 @@ export const allowedDomain = [
   'rahat.io',
   'gmail.com',
 ];
+
+export const SUBJECTS = {
+  ALL: 'all',
+  USER: 'user',
+  EXPENSE: 'expense',
+  DEPARTMENT: 'department',
+  ENTITY: 'entity',
+  CATEGORY: 'category',
+  STORY: 'story',
+  ROLE: 'role',
+  PERMISSION: 'permission',
+  EMPLOYEE_DETAILS: 'employee_details',
+  SALARY_DRAFT: 'salary_draft',
+  SALARY: 'salary',
+  ACCOUNT: 'account',
+  ACCOUNT_TRANSACTION: 'account_transaction',
+  CLIENT: 'client',
+  PROJECT: 'project',
+  INVOICE: 'invoice',
+};
 
 export const EMAIL_TEMPLATES = {
   LOGIN: 'login',

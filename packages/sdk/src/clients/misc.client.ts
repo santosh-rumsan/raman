@@ -1,18 +1,6 @@
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-
-export type LookupData = {
-  departments: { name: string; cuid: string; meta?: Record<string, any> }[];
-  categories: {
-    name: string;
-    cuid: string;
-    group: string;
-    meta?: Record<string, any>;
-  }[];
-  projects: { name: string; cuid: string; meta?: Record<string, any> }[];
-  accounts: { name: string; cuid: string; meta?: Record<string, any> }[];
-  users: { name: string; cuid: string; meta?: Record<string, any> }[];
-};
+import { LookupData } from '../types/misc.type';
 
 export class MiscClient {
   private _client: AxiosInstance;
