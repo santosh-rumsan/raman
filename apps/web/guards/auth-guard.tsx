@@ -11,26 +11,27 @@ type Props = {
 
 export default function AuthGuard({ children }: Props) {
   const router = useRouter();
-  const { isAuthenticated } = useRumsanAppStore();
-
+  const { isAuthenticated, isInitialized } = useRumsanAppStore();
   const [checked, setChecked] = useState(false);
 
   const checkIfAuthenticated = useCallback(() => {
-    if (!isAuthenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.pathname,
-      }).toString();
+    if (isInitialized) {
+      if (!isAuthenticated) {
+        const searchParams = new URLSearchParams({
+          returnTo: window.location.pathname,
+        }).toString();
 
-      const href = `${PATHS.AUTH.LOGIN}?${searchParams}`;
-      router.replace(href);
-    } else {
-      setChecked(true);
+        const href = `${PATHS.AUTH.LOGIN}?${searchParams}`;
+        router.replace(href);
+      } else {
+        setChecked(true);
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isInitialized, router]);
 
   useEffect(() => {
     checkIfAuthenticated();
-  }, [checkIfAuthenticated]);
+  }, [isAuthenticated, checkIfAuthenticated]);
 
   if (!checked) {
     return null;
