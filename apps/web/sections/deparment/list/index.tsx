@@ -60,7 +60,6 @@ export function DepartmentList() {
     <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
         <div className="flex flex-col gap-1 my-3">
-          <h1 className="text-2xl font-semibold text-gray-900">Departments</h1>
           <p className="text-gray-500 font-normal text-sm">
             Note: Please consult with the management before adding a new
             department.
