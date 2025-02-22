@@ -25,7 +25,6 @@ import {
   SidebarRail,
 } from '@rumsan/shadcn-ui/components/sidebar';
 import { NavMain } from './main.nav';
-import { NavProjects } from './projects.nav';
 import { NavUser } from './user.nav';
 
 // This is sample data.
@@ -54,8 +53,8 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Playground',
-      url: '#',
+      title: 'Expenses',
+      url: 'https://rumsan.com',
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -74,7 +73,7 @@ const data = {
       ],
     },
     {
-      title: 'Models',
+      title: 'Invoices',
       url: '#',
       icon: Bot,
       items: [
@@ -93,7 +92,7 @@ const data = {
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Time Off',
       url: '#',
       icon: BookOpen,
       items: [
@@ -121,20 +120,20 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#',
+          title: 'Projects',
+          url: '/projects',
         },
         {
-          title: 'Team',
-          url: '#',
+          title: 'Departments',
+          url: '/departments',
         },
         {
-          title: 'Billing',
-          url: '#',
+          title: 'Categories',
+          url: '/categories',
         },
         {
-          title: 'Limits',
-          url: '#',
+          title: 'Accounts',
+          url: '/accounts',
         },
       ],
     },
@@ -172,8 +171,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <AudioWaveform className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Raman App</span>
-                <span className="truncate text-xs">Rumsan</span>
+                <span className="truncate font-semibold">Rumsan Group</span>
+                <span className="truncate text-xs">Management</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -181,7 +180,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

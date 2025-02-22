@@ -12,19 +12,18 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import { useDepartmentList } from '@rumsan/raman-ui/queries/department.query';
-import { Department } from '@rumsan/raman/types';
+import { useProjectList } from '@rumsan/raman-ui/queries/project.query';
+import { Project } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
 import { DataTable } from '@rumsan/ui/components/data-table/datatable.table';
-import { useColumns } from './list.columns';
+import { useColumns } from './list.column';
 import { ListToolbar } from './list.toolbar';
 
-export function DepartmentList() {
+export function ProjectList() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -33,12 +32,11 @@ export function DepartmentList() {
     pageSize: 10,
   });
 
-  const departmentList = useDepartmentList();
-
-  const columns = useColumns<Department>();
+  const projectList = useProjectList();
+  const columns = useColumns<Project>();
 
   const table = useReactTable({
-    data: (departmentList.data as Department[]) || [],
+    data: (projectList.data as Project[]) || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -60,10 +58,9 @@ export function DepartmentList() {
     <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
         <div className="flex flex-col gap-1 my-3">
-          <h1 className="text-2xl font-semibold text-gray-900">Departments</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Projects</h1>
           <p className="text-gray-500 font-normal text-sm">
-            Note: Please consult with the management before adding a new
-            department.
+            Please consult with the project owner before adding a new project.
           </p>
         </div>
         <ListToolbar table={table} />
@@ -71,8 +68,8 @@ export function DepartmentList() {
           <DataTable
             table={table}
             columns={columns}
-            isLoading={departmentList.isLoading}
-            entityName="Department"
+            isLoading={projectList.isLoading}
+            entityName="Project"
           />
         </div>
         <DataTablePagination

@@ -1,5 +1,5 @@
 import { ApiClient } from '@rumsan/raman/clients';
-import { Expense } from '@rumsan/raman/types';
+import { Expense, ExpenseExtended } from '@rumsan/raman/types';
 import { useRumsan } from '@rumsan/react-query';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
@@ -139,7 +139,7 @@ export const useEditExpense = () => {
 
 export const useExpenseById = (
   expenseId: string,
-): UseQueryResult<Expense, Error> => {
+): UseQueryResult<ExpenseExtended, Error> => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(

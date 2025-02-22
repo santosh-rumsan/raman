@@ -1,12 +1,12 @@
 'use client';
 
-import { useLookUpList } from '@raman-ui/core/query/misc.query';
+import { useLookUpList } from '@rumsan/raman-ui/queries/misc.query';
 import { LookupData } from '@rumsan/raman/src/clients/misc.client';
 
 export const findByName = <T extends keyof LookupData>(
   data: LookupData,
   type: T,
-  lookupKey: string
+  lookupKey: string,
 ): LookupData[T][number] | undefined => {
   return data[type].find((item) => item.cuid === lookupKey);
 };
