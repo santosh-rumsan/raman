@@ -14,12 +14,12 @@ datasource db {
 }
 
 model Account {
-  cuid       String  @id @unique @default(cuid())
-  name       String
-  currency   String  @default("NPR")
-  acctNumber String?
-  bankCode   String?
-  balance    Int     @default(0)
+  cuid                 String    @id @unique @default(cuid())
+  name                 String
+  currency             String    @default("NPR")
+  number               String?
+  balance              Int       @default(0)
+  balanceLastUpdatedAt DateTime?
 
   Expenses            Expense[]
   AccountTransactions AccountTransaction[]
@@ -33,47 +33,23 @@ model Account {
   @@map("tbl_accounts")
 }
 
-enum AccountTxnStatus {
-  UNRECONCILED
-  RECONCILED
-  DISCARDED
-}
-
-enum AccountTxnType {
-  INCOME
-  EXPENSE
-  TRANSFER
-  ADJUSTMENT
-}
-
 model AccountTransaction {
-  cuid      String           @id @unique @default(cuid())
+  cuid      String  @id @unique @default(cuid())
   accountId String
-  expenseId String?
-  status    AccountTxnStatus @default(UNRECONCILED)
-  type      AccountTxnType?
+  refId     String?
+  name      String
+  amount    Int
+  category  TxType?
+  expenseId String
 
-  pstdDate        DateTime
-  txnCurrencyCode String
-  description     String
-  txnType         String
-  debitAmount     Float
-  creditAmount    Float
-  balanceAmount   Float
-  chequeNumber    String?
-  txnAmount       Float
-  txnDate         DateTime
-  txnId           String
-
-  Account Account  @relation(fields: [accountId], references: [cuid])
-  Expense Expense? @relation(fields: [expenseId], references: [cuid])
+  Account Account @relation(fields: [accountId], references: [cuid])
+  Expense Expense @relation(fields: [expenseId], references: [cuid])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdBy String?
   updatedBy String?
 
-  @@unique([accountId, txnId], name: "AccountTxnIdentifier")
   @@map("tbl_accounts_txns")
 }
 
