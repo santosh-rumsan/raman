@@ -3,7 +3,7 @@ import { ProjectList } from '@/sections/projects/list/main';
 
 export default function Page() {
   return (
-    <AdminLayout title="Categories">
+    <AdminLayout title="Projects">
       <ProjectList />
     </AdminLayout>
   );

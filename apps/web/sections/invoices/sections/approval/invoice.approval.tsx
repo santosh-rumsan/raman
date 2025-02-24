@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InvoiceForm } from '../form/invoice.form';
@@ -22,14 +23,13 @@ import { Invoice, invoiceSchema } from '../form/schema';
 import { InvoiceReject } from './invoice.reject';
 
 type ReimburseInvoiceAddProps = {
-  router: any;
   invoiceChallenge: string;
 };
 
 export default function InvoiceApproval({
-  router,
   invoiceChallenge,
 }: ReimburseInvoiceAddProps) {
+  const router = useRouter();
   const invoiceData = useGetApproval(invoiceChallenge);
   const { mutateAsync: approveInvoice, isPending } = useInvoiceApproval();
 

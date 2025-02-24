@@ -7,8 +7,10 @@ import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Input } from '@rumsan/shadcn-ui/components/input';
 import { DataTableViewOptions } from '@rumsan/ui/components/data-table/datatable.options.view';
 
+import { PATHS } from '@/routes/paths';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { InvoiceStatusType } from '@rumsan/raman/types';
+import { useRouter } from 'next/navigation';
 import { DataTableFacetedFilter } from './list.filter';
 
 interface DataTableToolbarProps<TData> {
@@ -18,10 +20,11 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
+  const router = useRouter();
   const isFiltered = table.getState().columnFilters.length > 0;
   const { users, projects, categories } = useSelectLookUp();
   const redirectToInvoiceCreate = () => {
-    //router.push(PATHS.INVOICE.ADD);
+    router.push(PATHS.INVOICE.ADD);
   };
 
   return (

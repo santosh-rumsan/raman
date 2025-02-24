@@ -2,7 +2,6 @@
 
 import {
   AudioWaveform,
-  BookOpen,
   Bot,
   Command,
   Frame,
@@ -59,16 +58,8 @@ const data = {
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
-        },
-        {
-          title: 'Starred',
-          url: '#',
-        },
-        {
-          title: 'Settings',
-          url: '#',
+          title: 'Daybook',
+          url: '/expenses',
         },
       ],
     },
@@ -76,41 +67,11 @@ const data = {
       title: 'Invoices',
       url: '#',
       icon: Bot,
+      isActive: true,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Time Off',
-      url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
+          title: 'List',
+          url: '/invoices',
         },
       ],
     },
@@ -118,6 +79,7 @@ const data = {
       title: 'Settings',
       url: '#',
       icon: Settings2,
+      isActive: true,
       items: [
         {
           title: 'Projects',

@@ -14,14 +14,17 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
+import { PATHS } from '@/routes/paths';
 import { useInvoiceList } from '@rumsan/raman-ui/queries/invoice.query';
 import { Invoice } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
 import { DataTable } from '@rumsan/ui/components/data-table/datatable.table';
+import { useRouter } from 'next/navigation';
 import { useColumns } from './list.column';
 import { DataTableToolbar } from './list.toolbar';
 
 export function InvoiceList() {
+  const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -69,15 +72,13 @@ export function InvoiceList() {
   });
 
   const handleRowClick = (row: any) => {
-    //router.push(PATHS.INVOICE.DETAILS(row.original.cuid));
+    router.push(PATHS.INVOICE.DETAILS(row.original.cuid));
   };
 
   return (
     <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
-        <div className="flex flex-col gap-1 my-3">
-          <h1 className="text-xl font-semibold">Invoices & Receipts</h1>{' '}
-        </div>
+        <div className="flex flex-col gap-1 my-3"></div>
         <DataTableToolbar table={table} />
         <div className="rounded-md border bg-white p-1 min-h-96">
           <DataTable

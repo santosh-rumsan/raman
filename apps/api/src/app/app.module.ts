@@ -12,6 +12,7 @@ import { ExpenseModule } from '../expense/expense.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ListenerModule } from '../listeners/listener.module';
 import { ProjectModule } from '../project/project.module';
+import { PublicModule } from '../public/public.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebSocketService } from './websocket.service';
@@ -32,6 +33,7 @@ import { WebSocketService } from './websocket.service';
     CatergoryModule,
     DepartmentModule,
     ProjectModule,
+    PublicModule,
     ExpenseModule,
     InvoiceModule,
     MiscModule,

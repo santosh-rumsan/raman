@@ -56,7 +56,7 @@ export function CategoryList() {
   });
 
   return (
-    <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+    <main className="gap-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
         <div className="flex flex-col gap-1 my-3"></div>
         <ListToolbar table={table} />

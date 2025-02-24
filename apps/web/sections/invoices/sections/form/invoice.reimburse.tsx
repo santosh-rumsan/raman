@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -23,10 +24,10 @@ import { Invoice, invoiceSchema } from './schema';
 
 type InvoiceAddProps = {
   cuid: string;
-  router: any;
 };
 
-export default function InvoiceReimburse({ router, cuid }: InvoiceAddProps) {
+export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
+  const router = useRouter();
   const invoiceData = useGetInvoice(cuid);
 
   const { mutateAsync: reimburseInvoice, isPending } = useInvoiceReimburse();

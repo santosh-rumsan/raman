@@ -139,7 +139,7 @@ export function InvoiceForm({
                       <FormControl>
                         <Button disabled={mode !== 'add'} variant={'outline'}>
                           {field.value ? (
-                            format(field.value, 'MMM D, YYYY')
+                            format(field.value, 'MMM dd, yyyy')
                           ) : (
                             <span className="font-normal">Select date</span>
                           )}

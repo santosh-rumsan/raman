@@ -3,13 +3,10 @@
 import { useExpenseStore } from '@/utils/expense.store';
 import { useAddExpense } from '@rumsan/raman-ui/queries/expense.query';
 import { InvoiceType } from '@rumsan/raman/types';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ExpenseBase from './expense.form';
 import { Expense } from './schema';
-
-type ExpenseAddProps = {
-  router: any;
-};
 
 const defaultValues: Expense = {
   description: '',
@@ -25,7 +22,8 @@ const defaultValues: Expense = {
   date: new Date(),
 };
 
-export default function ExpenseAdd({ router }: ExpenseAddProps) {
+export default function ExpenseAdd() {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addExpense = useAddExpense();

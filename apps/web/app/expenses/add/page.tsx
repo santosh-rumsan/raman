@@ -1,10 +1,10 @@
 import AdminLayout from '@/layouts/admin/layout';
-import { ExpenseList } from '@/sections/expenses/sections/list';
+import ExpenseAdd from '@/sections/expenses/sections/form/expense.add';
 
 export default function Page() {
   return (
     <AdminLayout title="Expenses">
-      <ExpenseList />
+      <ExpenseAdd />
     </AdminLayout>
   );
 }

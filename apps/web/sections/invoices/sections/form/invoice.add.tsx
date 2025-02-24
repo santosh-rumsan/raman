@@ -13,14 +13,11 @@ import {
   CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InvoiceForm } from './invoice.form';
 import { Invoice, invoiceSchema } from './schema';
-
-type InvoiceAddProps = {
-  router: any;
-};
 
 const defaultValues: Invoice = {
   amount: '',
@@ -36,7 +33,8 @@ const defaultValues: Invoice = {
   approvalChallenge: '',
 };
 
-export default function InvoiceAddForm({ router }: InvoiceAddProps) {
+export default function InvoiceAdd() {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 

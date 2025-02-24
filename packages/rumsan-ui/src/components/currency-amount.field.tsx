@@ -55,7 +55,7 @@ export const CurrencyAmountField: React.FC<MonetaryValueFieldProps> = ({
         control={control}
         render={({ field }) => (
           <Select
-            value={field.value}
+            value={field.value ?? ''}
             onValueChange={(value) => {
               field.onChange(value);
               validateFields();
@@ -83,6 +83,7 @@ export const CurrencyAmountField: React.FC<MonetaryValueFieldProps> = ({
             type="number"
             disabled={disabled}
             {...field}
+            value={field.value ?? ''}
             onChange={(e) => {
               field.onChange(e.target.value);
               validateFields();

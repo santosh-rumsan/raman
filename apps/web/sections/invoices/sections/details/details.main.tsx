@@ -4,7 +4,8 @@ import { PATHS } from '@/routes/paths';
 import { useGetInvoice } from '@rumsan/raman-ui/queries/invoice.query';
 import { Invoice } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
-import { ChevronLeft, Handshake } from 'lucide-react';
+import { Handshake } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import InvoiceDetailCard from './details.card';
 import InvoiceReimbursedDetails from './details.reimbursed';
@@ -12,7 +13,6 @@ import InvoiceRejectedDetails from './details.reject';
 import { ReceiptCard } from './receipt.card';
 
 type InvoiceDetailsProps = {
-  router: any;
   invoiceId: string;
 };
 
@@ -23,10 +23,8 @@ type StatusColors = {
   APPROVED: string;
 };
 
-export default function InvoiceDetails({
-  router,
-  invoiceId,
-}: InvoiceDetailsProps) {
+export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
+  const router = useRouter();
   const [isRejected, setIsRejected] = useState(false);
 
   const { data: invoiceDetails } = useGetInvoice(invoiceId);
@@ -60,24 +58,9 @@ export default function InvoiceDetails({
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center my-3">
-        <div className="flex items-start gap-1">
-          <div className="m-auto items-center justify-center">
-            <ChevronLeft
-              className="h-5 w-5 cursor-pointer"
-              onClick={handleBackButton}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1 ml-1">
-            <h1 className="text-xl font-bold text-gray-900">Invoice Details</h1>
-            <p className="text-gray-500 text-sm">
-              Here is the detailed view of the selected invoice
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-4 text-right ml-auto">
+    <div className="px-6">
+      {/* <div className="flex justify-between items-center">
+        <div className="flex gap-4 text-right">
           <div className="flex items-center justify-center w-[128px] h-[35px] text-sm gap-2 text-center text-blue-500 rounded-md">
             {invoice?.status === 'APPROVED' ? (
               <Button
@@ -91,9 +74,19 @@ export default function InvoiceDetails({
             ) : null}
           </div>
         </div>
+      </div> */}
+
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex items-start gap-1"></div>
+        {invoice?.status === 'APPROVED' ? (
+          <Button onClick={handleReimburse}>
+            <Handshake className="h-10 w-10" strokeWidth={2.5} />
+            Reimburse
+          </Button>
+        ) : null}
       </div>
 
-      <div className="grid grid-cols-12 gap-6 mt-6">
+      <div className="grid grid-cols-12 gap-6">
         {invoice?.status === 'REJECTED' && (
           <InvoiceRejectedDetails className="col-span-12" invoice={invoice} />
         )}

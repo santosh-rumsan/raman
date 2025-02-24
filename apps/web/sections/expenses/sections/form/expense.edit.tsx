@@ -2,16 +2,17 @@ import {
   useEditExpense,
   useExpenseById,
 } from '@rumsan/raman-ui/queries/expense.query';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ExpenseBase from './expense.form';
 import { Expense } from './schema';
 
 type ExpenseEditProps = {
-  router: any;
   expenseId: string;
 };
 
-export function ExpenseEdit({ router, expenseId }: ExpenseEditProps) {
+export function ExpenseEdit({ expenseId }: ExpenseEditProps) {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch existing expense details
