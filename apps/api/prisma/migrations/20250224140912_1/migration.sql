@@ -1,10 +1,4 @@
 -- CreateEnum
-CREATE TYPE "AccountTxnStatus" AS ENUM ('UNRECONCILED', 'RECONCILED', 'DISCARDED');
-
--- CreateEnum
-CREATE TYPE "AccountTxnType" AS ENUM ('INCOME', 'EXPENSE', 'TRANSFER', 'ADJUSTMENT');
-
--- CreateEnum
 CREATE TYPE "Currency" AS ENUM ('NPR', 'USD', 'GBP', 'EUR', 'USDC');
 
 -- CreateEnum
@@ -15,6 +9,9 @@ CREATE TYPE "InvoiceType" AS ENUM ('VAT', 'PAN', 'ESTIMATE');
 
 -- CreateEnum
 CREATE TYPE "Service" AS ENUM ('API', 'EMAIL', 'PHONE', 'WALLET', 'GOOGLE', 'APPLE', 'FACEBOOK', 'TWITTER', 'GITHUB', 'LINKEDIN');
+
+-- CreateEnum
+CREATE TYPE "SettingDataType" AS ENUM ('STRING', 'NUMBER', 'BOOLEAN', 'OBJECT');
 
 -- CreateEnum
 CREATE TYPE "TxType" AS ENUM ('EXPENSE', 'ADJUSTMENT', 'TRANSFER', 'INCOME');
@@ -36,9 +33,9 @@ CREATE TABLE "tbl_accounts" (
     "cuid" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "currency" TEXT NOT NULL DEFAULT 'NPR',
-    "acctNumber" TEXT,
-    "bankCode" TEXT,
+    "number" TEXT,
     "balance" INTEGER NOT NULL DEFAULT 0,
+    "balanceLastUpdatedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
@@ -52,20 +49,11 @@ CREATE TABLE "tbl_accounts" (
 CREATE TABLE "tbl_accounts_txns" (
     "cuid" TEXT NOT NULL,
     "accountId" TEXT NOT NULL,
-    "expenseId" TEXT,
-    "status" "AccountTxnStatus" NOT NULL DEFAULT 'UNRECONCILED',
-    "type" "AccountTxnType",
-    "pstdDate" TIMESTAMP(3) NOT NULL,
-    "txnCurrencyCode" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "txnType" TEXT NOT NULL,
-    "debitAmount" DOUBLE PRECISION NOT NULL,
-    "creditAmount" DOUBLE PRECISION NOT NULL,
-    "balanceAmount" DOUBLE PRECISION NOT NULL,
-    "chequeNumber" TEXT,
-    "txnAmount" DOUBLE PRECISION NOT NULL,
-    "txnDate" TIMESTAMP(3) NOT NULL,
-    "txnId" TEXT NOT NULL,
+    "refId" TEXT,
+    "name" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "category" "TxType",
+    "expenseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdBy" TEXT,
@@ -345,14 +333,23 @@ CREATE TABLE "tbl_auth_sessions" (
     CONSTRAINT "tbl_auth_sessions_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "tbl_settings" (
+    "name" TEXT NOT NULL,
+    "value" JSONB NOT NULL,
+    "dataType" "SettingDataType" NOT NULL,
+    "requiredFields" TEXT[],
+    "isReadOnly" BOOLEAN NOT NULL DEFAULT false,
+    "isPrivate" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "tbl_settings_pkey" PRIMARY KEY ("name")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_accounts_cuid_key" ON "tbl_accounts"("cuid");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_accounts_txns_cuid_key" ON "tbl_accounts_txns"("cuid");
-
--- CreateIndex
-CREATE UNIQUE INDEX "tbl_accounts_txns_accountId_txnId_key" ON "tbl_accounts_txns"("accountId", "txnId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_categories_cuid_key" ON "tbl_categories"("cuid");
@@ -420,11 +417,14 @@ CREATE UNIQUE INDEX "tbl_auth_service_serviceId_key" ON "tbl_auth"("service", "s
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_auth_sessions_sessionId_key" ON "tbl_auth_sessions"("sessionId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "tbl_settings_name_key" ON "tbl_settings"("name");
+
 -- AddForeignKey
 ALTER TABLE "tbl_accounts_txns" ADD CONSTRAINT "tbl_accounts_txns_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "tbl_accounts"("cuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tbl_accounts_txns" ADD CONSTRAINT "tbl_accounts_txns_expenseId_fkey" FOREIGN KEY ("expenseId") REFERENCES "tbl_expenses"("cuid") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tbl_accounts_txns" ADD CONSTRAINT "tbl_accounts_txns_expenseId_fkey" FOREIGN KEY ("expenseId") REFERENCES "tbl_expenses"("cuid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tbl_projects" ADD CONSTRAINT "tbl_projects_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "tbl_departments"("cuid") ON DELETE RESTRICT ON UPDATE CASCADE;
