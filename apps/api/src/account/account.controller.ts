@@ -4,10 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { xRC } from '@rumsan/extensions/decorators';
@@ -23,7 +23,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private readonly accountService: AccountService) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.ACCOUNT })
@@ -44,7 +44,7 @@ export class AccountController {
     return this.accountService.findOne(cuid);
   }
 
-  @Patch(':cuid')
+  @Put(':cuid')
   @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.ACCOUNT })
   update(
     @Param('cuid') cuid: string,

@@ -30,10 +30,10 @@ export const useAddAccount = () => {
     },
     onSuccess: (newAccount) => {
       queryClient?.setQueryData<Account[]>(['account_list'], (oldData = []) => {
-        return [...oldData, newAccount];
+        return [newAccount, ...oldData];
       });
     },
-  });
+  }, queryClient);
 };
 
 export const useEditAccount = () => {
@@ -52,7 +52,7 @@ export const useEditAccount = () => {
         );
       });
     },
-  });
+  }, queryClient);
 };
 
 export const useAccountGet = (cuid: string) => {
