@@ -7,6 +7,7 @@ const ROOTS = {
   EXPENSE: '/expenses',
   INVOICE: '/invoices',
   PUBLIC: '/public',
+  ACCOUNTS: '/accounts',
 };
 
 export const PATHS = {
@@ -24,6 +25,9 @@ export const PATHS = {
   },
   PROJECT: {
     HOME: `${ROOTS.PROJECT}`,
+  },
+  ACCOUNTS: {
+    HOME: `${ROOTS.ACCOUNTS}`,
   },
   EXPENSE: {
     HOME: `${ROOTS.EXPENSE}`,
