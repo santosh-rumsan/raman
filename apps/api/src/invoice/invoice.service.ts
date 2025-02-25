@@ -3,6 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
+import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateInvoiceDto } from './dto/invoice.dto';
@@ -15,7 +16,7 @@ export class InvoiceService {
   constructor(
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async createInvoice(
     dto: CreateInvoiceDto,
@@ -155,65 +156,65 @@ export class InvoiceService {
     });
   }
 
-  // async reimburseInvoice(cuid: string, payload: UpdateInvoiceDto) {
-  //   const invoice = await this.findFirstOrThrow(cuid);
-  //   if (!invoice.isApproved) throw new Error('This invoice is not approved');
+  async reimburseInvoice(cuid: string, payload: UpdateInvoiceDto) {
+    const invoice = await this.findFirstOrThrow(cuid);
+    if (!invoice.isApproved) throw new Error('This invoice is not approved');
 
-  //   const project = await this.prisma.project.findUnique({
-  //     where: { cuid: invoice.projectId },
-  //   });
+    const project = await this.prisma.project.findUnique({
+      where: { cuid: invoice.projectId ?? '' },
+    });
 
-  //   await this.prisma.$transaction(async (prisma) => {
-  //     await prisma.invoice.update({
-  //       where: { cuid },
-  //       data: {
-  //         status: InvoiceStatusType.REIMBURSED,
-  //         categoryId: payload.categoryId,
-  //         description: payload.description,
-  //         reimbursedDate: payload.reimbursedDate,
-  //         reimbursedRemarks: payload.reimbursedRemarks,
-  //       },
-  //     });
-  //     const {
-  //       amount,
-  //       projectId,
-  //       categoryId,
-  //       invoiceType,
-  //       receipts,
-  //       description,
-  //       currency,
-  //       vatAmount,
-  //     } = invoice;
+    await this.prisma.$transaction(async (prisma) => {
+      await prisma.invoice.update({
+        where: { cuid },
+        data: {
+          status: InvoiceStatusType.REIMBURSED,
+          categoryId: payload.categoryId,
+          description: payload.description,
+          reimbursedDate: payload.reimbursedDate,
+          reimbursedRemarks: payload.reimbursedRemarks,
+        },
+      });
+      const {
+        amount,
+        projectId,
+        categoryId,
+        invoiceType,
+        receipts,
+        description,
+        currency,
+        vatAmount,
+      } = invoice;
 
-  //     const expensePayload = {
-  //       amount: Number(amount),
-  //       projectId,
-  //       categoryId,
-  //       invoiceType,
-  //       source: 'Invoice Reimbursement',
-  //       remarks: payload?.reimbursedRemarks,
-  //       description,
-  //       currency,
-  //       vatAmount,
-  //       attachments: receipts,
-  //       departmentId: project.departmentId,
-  //       date: payload.reimbursedDate,
-  //       accountId: payload.accountId,
-  //     };
+      const expensePayload = {
+        amount: Number(amount),
+        projectId,
+        categoryId,
+        invoiceType,
+        source: 'Invoice Reimbursement',
+        remarks: payload?.reimbursedRemarks,
+        description,
+        currency,
+        vatAmount,
+        attachments: receipts,
+        departmentId: project?.departmentId,
+        date: payload.reimbursedDate,
+        accountId: payload.accountId,
+      };
 
-  //     const expenseResult = await prisma.expense.create({
-  //       data: expensePayload,
-  //     } as any);
+      const expenseResult = await prisma.expense.create({
+        data: expensePayload,
+      } as any);
 
-  //     await prisma.invoice.update({
-  //       where: { cuid },
-  //       data: {
-  //         expenseId: expenseResult.cuid,
-  //       },
-  //     });
-  //   });
-  //   return 'Invoice is reimbursed successfully';
-  // }
+      await prisma.invoice.update({
+        where: { cuid },
+        data: {
+          expenseId: expenseResult.cuid,
+        },
+      });
+    });
+    return 'Invoice is reimbursed successfully';
+  }
 
   private async findFirstOrThrow(cuid: string, getDeleted = false) {
     const where = { cuid };

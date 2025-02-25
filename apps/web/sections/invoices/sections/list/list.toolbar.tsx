@@ -9,7 +9,7 @@ import { DataTableViewOptions } from '@rumsan/ui/components/data-table/datatable
 
 import { PATHS } from '@/routes/paths';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
-import { InvoiceStatusType } from '@rumsan/raman/types';
+import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { useRouter } from 'next/navigation';
 import { DataTableFacetedFilter } from './list.filter';
 

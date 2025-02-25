@@ -3,7 +3,9 @@
 import ExpenseAttachment from '@/sections/expenses/sections/form/expense.attachments';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { useLookUpList } from '@rumsan/raman-ui/queries/misc.query';
-import { FileAttachment, InvoiceType } from '@rumsan/raman/types';
+import { InvoiceType } from '@rumsan/raman/types/enums';
+import { FileAttachment } from '@rumsan/raman/types/index';
+
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Calendar } from '@rumsan/shadcn-ui/components/calendar';
 import {
@@ -291,7 +293,7 @@ export function InvoiceForm({
             {mode === 'add' ? (
               <ExpenseAttachment
                 files={files ?? []}
-                setFiles={setFiles || (() => {})}
+                setFiles={setFiles || (() => { })}
                 id="receipts"
               />
             ) : (

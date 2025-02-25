@@ -1,6 +1,6 @@
 import { cn } from '@/utils';
 import { useExpenseById } from '@rumsan/raman-ui/queries/expense.query';
-import { Invoice } from '@rumsan/raman/types';
+import { Invoice } from '@rumsan/raman/types/invoice.type';
 import {
   Card,
   CardContent,
@@ -57,7 +57,7 @@ export default function InvoiceReimbursedDetails({
               Reimbursed Date
             </Label>
             <p className="text-black font-normal text-sm">
-              {format(invoice?.reimbursedDate as Date, 'Do MMMM, YYYY')}
+              {format(invoice?.reimbursedDate as Date, 'do MMMM, yyyy')}
             </p>
           </div>
 

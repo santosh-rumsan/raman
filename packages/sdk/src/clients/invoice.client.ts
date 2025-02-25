@@ -1,6 +1,6 @@
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateInvoice, EditInvoice, Invoice } from '../types';
+import { CreateInvoice, EditInvoice, Invoice } from '../types/invoice.type';
 import { Pagination } from '../types/pagination.type';
 
 export class InvoiceClient {

@@ -1,4 +1,7 @@
-import { Currency, InvoiceBase, InvoiceType } from '@rumsan/raman/types';
+import { Currency, InvoiceType } from '@rumsan/raman/types/enums';
+import { InvoiceBase } from '@rumsan/raman/types/invoice.type';
+
+
 import * as z from 'zod';
 
 export type Invoice = Omit<

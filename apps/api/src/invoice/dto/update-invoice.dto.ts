@@ -3,7 +3,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 import { CreateInvoiceDto } from './invoice.dto';
 
-export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {}
+export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) { }
 
 export class GetInvoiceDto {
   @ApiPropertyOptional({ example: 1 })
