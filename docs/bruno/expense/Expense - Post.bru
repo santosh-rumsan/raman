@@ -1,0 +1,42 @@
+meta {
+  name: Expense - Post
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/expenses
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+    "files": "string",
+    "title": "Expense Test",
+    "amount": 1200,
+    "projectId": "cm1uf1jc10002ou9mwypywcko",
+    "categoryId": "cm1uf0zzw0001ou9m4il4cm4e",
+    "accountId": "cm1uevvz40000ou9m4t4g1k6r",
+    "source": "manual",
+    "remarks": "Test Expense"
+  }
+}
+
+body:multipart-form {
+  title: pokhara-visit
+  amount: 6000
+  isPending: false
+  source: Manual
+  remarks: Travel expense
+  attachments: @file(/Users/rumsan/Downloads/percy.jpeg)
+  departmentId: i73b1sdsrssoy5zhx4k6da3c
+}
+
+script:post-response {
+  var data = res.getBody().data;
+  if(data)
+    {
+      bru.setVar("expense-cuid", data.cuid);
+    }
+}

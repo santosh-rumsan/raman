@@ -1,0 +1,18 @@
+meta {
+  name: Clienrt - Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{url}}/client/{{client-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "country": "CA",
+    "email": "doejohn@gmail.com"
+  }
+}

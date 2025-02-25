@@ -1,0 +1,28 @@
+meta {
+  name: Account - Create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/account
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name":"Laxmi Sunrise",
+    "accountNumber":"233434",
+    "balance":50000
+  }
+}
+
+script:post-response {
+  var resp = res.getBody().data;
+  if(resp)
+    {
+      bru.setVar("account-name", resp.name);
+      bru.setVar("account-cuid", resp.cuid);
+    }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Invoice - Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/invoices
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  amount: 4000
+  projectId: m50c7cr99zlnxty75qsciw3n
+  categoryId: fs282gdlowmge6zpzmhjpfe7
+  description: food expense
+  userId: n0iucxk6zi6m4enrbbj5f8e1
+  invoiceType: VAT
+  receipt: @file(/Users/rumsan/Downloads/percy.jpeg)
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Project - Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/projects/{{project-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Project Test"
+  }
+}

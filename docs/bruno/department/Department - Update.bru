@@ -1,0 +1,17 @@
+meta {
+  name: Department - Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/departments/{{department-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Hello Tests"
+  }
+}

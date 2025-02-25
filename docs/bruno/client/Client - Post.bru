@@ -1,0 +1,27 @@
+meta {
+  name: Client - Post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/client
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "John Doe",
+    "country": "NP",
+    "email": "johndoe@gmail.com"
+  }
+}
+
+script:post-response {
+  var resp = res.getBody().data;
+  if(resp)
+    {
+      bru.setVar("client-cuid", resp.id);
+    }
+}

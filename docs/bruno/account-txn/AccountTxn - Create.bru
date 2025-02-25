@@ -1,0 +1,27 @@
+meta {
+  name: AccountTxn - Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/account-txn-app
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "pstdDate": "2024-01-01",
+      "txnCurrencyCode": "NPR",
+      "description": "CIPS/ACCOUNTFT:Raman KC/Susan Timsina/6920/161846552/IPS",
+      "txnType": "D",
+      "debitAmount": 39608,
+      "creditAmount": 0,
+      "balanceAmount": 310781.07,
+      "chequeNumber": null,
+      "txnAmount": "39608",
+      "txnDate": "2024-01-01",
+      "txnId": "S34907700"
+    }
+}

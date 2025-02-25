@@ -1,0 +1,11 @@
+meta {
+  name: Expense - Delete
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{url}}/expenses/{{expense-cuid}}
+  body: none
+  auth: none
+}

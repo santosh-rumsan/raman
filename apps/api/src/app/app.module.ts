@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthsModule, RolesModule, UsersModule } from '@rumsan/user';
-import { MiscModule } from 'src/misc/misc.module';
-import { ReportingModule } from 'src/reporting/reporting.module';
+import { AccountTxnModule } from '../account-txn/account-txn.module';
 import { AccountModule } from '../account/account.module';
 import { CatergoryModule } from '../category/category.module';
 import { DemoModule } from '../demo/demo.module';
@@ -11,8 +10,10 @@ import { DepartmentModule } from '../department/department.module';
 import { ExpenseModule } from '../expense/expense.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ListenerModule } from '../listeners/listener.module';
+import { MiscModule } from '../misc/misc.module';
 import { ProjectModule } from '../project/project.module';
 import { PublicModule } from '../public/public.module';
+import { ReportingModule } from '../reporting/reporting.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WebSocketService } from './websocket.service';
@@ -30,6 +31,7 @@ import { WebSocketService } from './websocket.service';
     DemoModule,
     ListenerModule,
     AccountModule,
+    AccountTxnModule,
     CatergoryModule,
     DepartmentModule,
     ProjectModule,

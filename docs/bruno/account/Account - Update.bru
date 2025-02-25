@@ -1,0 +1,17 @@
+meta {
+  name: Account - Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{url}}/account/{{account-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "balance":60000
+  }
+}

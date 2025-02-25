@@ -1,0 +1,17 @@
+meta {
+  name: Category - Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/categories/{{category-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "ssss"
+  }
+}

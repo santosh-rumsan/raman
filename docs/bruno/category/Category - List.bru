@@ -1,0 +1,17 @@
+meta {
+  name: Category - List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/categories?name={{category-name}}&page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  name: {{category-name}}
+  page: 1
+  limit: 10
+}

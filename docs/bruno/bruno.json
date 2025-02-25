@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "Raman App",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}
