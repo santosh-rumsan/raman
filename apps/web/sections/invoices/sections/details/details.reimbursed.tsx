@@ -57,7 +57,7 @@ export default function InvoiceReimbursedDetails({
               Reimbursed Date
             </Label>
             <p className="text-black font-normal text-sm">
-              {format(invoice?.reimbursedDate as Date, 'do MMMM, yyy')}
+              {format(invoice?.reimbursedDate as Date, 'do MMMM, yyyy')}
             </p>
           </div>
 
