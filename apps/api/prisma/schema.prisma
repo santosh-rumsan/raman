@@ -56,7 +56,7 @@ model AccountTransaction {
   pstdDate        DateTime
   txnCurrencyCode String
   description     String
-  txnType         String
+  txnCode         String
   debitAmount     Float
   creditAmount    Float
   balanceAmount   Float
