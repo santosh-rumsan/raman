@@ -2,7 +2,7 @@
 
 import { useExpenseStore } from '@/utils/expense.store';
 import { useAddExpense } from '@rumsan/raman-ui/queries/expense.query';
-import { InvoiceType } from '@rumsan/raman/types';
+import { InvoiceType } from '@rumsan/raman/types/enums';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ExpenseBase from './expense.form';

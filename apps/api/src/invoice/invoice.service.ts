@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
-import { InvoiceStatusType } from '@rumsan/raman/types';
+import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateInvoiceDto } from './dto/invoice.dto';

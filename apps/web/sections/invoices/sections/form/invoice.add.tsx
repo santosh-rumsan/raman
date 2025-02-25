@@ -3,7 +3,7 @@
 import { PATHS } from '@/routes/paths';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAddInvoice } from '@rumsan/raman-ui/queries/invoice.query';
-import { InvoiceType } from '@rumsan/raman/types';
+import { InvoiceType } from '@rumsan/raman/types/enums';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
   Card,
