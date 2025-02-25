@@ -7,6 +7,7 @@
   - You are about to drop the column `category` on the `tbl_accounts_txns` table. All the data in the column will be lost.
   - You are about to drop the column `name` on the `tbl_accounts_txns` table. All the data in the column will be lost.
   - You are about to drop the column `refId` on the `tbl_accounts_txns` table. All the data in the column will be lost.
+  - You are about to drop the column `isPending` on the `tbl_expenses` table. All the data in the column will be lost.
   - A unique constraint covering the columns `[accountId,txnId]` on the table `tbl_accounts_txns` will be added. If there are existing duplicate values, this will fail.
   - Added the required column `balanceAmount` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `creditAmount` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
@@ -54,6 +55,11 @@ ADD COLUMN     "txnDate" TIMESTAMP(3) NOT NULL,
 ADD COLUMN     "txnId" TEXT NOT NULL,
 ADD COLUMN     "type" "AccountTxnType",
 ALTER COLUMN "expenseId" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "tbl_expenses" DROP COLUMN "isPending",
+ADD COLUMN     "isApproved" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isReconcilled" BOOLEAN NOT NULL DEFAULT false;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_accounts_txns_accountId_txnId_key" ON "tbl_accounts_txns"("accountId", "txnId");
