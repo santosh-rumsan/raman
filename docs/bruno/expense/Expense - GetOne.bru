@@ -1,0 +1,23 @@
+meta {
+  name: Expense - GetOne
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/expenses/cm543a5xg000564afxblult4i
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Hello Testing",
+    "amount": 500000
+  }
+}
+
+body:multipart-form {
+  title: Hello Testing
+  amount: 500000
+}

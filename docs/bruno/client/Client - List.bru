@@ -1,0 +1,16 @@
+meta {
+  name: Client - List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/client?page=1&perPage=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  perPage: 10
+}

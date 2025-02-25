@@ -1,0 +1,16 @@
+meta {
+  name: Department - List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/departments?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+}

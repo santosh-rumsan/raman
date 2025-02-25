@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { InvoiceStatusType, InvoiceType } from '@rumsan/raman/types';
+import { InvoiceStatusType, InvoiceType } from '@rumsan/raman/types/enums';
 import {
   IsBoolean,
   IsDate,

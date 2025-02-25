@@ -1,0 +1,26 @@
+meta {
+  name: Category - Post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Travelling"
+  }
+}
+
+script:post-response {
+  var categoryData = res.getBody().data;
+  
+  if(categoryData){
+     bru.setVar("category-name", categoryData.name);
+    bru.setVar("category-cuid", categoryData.cuid);
+  }
+}

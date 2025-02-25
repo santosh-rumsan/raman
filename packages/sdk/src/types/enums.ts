@@ -54,3 +54,18 @@ export const Currency = {
   EUR: 'EUR' as Currency,
   USDC: 'USDC' as Currency,
 };
+
+export type AccountTxnStatus = 'UNRECONCILED' | 'RECONCILED' | 'DISCARDED';
+export const AccountTxnStatus = {
+  UNRECONCILED: 'UNRECONCILED' as AccountTxnStatus,
+  RECONCILED: 'RECONCILED' as AccountTxnStatus,
+  DISCARDED: 'DISCARDED' as AccountTxnStatus,
+};
+
+export type AccountTxnType = 'INCOME' | 'EXPENSE' | 'TRANSFER' | 'ADJUSTMENT';
+export const AccountTxnType = {
+  INCOME: 'INCOME' as AccountTxnType,
+  EXPENSE: 'EXPENSE' as AccountTxnType,
+  TRANSFER: 'TRANSFER' as AccountTxnType,
+  ADJUSTMENT: 'ADJUSTMENT' as AccountTxnType,
+};

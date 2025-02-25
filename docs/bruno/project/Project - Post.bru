@@ -1,0 +1,28 @@
+meta {
+  name: Project - Post
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}/projects
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Finance-App2",
+    "departmentId":"{{department-cuid}}",
+    "owner": "uxsunjc4x0ufd02a9jv7m7fm"
+  }
+}
+
+script:post-response {
+  var resp = res.getBody().data;
+  if(resp)
+    {
+      bru.setVar("project-name", resp.name);
+      bru.setVar("project-cuid", resp.cuid);
+    }
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Account - List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/account?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Expense - List
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/expenses?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+}

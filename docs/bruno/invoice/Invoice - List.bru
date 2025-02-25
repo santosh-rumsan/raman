@@ -1,0 +1,16 @@
+meta {
+  name: Invoice - List
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{url}}/invoices?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+}

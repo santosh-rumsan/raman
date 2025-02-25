@@ -1,0 +1,16 @@
+meta {
+  name: Project - List
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/projects?page=1&limit=10
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+}

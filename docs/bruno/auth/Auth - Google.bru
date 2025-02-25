@@ -1,0 +1,27 @@
+meta {
+  name: Auth - Google
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/auth/google
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "idToken": "ya29.a0ARW5m77JuAJCT4inUs5j4uIxDPPEdHuzNCyGJGWa5L4R20T0ESIDyKaU4elEzrEPU-0RUFVDzdSZBSQj0pdSSIyTMUVzr0JR8DZy_d0li3N32JrsK5GYKXcEpkTtye2FtWjIJ1tMDduhqmdKKMHetcV3gafpDgoO06saCgYKAWMSARISFQHGX2Mi6TMHNRr4Vj8G4fEhb8kFRQ0170",
+      "walletSignature": "0xca79f4986c62c2735414ed81d3bd2cf7545bce800730a416b45ae715e2c0fc722be5312d802ccb402d0b4275e419701530304a6a707e83d636fd06cd2c3b9d671c"
+  }
+}
+
+tests {
+  var data = res.getBody().data;
+  var reqBody = req.body
+  
+  if(data){
+    bru.setVar("access-token", data.accessToken);
+  }
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Department - Post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/departments
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Cool Dept3",
+    "group": "shared",
+    "owner": "qi3jlq7i7lwn8k9h0kvbjdjd"
+  }
+}
+
+script:post-response {
+  var resp = res.getBody().data;
+  if(resp)
+    {
+      bru.setVar("department-name", resp.name);
+      bru.setVar("department-cuid", resp.cuid);
+    }
+}

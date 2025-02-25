@@ -1,0 +1,23 @@
+meta {
+  name: Expense - Update
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{url}}/expenses/{{expense-cuid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Hello Testing",
+    "amount": 500000
+  }
+}
+
+body:multipart-form {
+  title: Hello Testing
+  amount: 500000
+}
