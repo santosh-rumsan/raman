@@ -20,7 +20,7 @@ export class ExpenseService {
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
     private gdrive: GDriveService,
-  ) {}
+  ) { }
 
   async create(
     expenseData: CreateExpenseDto,
@@ -285,5 +285,26 @@ export class ExpenseService {
       .catch((error) => {
         throw new Error('Category does not exists');
       });
+  }
+
+  async approveExpense(cuid: string, approvedBy: string) {
+    const expense = await this.prisma.expense.findUnique({
+      where: { cuid },
+    });
+
+    if (!expense) {
+      throw new Error('Expense not found');
+    }
+
+    return this.prisma.expense.update({
+      where: { cuid },
+      data: {
+        isApproved: true,
+        approvalDetails: {
+          approvedAt: new Date(),
+          approvedBy: approvedBy,
+        },
+      },
+    });
   }
 }
