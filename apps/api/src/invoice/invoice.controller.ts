@@ -31,7 +31,7 @@ import { InvoiceService } from './invoice.service';
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class InvoiceController {
-  constructor(private readonly invoiceService: InvoiceService) {}
+  constructor(private readonly invoiceService: InvoiceService) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.INVOICE })
@@ -57,15 +57,14 @@ export class InvoiceController {
     return this.invoiceService.updateInvoice(invoiceId, dto, rc);
   }
 
-  // @Patch(':invoiceId/reimburse')
-  // @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.INVOICE })
-  // reimburseInvoice(
-  //   @Param('invoiceId') invoiceId: string,
-  //   @Body() dto: UpdateInvoiceDto,
-  //   @xRC() rc: tRC,
-  // ) {
-  //   return this.invoiceService.reimburseInvoice(invoiceId, dto, rc);
-  // }
+  @Patch(':invoiceId/reimburse')
+  @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.INVOICE })
+  reimburseInvoice(
+    @Param('invoiceId') invoiceId: string,
+    @Body() dto: UpdateInvoiceDto,
+  ) {
+    return this.invoiceService.reimburseInvoice(invoiceId, dto);
+  }
 
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
