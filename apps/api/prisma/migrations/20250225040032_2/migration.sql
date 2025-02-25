@@ -14,10 +14,10 @@
   - Added the required column `description` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `pstdDate` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnAmount` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `txnCode` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnCurrencyCode` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnDate` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnId` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `txnType` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateEnum
@@ -48,10 +48,10 @@ ADD COLUMN     "description" TEXT NOT NULL,
 ADD COLUMN     "pstdDate" TIMESTAMP(3) NOT NULL,
 ADD COLUMN     "status" "AccountTxnStatus" NOT NULL DEFAULT 'UNRECONCILED',
 ADD COLUMN     "txnAmount" DOUBLE PRECISION NOT NULL,
+ADD COLUMN     "txnCode" TEXT NOT NULL,
 ADD COLUMN     "txnCurrencyCode" TEXT NOT NULL,
 ADD COLUMN     "txnDate" TIMESTAMP(3) NOT NULL,
 ADD COLUMN     "txnId" TEXT NOT NULL,
-ADD COLUMN     "txnType" TEXT NOT NULL,
 ADD COLUMN     "type" "AccountTxnType",
 ALTER COLUMN "expenseId" DROP NOT NULL;
 
