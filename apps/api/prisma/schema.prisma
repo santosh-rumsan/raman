@@ -131,23 +131,26 @@ enum Currency {
 }
 
 model Expense {
-  cuid          String       @id @unique @default(cuid())
-  date          DateTime
-  description   String
-  departmentId  String
-  categoryId    String
-  amount        Int
-  currency      Currency     @default(NPR)
-  vatAmount     Int?
-  projectId     String?
-  invoiceType   InvoiceType? @default(ESTIMATE)
-  accountId     String?
-  attachments   Json?        @db.JsonB()
-  source        String       @default("manual")
-  remarks       String?
-  isReconcilled Boolean      @default(false)
-  isApproved    Boolean      @default(false)
-  extras        Json?        @db.JsonB()
+  cuid         String       @id @unique @default(cuid())
+  date         DateTime
+  description  String
+  departmentId String
+  categoryId   String
+  amount       Int
+  currency     Currency     @default(NPR)
+  vatAmount    Int?
+  projectId    String?
+  invoiceType  InvoiceType? @default(ESTIMATE)
+  accountId    String?
+  attachments  Json?        @db.JsonB()
+  source       String       @default("manual")
+  remarks      String?
+  extras       Json?        @db.JsonB()
+
+  isReconciled     Boolean @default(false)
+  reconcileDetails Json?   @db.JsonB()
+  isApproved       Boolean @default(false)
+  approvalDetails  Json?   @db.JsonB()
 
   AccountTransaction AccountTransaction[]
   Salaries           Salary[]
