@@ -58,8 +58,10 @@ ALTER COLUMN "expenseId" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "tbl_expenses" DROP COLUMN "isPending",
+ADD COLUMN     "approvalDetails" JSONB,
 ADD COLUMN     "isApproved" BOOLEAN NOT NULL DEFAULT false,
-ADD COLUMN     "isReconcilled" BOOLEAN NOT NULL DEFAULT false;
+ADD COLUMN     "isReconciled" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "reconcileDetails" JSONB;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tbl_accounts_txns_accountId_txnId_key" ON "tbl_accounts_txns"("accountId", "txnId");
