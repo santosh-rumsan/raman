@@ -11,6 +11,7 @@ import { Expense } from '@rumsan/raman/types';
 import { useRouter } from 'next/navigation';
 import { AttachmentCard } from './attachment.card';
 import ExpenseDetailCard from './details.card';
+import { CloseVerifyDailog } from './expense.verify';
 
 type ExpensesDetailsProps = {
   expenseId: string;
@@ -49,14 +50,18 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
     <div className="px-6">
       <div className="flex justify-between items-center">
         <div className="flex items-start gap-1"></div>
-        <button
-          onClick={handleEditButton}
-          className="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600"
-        >
-          Edit Expense
-        </button>
+        {expense?.isApproved === false && (
+          <div className="flex gap-2">
+            <button
+              onClick={handleEditButton}
+              className="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600"
+            >
+              Edit
+            </button>
+            <CloseVerifyDailog expenseId={expenseId} />
+          </div>
+        )}
       </div>
-
       <div className="grid grid-cols-12 gap-6 mt-4">
         <ExpenseDetailCard className="col-span-8" expense={expense} />
         <AttachmentCard

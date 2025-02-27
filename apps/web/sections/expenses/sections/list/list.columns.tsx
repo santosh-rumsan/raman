@@ -1,5 +1,6 @@
 'use client';
 
+import { Expense } from '@rumsan/raman';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { IconByName } from '@/utils';
@@ -57,6 +58,7 @@ export function ListColumns<T>(): ColumnDef<T>[] {
         <DataTableColumnHeader column={column} className="ml-10" title="Date" />
       ),
       cell: ({ row }) => {
+        const expense = row.original as Expense;
         const item = lookupByCuid('categories', row.getValue('categoryId'));
         return (
           <div className="flex items-center space-x-2 gap-">
@@ -66,6 +68,7 @@ export function ListColumns<T>(): ColumnDef<T>[] {
                 defaultIcon="HandCoins"
                 className="h-5 w-5"
                 strokeWidth={2.5}
+                color={expense?.isApproved ? "#4CAF50" : "#FFC107"}
               />
             </div>
             <span className="truncate font-medium">
@@ -172,9 +175,8 @@ export function ListColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div
-            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${
-              statusColor[row.getValue('isPending') as keyof typeof statusColor]
-            }`}
+            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${statusColor[row.getValue('isPending') as keyof typeof statusColor]
+              }`}
           >
             <span className="truncate text-xs">
               {row.getValue('isPending') ? 'Pending' : 'Reconciled'}
