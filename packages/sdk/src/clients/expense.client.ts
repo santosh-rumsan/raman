@@ -69,4 +69,12 @@ export class ExpenseClient {
     );
     return formatResponse<Expense>(response);
   }
+
+  async approve(cuid: string, config?: AxiosRequestConfig) {
+    const response = await this._client.patch(
+      `${this._prefix}/${cuid}/approve`,
+      config
+    );
+    return formatResponse<Expense>(response);
+  }
 }

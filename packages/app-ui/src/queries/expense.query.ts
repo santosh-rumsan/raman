@@ -154,3 +154,31 @@ export const useExpenseById = (
     queryClient,
   );
 };
+
+export const useApproveExpense = () => {
+  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  return useMutation(
+    {
+      mutationFn: async (payload: { id: string; }) => {
+        const { data } = await RsClient.Expense.approve(
+          payload.id,
+        );
+        return data;
+      },
+      onSuccess: (updatedExpense) => {
+        queryClient?.invalidateQueries({
+          queryKey: ['expense_list'],
+        });
+        queryClient?.setQueryData<Expense[]>(
+          ['expense_list'],
+          (oldData = []) => {
+            return oldData.map((expense) =>
+              expense.cuid === updatedExpense.cuid ? updatedExpense : expense,
+            );
+          },
+        );
+      },
+    },
+    queryClient,
+  );
+};

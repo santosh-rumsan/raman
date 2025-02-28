@@ -6,7 +6,7 @@ import {
   CardHeader,
 } from '@rumsan/shadcn-ui/components/card';
 import { Label } from '@rumsan/shadcn-ui/components/label';
-import { Wallet } from 'lucide-react';
+import { BadgeCheck, BadgeHelp, Wallet } from 'lucide-react';
 import { statusColor } from '../list/list.columns';
 
 export default function ExpenseDetailCard({
@@ -36,6 +36,11 @@ export default function ExpenseDetailCard({
           <h3 className="text-base ml-3 text-gray-700">
             {expense?.description}
           </h3>
+          {expense?.isApproved ? (
+            <BadgeCheck strokeWidth={2.5} className="h-4" color="#4CAF50" />
+          ) : (
+            <BadgeHelp strokeWidth={2.5} className="h-4" color="#FFC107" />
+          )}
         </div>
       </CardHeader>
 
@@ -78,11 +83,10 @@ export default function ExpenseDetailCard({
           <div>
             <Label className="text-xs font-normal text-gray-400">Status</Label>
             <p
-              className={`flex space-x-2 h-6 w-[80px] font-normal text-sm items-center justify-center rounded-2xl p-2 ${
-                statusColor[
-                  String(expense?.isPending) as keyof typeof statusColor
-                ]
-              }`}
+              className={`flex space-x-2 h-6 w-[80px] font-normal text-sm items-center justify-center rounded-2xl p-2 ${statusColor
+              [String(expense?.isPending) as keyof typeof statusColor
+              ]
+                }`}
             >
               {expense?.isPending ? 'Pending' : 'Reconciled'}
             </p>
