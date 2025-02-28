@@ -35,19 +35,57 @@ export function DataTable<T, TData>({
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
-                <TableHead className="text-sm text-black-900" key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                <TableHead
+                  className="text-sm text-black-900 cursor-pointer"
+                  key={header.id}
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <span
+                    className="inline-flex items-center gap-1"
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                    {header.column.getIsSorted() === 'asc' ? (
+                      <span className="text-gray-600">▲</span> // Lighter gray color
+                    ) : header.column.getIsSorted() === 'desc' ? (
+                      <span className="text-gray-600">▼</span>
+                    ) : null}
+                  </span>
                 </TableHead>
               );
             })}
           </TableRow>
         ))}
       </TableHeader>
+
+      {/* <thead>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id} className="bg-gray-200">
+            {headerGroup.headers.map((header) => (
+              <th
+                key={header.id}
+                className="border p-2 cursor-pointer"
+                onClick={header.column.getToggleSortingHandler()}
+              >
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+                {header.column.getIsSorted() === 'asc'
+                  ? ' ▲'
+                  : header.column.getIsSorted() === 'desc'
+                    ? ' ▼'
+                    : ''}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead> */}
       <TableBody>
         {isLoading ? (
           <TableRow className="h-96">

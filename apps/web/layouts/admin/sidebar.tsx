@@ -2,7 +2,6 @@
 
 import {
   AudioWaveform,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
@@ -52,26 +51,22 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Expenses',
+      title: 'Transactions',
       url: 'https://rumsan.com',
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'Daybook',
+          title: 'Expenses',
           url: '/expenses',
         },
-      ],
-    },
-    {
-      title: 'Invoices',
-      url: '#',
-      icon: Bot,
-      isActive: true,
-      items: [
         {
-          title: 'List',
+          title: 'Receipts',
           url: '/invoices',
+        },
+        {
+          title: 'Bank Accounts',
+          url: '/accounts',
         },
       ],
     },

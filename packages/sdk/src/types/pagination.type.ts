@@ -3,7 +3,5 @@ export type Pagination = {
   limit: number;
   sort?: string;
   order?: 'asc' | 'desc';
-  filter?: Record<string, unknown>;
-  year?: string;
-  name?: string;
+  filters?: Record<string, unknown> | undefined;
 };

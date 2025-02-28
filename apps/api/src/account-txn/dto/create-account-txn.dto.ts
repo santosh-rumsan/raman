@@ -3,13 +3,9 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAccountTxnDto {
-  @ApiProperty({ description: 'Unique identifier for the account' })
-  @IsString()
-  accountId: string;
-
   @ApiProperty({ description: 'Amount of the transaction' })
-  @IsNumber()
-  txnAmount: number;
+  @IsString()
+  txnAmount: string;
 
   @ApiProperty({
     description: 'Date of the transaction',
@@ -35,7 +31,7 @@ export class CreateAccountTxnDto {
     description: 'Transaction Code (e.g., (C) credit, (D) debit)',
   })
   @IsString()
-  txnCode: string;
+  txnType: string;
 
   @ApiProperty({ description: 'Debit amount of the transaction' })
   @IsNumber()

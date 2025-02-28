@@ -25,24 +25,9 @@ export class AccountService {
     return result as Account;
   }
 
-  async findAll(query: GetAccountDto) {
-    const where: Record<any, any> = {
-      deletedAt: null,
-    };
-    if (query.name) {
-      where.name = query.name;
-    }
-
-    return paginate(
-      this.prisma.account,
-      {
-        where,
-      },
-      {
-        page: query.page,
-        perPage: query.limit,
-      },
-    );
+  async list(dto: GetAccountDto) {
+    const where = dto.show_archived ? {} : { deletedAt: null };
+    return this.prisma.account.findMany({ where });
   }
 
   async findOne(cuid: string) {
@@ -51,12 +36,12 @@ export class AccountService {
 
   async update(
     cuid: string,
-    updateAccountDto: UpdateAccountDto,
+    dto: UpdateAccountDto,
     ctx: tRC,
   ): Promise<Account> {
     await this.findFirstOrThrow(cuid);
 
-    const data = { ...updateAccountDto, updatedBy: ctx.currentUserId };
+    const data = { ...dto, updatedBy: ctx.currentUserId };
     this.eventMgr.emit(EVENTS.ACCOUNT.UPDATED, data);
 
     return (await this.prisma.account.update({

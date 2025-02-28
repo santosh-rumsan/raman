@@ -1,6 +1,6 @@
 import { RumsanClient } from '@rumsan/sdk/clients';
 import { CreateAxiosDefaults } from 'axios';
-import { AccountTransactionClient } from './account-transaction.client';
+import { AccountTxnClient } from './account-transaction.client';
 import { AccountClient } from './account.client';
 import { CategoryClient } from './category.client';
 import { DemoClient } from './demo.client';
@@ -27,7 +27,7 @@ export class ApiClient extends RumsanClient {
   }
 
   public get AccountTransaction() {
-    return new AccountTransactionClient(this.apiClient);
+    return new AccountTxnClient(this.apiClient);
   }
 
   public get Category() {

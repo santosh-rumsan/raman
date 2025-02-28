@@ -1,6 +1,6 @@
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Account, CreateAccount, EditAccount } from '../types';
+import { Account, AccountTxn, CreateAccount, EditAccount } from '../types';
 import { Pagination } from '../types/pagination.type';
 
 export class AccountClient {
@@ -22,6 +22,21 @@ export class AccountClient {
       ...config,
     });
     return formatResponse<Account[]>(response);
+  }
+
+  async listTransactions(
+    id: string,
+    data?: Pagination & { description?: string },
+    config?: AxiosRequestConfig,
+  ) {
+    const response = await this._client.get(
+      `${this._prefix}/${id}/transactions`,
+      {
+        params: data,
+        ...config,
+      },
+    );
+    return formatResponse<AccountTxn[]>(response);
   }
 
   async findOne(id: string, config?: AxiosRequestConfig) {

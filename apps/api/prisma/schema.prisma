@@ -19,7 +19,7 @@ model Account {
   currency   String  @default("NPR")
   acctNumber String?
   bankCode   String?
-  balance    Int     @default(0)
+  balance    Float     @default(0)
 
   Expenses            Expense[]
   AccountTransactions AccountTransaction[]
@@ -136,9 +136,9 @@ model Expense {
   description  String
   departmentId String
   categoryId   String
-  amount       Int
+  amount       Float
   currency     Currency     @default(NPR)
-  vatAmount    Int?
+  vatAmount    Float?
   projectId    String?
   invoiceType  InvoiceType? @default(ESTIMATE)
   accountId    String?
@@ -176,8 +176,8 @@ model SalaryDraft {
   status               DraftStatus @default(OPEN)
   numberOfEmployee     Int
   numberOfEmployeePaid Int         @default(0)
-  totalAmountDue       Int?
-  totalAmountPaid      Int?        @default(0)
+  totalAmountDue       Float?
+  totalAmountPaid      Float?        @default(0)
 
   Salary Salary[]
 
@@ -196,8 +196,8 @@ model Salary {
   cuid          String       @id @unique @default(cuid())
   employeeId    String?
   salaryDraftId String?
-  amountDue     Int?
-  amountPaid    Int?         @default(0)
+  amountDue     Float?
+  amountPaid    Float?         @default(0)
   isPartial     Boolean      @default(false)
   expenseId     String?
   status        SalaryStatus @default(UNPAID)
@@ -235,7 +235,7 @@ model Invoice {
   cuid              String            @id @unique @default(cuid())
   date              DateTime
   description       String
-  amount            Int
+  amount            Float
   categoryId        String
   userId            String
   currency          Currency          @default(NPR)
@@ -245,7 +245,7 @@ model Invoice {
   receipts          Json?             @db.JsonB()
   approvalChallenge String?           @unique @default(cuid())
   invoiceType       InvoiceType?      @default(ESTIMATE)
-  vatAmount         Int?
+  vatAmount         Float?
   expenseId         String?
   reason            String?
   reimbursedDate    DateTime?
@@ -292,7 +292,7 @@ model UserDetails {
   cuid         String    @unique
   name         String?
   departmentId String?
-  salary       Int       @default(0)
+  salary       Float       @default(0)
   accountId    String?
   userType     UserType?
   managerId    String?
@@ -372,8 +372,8 @@ model Role {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt()
-  createdBy Int?
-  updatedBy Int?
+  createdBy String?
+  updatedBy String?
 
   @@map("tbl_auth_roles")
 }
@@ -406,7 +406,7 @@ model UserRole {
   Role Role @relation(fields: [roleId], references: [cuid])
 
   createdAt DateTime @default(now())
-  createdBy Int?
+  createdBy String?
 
   @@unique([userId, roleId], name: "UserRoleIdentifier")
   @@map("tbl_users_roles")

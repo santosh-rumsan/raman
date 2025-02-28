@@ -1,0 +1,17 @@
+meta {
+  name: AccountTxn - Update Balance
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{url}}/account-txn-app/xa9i22qnbsl8a4uyaczjigrf/balance
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "balance":9670
+  }
+}

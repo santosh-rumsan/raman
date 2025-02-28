@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { AccountTxnStatus, AccountTxnType } from '@rumsan/raman/types/enums';
 
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
@@ -29,18 +29,28 @@ export class UpdateAccountTxnDto {
   type?: AccountTxnType;
 }
 
-export class GetAccountTxnDto {
-  @IsOptional()
-  @ApiProperty({
-    description: 'Account Cuid',
-  })
-  accountId: string;
+class FiltersDto {
+  [key: string]: string; // Dynamic keys for filters
+}
 
+export class GetAccountTxnDto {
   @ApiPropertyOptional({ example: 1 })
   @IsNumber()
-  page?: number;
+  page?: number = 1;
 
   @ApiPropertyOptional({ example: '10' })
   @IsNumber()
-  limit?: number;
+  limit?: number = 100;
+
+  @IsOptional()
+  @IsString()
+  sort?: string;
+
+  @IsOptional()
+  @IsString()
+  order?: 'asc' | 'desc' = 'asc';
+
+  @IsOptional()
+  @IsString()
+  description?: string;
 }

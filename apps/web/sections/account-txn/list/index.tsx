@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   getCoreRowModel,
@@ -12,34 +11,37 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 
-import { PATHS } from '@/routes/paths';
-import { useAccountList } from '@rumsan/raman-ui/queries/account.query';
-import { Account } from '@rumsan/raman/types';
+import { useAccountTxnList } from '@rumsan/raman-ui/queries/account-txn.query';
+import { AccountTxn } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
 import { DataTable } from '@rumsan/ui/components/data-table/datatable.table';
 import { useRouter } from 'next/navigation';
 import { useColumns } from './list.columns';
 import { ListToolbar } from './list.toolbar';
 
-export function AccountList() {
+export function AccountTxnList(props: { accountId: string }) {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 15,
   });
 
-  const accountList = useAccountList();
-  const columns = useColumns<Account>();
+  const accountList = useAccountTxnList(props.accountId, {
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    sort: sorting[0]?.id,
+    order: sorting[0]?.desc ? 'desc' : 'asc',
+    description: columnFilters[0]?.value,
+  });
+  const columns = useColumns<AccountTxn>();
 
   const table = useReactTable({
-    data: (accountList.data as Account[]) || [],
+    data: (accountList.data?.data as AccountTxn[]) || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -49,18 +51,18 @@ export function AccountList() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    manualSorting: true,
+    manualPagination: true,
+    manualFiltering: true,
+    rowCount: accountList.data?.meta?.total,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      pagination: pagination,
       rowSelection,
-      pagination,
     },
   });
-
-  const handleRowClick = (row: any) => {
-    router.push(PATHS.ACCOUNTS.TXNS(row.original.cuid));
-  };
 
   return (
     <main className="gap-4 sm:px-6 sm:py-0 md:gap-8">
@@ -71,7 +73,6 @@ export function AccountList() {
           <DataTable
             table={table}
             columns={columns}
-            handleRowClick={handleRowClick}
             isLoading={accountList.isLoading}
             entityName="Account"
           />

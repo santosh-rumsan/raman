@@ -28,6 +28,7 @@ export const PATHS = {
   },
   ACCOUNTS: {
     HOME: `${ROOTS.ACCOUNTS}`,
+    TXNS: (cuid: string) => `${ROOTS.ACCOUNTS}/${cuid}/transactions`,
   },
   EXPENSE: {
     HOME: `${ROOTS.EXPENSE}`,
