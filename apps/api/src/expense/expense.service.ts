@@ -20,7 +20,7 @@ export class ExpenseService {
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
     private gdrive: GDriveService,
-  ) { }
+  ) {}
 
   async create(
     expenseData: CreateExpenseDto,
@@ -30,6 +30,8 @@ export class ExpenseService {
     const data: Expense = {
       cuid: createId(),
       ...expenseData,
+      isApproved: false,
+      isReconciled: false,
       createdBy: ctx.currentUser?.cuid,
       updatedBy: ctx.currentUser?.cuid,
     };

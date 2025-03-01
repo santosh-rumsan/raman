@@ -7,15 +7,15 @@ export interface AccountTxnBase {
   status: AccountTxnStatus;
   type?: AccountTxnType;
 
-  pstdDate: Date;
+  pstdDate?: Date;
   txnCurrencyCode: string;
   description: string;
-  txnCode: string;
+  txnCode?: string;
   debitAmount: number;
   creditAmount: number;
   balanceAmount: number;
   chequeNumber?: string;
-  txnAmount: number;
+  txnAmount?: number;
   txnDate: Date;
   txnId: string;
 }

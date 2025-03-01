@@ -1,20 +1,24 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { Expense, ExpenseExtended } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
 //TODO: fix any
-export const useExpenseList = (pagination: any): any => {
+export const useExpenseList = (
+  pagination: Pagination & { description?: string },
+): any => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   const query = useQuery(
     {
       queryKey: ['expense_list', pagination],
       queryFn: async () => {
-        return await RsClient.Expense.list({
-          page: pagination.pageIndex + 1,
-          limit: pagination.pageSize,
-        });
+        const { response } = await RsClient.Expense.list(pagination);
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
     },
     queryClient,
@@ -159,10 +163,8 @@ export const useApproveExpense = () => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
   return useMutation(
     {
-      mutationFn: async (payload: { id: string; }) => {
-        const { data } = await RsClient.Expense.approve(
-          payload.id,
-        );
+      mutationFn: async (payload: { id: string }) => {
+        const { data } = await RsClient.Expense.approve(payload.id);
         return data;
       },
       onSuccess: (updatedExpense) => {

@@ -2,6 +2,7 @@ import { CommonFields } from './common.type';
 
 export type AccountBase = {
   name: string;
+  bankCode?: string;
   acctNumber?: string;
   currency: string;
   balance?: number;

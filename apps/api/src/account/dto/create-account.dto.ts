@@ -8,6 +8,11 @@ export class CreateAccountDto implements CreateAccount {
   @IsString()
   name: string;
 
+  @ApiProperty({ example: 'GLBB' })
+  @IsOptional()
+  @IsString()
+  bankCode?: string;
+
   @ApiProperty({ example: '24000012000012' })
   @IsNotEmpty()
   @IsString()

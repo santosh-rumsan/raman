@@ -40,7 +40,10 @@ export class ExpenseClient {
     return formatResponse<Expense>(response);
   }
 
-  async list(data?: Pagination, config?: AxiosRequestConfig) {
+  async list(
+    data?: Pagination & { description?: string },
+    config?: AxiosRequestConfig,
+  ) {
     const response = await this._client.get(`${this._prefix}`, {
       params: data,
       ...config,
@@ -73,7 +76,7 @@ export class ExpenseClient {
   async approve(cuid: string, config?: AxiosRequestConfig) {
     const response = await this._client.patch(
       `${this._prefix}/${cuid}/approve`,
-      config
+      config,
     );
     return formatResponse<Expense>(response);
   }

@@ -20,13 +20,16 @@ export interface ExpenseBase<T = string> {
   vatAmount?: number | 0;
   source?: string;
   remarks?: string | null;
-  isPending?: boolean | false;
   extras?: Record<string, T>;
 }
 
 export type Expense<T = string> = ExpenseBase<T> &
   CommonFields & {
     cuid: string;
+    approvalDetails?: Record<string, string>;
+    isApproved: boolean;
+    reconcileDetails?: Record<string, string>;
+    isReconciled: boolean;
   };
 
 export type ExpenseExtended<T = string> = Expense<T> & {

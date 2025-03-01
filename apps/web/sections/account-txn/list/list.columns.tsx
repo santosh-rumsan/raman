@@ -36,7 +36,6 @@ export function useColumns<T>(): ColumnDef<T>[] {
         if (amt < 1) return '';
         return (
           <div className="text-right">
-            {' '}
             {amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </div>
         );

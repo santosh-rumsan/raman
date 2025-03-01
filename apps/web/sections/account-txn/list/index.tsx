@@ -74,7 +74,6 @@ export function AccountTxnList(props: { accountId: string }) {
             table={table}
             columns={columns}
             isLoading={accountList.isLoading}
-            entityName="Account"
           />
         </div>
         <DataTablePagination

@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   getCoreRowModel,
@@ -27,15 +26,21 @@ export function ExpenseList() {
   const router = useRouter();
 
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 15,
   });
 
-  const { data, isLoading } = useExpenseList(pagination);
+  const { data, isLoading } = useExpenseList({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    sort: sorting[0]?.id,
+    order: sorting[0]?.desc ? 'desc' : 'asc',
+    description: columnFilters[0]?.value,
+  });
   const columns = ListColumns<Expense>();
 
   const table = useReactTable({
@@ -51,6 +56,11 @@ export function ExpenseList() {
     onRowSelectionChange: setRowSelection,
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualSorting: true,
+    manualPagination: true,
+    manualFiltering: true,
+    enableRowSelection: true,
+    rowCount: data?.meta?.total,
     state: {
       sorting,
       columnFilters,
@@ -63,10 +73,6 @@ export function ExpenseList() {
         pageSize: 10,
       },
     },
-    pageCount: data?.response.meta?.lastPage || 1,
-    enableRowSelection: true,
-    manualPagination: true,
-    manualSorting: true,
   });
 
   const handleRowClick = (row: any) => {
@@ -74,22 +80,42 @@ export function ExpenseList() {
   };
 
   return (
-    <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+    // <main className="gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+    //   <div className="space-y-4">
+    //     <div className="flex flex-col gap-1 my-3">
+    //       <p className="text-gray-500 font-normal text-sm">
+    //         Important: Expenses incurred by the office should be entered within
+    //         24 hours.
+    //       </p>
+    //     </div>
+    //     <ListToolbar table={table} />
+    //     <div className="rounded-md border bg-white p-1 min-h-96">
+    //       <DataTable
+    //         table={table}
+    //         columns={columns}
+    //         handleRowClick={handleRowClick}
+    //         isLoading={isLoading}
+    //         entityName="Expense"
+    //       />
+    //     </div>
+    //     <DataTablePagination
+    //       table={table}
+    //       setPagination={setPagination}
+    //       pagination={pagination}
+    //     />
+    //   </div>
+    // </main>
+
+    <main className="gap-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
-        <div className="flex flex-col gap-1 my-3">
-          <p className="text-gray-500 font-normal text-sm">
-            Important: Expenses incurred by the office should be entered within
-            24 hours.
-          </p>
-        </div>
+        <div className="flex flex-col gap-1 my-3"></div>
         <ListToolbar table={table} />
-        <div className="rounded-md border bg-white p-1 min-h-96">
+        <div className="rounded-md border">
           <DataTable
             table={table}
             columns={columns}
             handleRowClick={handleRowClick}
             isLoading={isLoading}
-            entityName="Expense"
           />
         </div>
         <DataTablePagination

@@ -18,7 +18,6 @@ interface DataTableProps<T, TData> {
   table: Table<TData>;
   isLoading?: boolean;
   handleRowClick?: (row: any) => void;
-  entityName: string;
 }
 
 export function DataTable<T, TData>({
@@ -26,7 +25,6 @@ export function DataTable<T, TData>({
   columns,
   isLoading,
   handleRowClick,
-  entityName,
 }: DataTableProps<T, TData>) {
   return (
     <TableDom className="w-full">
@@ -38,11 +36,11 @@ export function DataTable<T, TData>({
                 <TableHead
                   className="text-sm text-black-900 cursor-pointer"
                   key={header.id}
-                  onClick={header.column.getToggleSortingHandler()}
+                  //onClick={header.column.getToggleSortingHandler()}
                 >
                   <span
-                    className="inline-flex items-center gap-1"
-                    onClick={header.column.getToggleSortingHandler()}
+                    className="inline-flex items-center gap-1 w-full"
+                    //onClick={header.column.getToggleSortingHandler()}
                   >
                     {header.isPlaceholder
                       ? null
@@ -50,11 +48,11 @@ export function DataTable<T, TData>({
                           header.column.columnDef.header,
                           header.getContext(),
                         )}
-                    {header.column.getIsSorted() === 'asc' ? (
+                    {/* {header.column.getIsSorted() === 'asc' ? (
                       <span className="text-gray-600">▲</span> // Lighter gray color
                     ) : header.column.getIsSorted() === 'desc' ? (
                       <span className="text-gray-600">▼</span>
-                    ) : null}
+                    ) : null} */}
                   </span>
                 </TableHead>
               );
@@ -113,7 +111,7 @@ export function DataTable<T, TData>({
         ) : (
           <TableRow className="h-96">
             <TableCell colSpan={columns.length} className="text-center">
-              <DataTableNoData entityName={entityName} />
+              <DataTableNoData />
             </TableCell>
           </TableRow>
         )}

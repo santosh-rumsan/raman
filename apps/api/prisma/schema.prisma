@@ -53,15 +53,15 @@ model AccountTransaction {
   status    AccountTxnStatus @default(UNRECONCILED)
   type      AccountTxnType?
 
-  pstdDate        DateTime
+  pstdDate        DateTime?
   txnCurrencyCode String
   description     String
-  txnCode         String
+  txnCode         String?
   debitAmount     Float
   creditAmount    Float
-  balanceAmount   Float
+  balanceAmount   Float?
   chequeNumber    String?
-  txnAmount       Float
+  txnAmount       Float?
   txnDate         DateTime
   txnId           String
 
