@@ -5,7 +5,7 @@ import { EVENTS } from '@rumsan/raman/constants/events';
 import { Project } from '@rumsan/raman/types/project.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { GetProjectDto, UpdateProjectDto } from './dto/update-project.dto';
+import { ListProjectDto, ProjectFilterDto, UpdateProjectDto } from './dto/update-project.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
@@ -14,7 +14,7 @@ export class ProjectService {
   constructor(
     private prisma: PrismaService,
     private eventMgr: EventEmitter2,
-  ) {}
+  ) { }
 
   async create(payload: CreateProjectDto, ctx: tRC) {
     const result = await this.prisma.project.findFirst({
@@ -33,23 +33,46 @@ export class ProjectService {
     })) as Project;
   }
 
-  async findAll(query: GetProjectDto) {
-    const where: Record<any, any> = {
+  async findAll(dto: ListProjectDto, filters?: ProjectFilterDto,) {
+    const orderBy = {};
+    dto.sort = dto.sort || 'createdAt';
+    dto.order = dto.order || 'desc';
+    if (dto.sort) {
+      orderBy[dto.sort] = dto.order;
+    }
+
+    const where = {
       deletedAt: null,
     };
-    if (query.name) {
-      where.name = query.name;
+    if (filters?.name) {
+      where['name'] = {
+        contains: filters.name,
+        mode: 'insensitive',
+      };
+    }
+    if (filters?.owner) {
+      where['owner'] = {
+        in: filters.owner,
+      };
+    }
+
+    if (filters?.departmentId) {
+      where['departmentId'] = {
+        in: filters.departmentId,
+      };
     }
 
     return paginate(
       this.prisma.project,
       {
         where,
+        orderBy,
+        include: {
+          ProjectOwner: { select: { name: true } },
+          Department: { select: { name: true } },
+        },
       },
-      {
-        page: query.page,
-        perPage: query.limit,
-      },
+      { page: dto.page, perPage: dto.limit },
     );
   }
 

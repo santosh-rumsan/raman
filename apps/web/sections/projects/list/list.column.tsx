@@ -1,8 +1,6 @@
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
-import { Button } from '@rumsan/shadcn-ui/components/button';
 import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatable.column.header';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
 import { DataTableRowActions } from './list.actions';
 
 export function useColumns<T>(): ColumnDef<T>[] {
@@ -11,41 +9,62 @@ export function useColumns<T>(): ColumnDef<T>[] {
   return [
     {
       accessorKey: 'name',
-      header: ({ column }) => {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Name" />
+      ),
+      cell: ({ row }) => {
+        const item = row.getValue('name') as string
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            className="px-0 py-0 hover:bg-transparent"
-          >
-            Name
-            <ArrowUpDown className="ml-2" />
-          </Button>
+          <div>
+            <span>{item}</span>
+          </div>
         );
       },
-      cell: ({ row }) => <div>{row.getValue('name')}</div>,
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
     },
 
     {
       accessorKey: 'departmentId',
-      header: () => <div className="text-left">Department</div>,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Department" />
+      ),
       cell: ({ row }) => {
-        const departmentName = lookupByCuid(
-          'departments',
-          row.getValue('departmentId'),
-        );
+        const item = lookupByCuid('departments', row.getValue('departmentId'));
 
-        return <div>{departmentName?.name}</div>;
+        return (
+          <div>
+            <span>{item?.name}</span>
+          </div>
+        );
       },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+      enableSorting: false,
+      enableHiding: false,
     },
+
     {
       accessorKey: 'owner',
-      header: () => <div className="text-left">Owner</div>,
-
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Owner" />
+      ),
       cell: ({ row }) => {
-        const ownerName = lookupByCuid('users', row.getValue('owner'));
-        return <div>{ownerName?.name}</div>;
+        const item = lookupByCuid('users', row.getValue('owner'));
+
+        return (
+          <div>
+            <span>{item?.name}</span>
+          </div>
+        );
       },
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+      enableSorting: false,
+      enableHiding: false,
     },
     {
       id: 'actions',

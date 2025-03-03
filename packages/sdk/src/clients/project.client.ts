@@ -24,6 +24,21 @@ export class ProjectClient {
     return formatResponse<Project[]>(response);
   }
 
+  async search(
+    params?: Pagination,
+    filters?: any,
+    config?: AxiosRequestConfig,) {
+    const response = await this._client.post(
+      `${this._prefix}/search`,
+      filters,
+      {
+        params,
+        ...config,
+      },
+    );
+    return formatResponse<Project[]>(response);
+  }
+
   async get(id: string, config?: AxiosRequestConfig) {
     const response = await this._client.get(`${this._prefix}/${id}`, config);
     return formatResponse<Project>(response);

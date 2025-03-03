@@ -16,7 +16,7 @@ import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants/index';
 import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { GetProjectDto, UpdateProjectDto } from './dto/update-project.dto';
+import { ListProjectDto, ProjectFilterDto, UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectService } from './project.service';
 
 @Controller('projects')
@@ -25,7 +25,7 @@ import { ProjectService } from './project.service';
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class ProjectController {
   private logger = new Logger('ProjectController');
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(private readonly projectService: ProjectService) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.PROJECT })
@@ -36,8 +36,18 @@ export class ProjectController {
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.PROJECT })
   //TODO: fix any
-  getCategories(@Query() query: GetProjectDto): any {
+  getProjects(@Query() query: ListProjectDto): any {
     return this.projectService.findAll(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.PROJECT })
+  //TODO:fix any
+  listExpensesWithFilter(
+    @Query() query: ListProjectDto,
+    @Body() filters: ProjectFilterDto,
+  ): any {
+    return this.projectService.findAll(query, filters);
   }
 
   @Get(':id')
