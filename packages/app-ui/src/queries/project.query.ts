@@ -4,20 +4,21 @@ import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 
+//TODO: fix any
 export const useProjectList = (
-  pager: Pagination = { page: 1, limit: 20 },
-): UseQueryResult<Project[], Error> => {
+  pagination: Pagination, filters: any,
+): any => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
-      queryKey: ['project_list'],
+      queryKey: ['project_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { data } = await RsClient.Project.list({
-          page: pager.page,
-          limit: pager.limit,
-        });
-        return data;
+        const { response } = await RsClient.Project.search(pagination, filters);
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
     },
     queryClient,
