@@ -1,0 +1,17 @@
+meta {
+  name: Expense - Search
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{url}}/expenses/search?page=1&limit=15&order=desc
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 15
+  order: desc
+}

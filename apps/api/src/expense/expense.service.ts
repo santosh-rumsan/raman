@@ -9,7 +9,11 @@ import { tRC } from '@rumsan/sdk/types';
 import { GDriveService } from '../utils/gdrive.utils';
 import { createIpfsHash } from '../utils/ipfs.utils';
 import { CreateExpenseDto } from './dto/create-expense.dto';
-import { GetExpenseDto, UpdateExpenseDto } from './dto/update-expense.dto';
+import {
+  ExpenseFilterDto,
+  ListDto,
+  UpdateExpenseDto,
+} from './dto/update-expense.dto';
 import { ErrorManager } from './errorHandling';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
@@ -140,27 +144,44 @@ export class ExpenseService {
     });
   }
 
-  async findAll(query: GetExpenseDto) {
-    const where: Record<any, any> = {
-      deletedAt: null,
-    };
-    if (query.title) {
-      where.title = query.title;
+  async list(dto: ListDto, filters?: ExpenseFilterDto) {
+    const orderBy = {};
+    dto.sort = dto.sort || 'date';
+    dto.order = dto.order || 'desc';
+    if (dto.sort) {
+      orderBy[dto.sort] = dto.order;
     }
+
+    const where = {};
+    if (filters?.description) {
+      where['description'] = {
+        contains: filters.description,
+        mode: 'insensitive',
+      };
+    }
+    if (filters?.categoryId) {
+      where['categoryId'] = {
+        in: filters.categoryId,
+      };
+    }
+
+    if (filters?.departmentId) {
+      where['departmentId'] = {
+        in: filters.departmentId,
+      };
+    }
+
     return paginate(
       this.prisma.expense,
       {
         where,
+        orderBy,
         include: {
           Project: { select: { name: true } },
           Category: { select: { name: true } },
         },
-        orderBy: { createdAt: 'desc' },
       },
-      {
-        page: query.page,
-        perPage: query.limit,
-      },
+      { page: dto.page, perPage: dto.limit },
     );
   }
 

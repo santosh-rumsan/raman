@@ -10,29 +10,40 @@ import { DataTableViewOptions } from '@rumsan/ui/components/data-table/datatable
 import { PATHS } from '@/routes/paths';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { ListFilter } from '@rumsan/ui/components/data-table/datatable.filter';
+import { useDebounce } from '@rumsan/ui/hooks/debounce.hook';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface ListToolbarProps<TData> {
   table: Table<TData>;
+  resetPagination?: () => void;
 }
 
-export function ListToolbar<T>({ table }: ListToolbarProps<T>) {
+export function ListToolbar<T>({
+  table,
+  resetPagination,
+}: ListToolbarProps<T>) {
   const router = useRouter();
   const isFiltered = table.getState().columnFilters.length > 0;
-
   const { categories, departments } = useSelectLookUp();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    const column = table.getColumn('description');
+    if (column) {
+      column.setFilterValue(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Search expenses..."
-          value={
-            (table.getColumn('description')?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn('description')?.setFilterValue(event.target.value)
-          }
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
 
@@ -52,10 +63,21 @@ export function ListToolbar<T>({ table }: ListToolbarProps<T>) {
           />
         )}
 
+        {table.getColumn('departmentId') && (
+          <ListFilter
+            column={table.getColumn('isApproved')}
+            title="Approval"
+            options={[
+              { label: 'Approved', value: 'true' },
+              { label: 'Pending', value: 'false' },
+            ]}
+          />
+        )}
+
         {isFiltered && (
           <Button
             variant="ghost"
-            onClick={() => table.resetColumnFilters()}
+            onClick={() => setSearchTerm('')}
             className="h-8 px-2 lg:px-3"
           >
             Reset

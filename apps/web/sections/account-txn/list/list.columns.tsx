@@ -1,3 +1,4 @@
+import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatable.column.header';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
@@ -5,7 +6,9 @@ export function useColumns<T>(): ColumnDef<T>[] {
   return [
     {
       accessorKey: 'txnDate',
-      header: () => <div className="text-left">Date</div>,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Date" />
+      ),
       cell: ({ row }) => (
         <div>
           {row.getValue('txnDate')

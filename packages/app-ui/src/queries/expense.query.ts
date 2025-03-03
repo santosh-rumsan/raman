@@ -5,16 +5,15 @@ import { useRumsan } from '@rumsan/react-query';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
 //TODO: fix any
-export const useExpenseList = (
-  pagination: Pagination & { description?: string },
-): any => {
+export const useExpenseList = (pagination: Pagination, filters: any): any => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   const query = useQuery(
     {
-      queryKey: ['expense_list', pagination],
+      queryKey: ['expense_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { response } = await RsClient.Expense.list(pagination);
+        console.log(filters);
+        const { response } = await RsClient.Expense.search(pagination, filters);
         return {
           data: response.data,
           meta: response.meta,

@@ -29,10 +29,6 @@ export class UpdateAccountTxnDto {
   type?: AccountTxnType;
 }
 
-class FiltersDto {
-  [key: string]: string; // Dynamic keys for filters
-}
-
 export class GetAccountTxnDto {
   @ApiPropertyOptional({ example: 1 })
   @IsNumber()

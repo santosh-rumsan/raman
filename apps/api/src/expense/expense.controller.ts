@@ -23,7 +23,11 @@ import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { ApiFile } from '../decorator/ApiBody';
 import { CreateExpenseDto } from './dto/create-expense.dto';
-import { GetExpenseDto, UpdateExpenseDto } from './dto/update-expense.dto';
+import {
+  ExpenseFilterDto,
+  ListDto,
+  UpdateExpenseDto,
+} from './dto/update-expense.dto';
 import { ExpenseService } from './expense.service';
 
 @Controller('expenses')
@@ -32,7 +36,7 @@ import { ExpenseService } from './expense.service';
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class ExpenseController {
   private logger = new Logger(ExpenseController.name);
-  constructor(private readonly expenseService: ExpenseService) { }
+  constructor(private readonly expenseService: ExpenseService) {}
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.EXPENSE })
@@ -73,8 +77,18 @@ export class ExpenseController {
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.EXPENSE })
   //TODO:fix any
-  getExpenses(@Query() query: GetExpenseDto): any {
-    return this.expenseService.findAll(query);
+  getExpenses(@Query() query: ListDto): any {
+    return this.expenseService.list(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.EXPENSE })
+  //TODO:fix any
+  listExpensesWithFilter(
+    @Query() query: ListDto,
+    @Body() filters: ExpenseFilterDto,
+  ): any {
+    return this.expenseService.list(query, filters);
   }
 
   @Patch(':id')
@@ -101,10 +115,7 @@ export class ExpenseController {
 
   @Patch(':cuid/approve')
   @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.EXPENSE })
-  async approveExpense(
-    @Param('cuid') cuid: string,
-    @Req() req: any,
-  ) {
+  async approveExpense(@Param('cuid') cuid: string, @Req() req: any) {
     const approvedBy = req.user.cuid;
     return this.expenseService.approveExpense(cuid, approvedBy);
   }

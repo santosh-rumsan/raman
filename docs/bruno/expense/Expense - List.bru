@@ -5,12 +5,15 @@ meta {
 }
 
 get {
-  url: {{url}}/expenses?page=1&limit=10
+  url: {{url}}/expenses?page=1&limit=15&order=desc&filters[0]=Coffe&filters[categoryId]=z1pcvkygs8j2ne4688wdurpg
   body: none
   auth: none
 }
 
 params:query {
   page: 1
-  limit: 10
+  limit: 15
+  order: desc
+  filters[0]: Coffe
+  filters[categoryId]: z1pcvkygs8j2ne4688wdurpg
 }

@@ -40,14 +40,27 @@ export class ExpenseClient {
     return formatResponse<Expense>(response);
   }
 
-  async list(
-    data?: Pagination & { description?: string },
-    config?: AxiosRequestConfig,
-  ) {
+  async list(data?: Pagination, config?: AxiosRequestConfig) {
     const response = await this._client.get(`${this._prefix}`, {
       params: data,
       ...config,
     });
+    return formatResponse<Expense[]>(response);
+  }
+
+  async search(
+    params?: Pagination,
+    filters?: any,
+    config?: AxiosRequestConfig,
+  ) {
+    const response = await this._client.post(
+      `${this._prefix}/search`,
+      filters,
+      {
+        params,
+        ...config,
+      },
+    );
     return formatResponse<Expense[]>(response);
   }
 
