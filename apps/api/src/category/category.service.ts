@@ -57,8 +57,6 @@ export class CategoryService {
     }
 
     if (filters?.group) {
-      console.log('filters.group', filters.group);
-
       where['group'] = {
         in: filters.group,
 
