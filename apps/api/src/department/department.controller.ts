@@ -45,11 +45,13 @@ export class DepartmentController {
     return this.departmentService.findAll(query);
   }
 
-  @Post()
+  @Post('search')
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.DEPARTMENT })
   //TODO:fix any
-  listExpensesWithFilter(@Query() query: ListDepartmentDto,
-    @Body() filters: DepartmentFilterDto): any {
+  listDepartmentsWithFilter(
+    @Query() query: ListDepartmentDto,
+    @Body() filters: DepartmentFilterDto
+  ): any {
     return this.departmentService.findAll(query, filters)
   }
 

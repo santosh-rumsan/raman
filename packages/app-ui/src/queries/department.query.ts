@@ -4,21 +4,22 @@ import {
   Department,
   EditDepartment,
 } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 
-export const useDepartmentList = (): UseQueryResult<Department[], Error> => {
+export const useDepartmentList = (pagination: Pagination, filters: any): any => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
-      queryKey: ['department_list'],
+      queryKey: ['department_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { data } = await RsClient.Department.list({
-          page: 1,
-          limit: 1000,
-        });
-        return data;
+        const { response } = await RsClient.Department.search(pagination, filters);
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
       staleTime: 5 * 60 * 1000,
     },

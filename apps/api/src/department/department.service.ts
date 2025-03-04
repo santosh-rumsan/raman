@@ -71,15 +71,19 @@ export class DepartmentService {
         in: filters.owner,
       };
     }
-
-
     return paginate(
       this.prisma.department,
       {
         where,
         orderBy,
         include: {
-          ProjectOwner: { select: { name: true } },
+          Owner: {
+            select: {
+              details: {
+                select: { name: true }
+              }
+            }
+          },
         },
       },
       { page: dto.page, perPage: dto.limit },
