@@ -29,6 +29,21 @@ export class CategoryClient {
     return formatResponse<Category[]>(response);
   }
 
+  async search(
+    params?: Pagination,
+    filters?: any,
+    config?: AxiosRequestConfig,) {
+    const response = await this._client.post(
+      `${this._prefix}/search`,
+      filters,
+      {
+        params,
+        ...config,
+      },
+    );
+    return formatResponse<Category[]>(response);
+  }
+
   async update(id: string, data: EditCategory, config?: AxiosRequestConfig) {
     const response = await this._client.put(
       `${this._prefix}/${id}`,
