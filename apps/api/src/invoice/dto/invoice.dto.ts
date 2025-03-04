@@ -13,8 +13,11 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
+  Min,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateInvoiceDto implements CreateInvoice {
@@ -65,22 +68,24 @@ export class CreateInvoiceDto implements CreateInvoice {
   })
   description: string;
 
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Bill Type',
-    example: 'pan/vat/estimate',
+  @IsNotEmpty()
+  @IsEnum(InvoiceType, {
+    message: `invoiceType must be one of ${Object.values(InvoiceType).join(', ')}`,
   })
-  @IsEnum(InvoiceType)
+  @ApiProperty({
+    example: 'ESTIMATE',
+  })
   invoiceType: InvoiceType;
 
-  @IsInt()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Vat Amount',
-    example: '100.01',
+  @ValidateIf((obj) => obj.invoiceType === InvoiceType.VAT)
+  @IsNumber()
+  @Min(0.001, {
+    message: 'VAT amount must be greater than 0 if invoiceType is VAT',
   })
-  vatAmount: number;
+  @ApiProperty({
+    example: 23,
+  })
+  vatAmount?: number;
 
   @IsString()
   @IsOptional()

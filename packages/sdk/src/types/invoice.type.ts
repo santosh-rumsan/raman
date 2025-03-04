@@ -11,7 +11,6 @@ export type InvoiceBase<T = string> = {
   categoryId: string;
   vatAmount?: number | 0;
   projectId?: string | null;
-  receipts?: Record<string, string>;
   reason?: string | null;
   isApproved?: boolean;
   rejectOrApprove?: boolean;
@@ -24,7 +23,7 @@ export type InvoiceBase<T = string> = {
   extras?: Record<string, T>;
 };
 export type Invoice<T = string> = InvoiceBase<T> &
-  CommonFields & { cuid: string };
+  CommonFields & { cuid: string; receipts?: Record<string, string>[] };
 
 export type CreateInvoice = InvoiceBase;
 export type EditInvoice = Partial<CreateInvoice>;

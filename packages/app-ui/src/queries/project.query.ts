@@ -5,9 +5,7 @@ import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 //TODO: fix any
-export const useProjectList = (
-  pagination: Pagination, filters: any,
-): any => {
+export const useProjectSearch = (pagination: Pagination, filters: any) => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
@@ -15,6 +13,24 @@ export const useProjectList = (
       queryKey: ['project_list', { ...pagination, ...filters }],
       queryFn: async () => {
         const { response } = await RsClient.Project.search(pagination, filters);
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    },
+    queryClient,
+  );
+};
+
+export const useProjectList = (pagination: Pagination) => {
+  const { queryClient, RsClient } = useRumsan<ApiClient>();
+
+  return useQuery(
+    {
+      queryKey: ['project_list', { ...pagination }],
+      queryFn: async () => {
+        const { response } = await RsClient.Project.list(pagination);
         return {
           data: response.data,
           meta: response.meta,

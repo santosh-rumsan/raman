@@ -15,8 +15,7 @@ export interface ExpenseBase<T = string> {
   categoryId: string;
   projectId?: string | null;
   accountId?: string | null;
-  attachments?: Record<string, string>;
-  invoiceType?: InvoiceType;
+  invoiceType: InvoiceType;
   vatAmount?: number | 0;
   source?: string;
   remarks?: string | null;
@@ -26,6 +25,7 @@ export interface ExpenseBase<T = string> {
 export type Expense<T = string> = ExpenseBase<T> &
   CommonFields & {
     cuid: string;
+    attachments?: Record<string, any>[];
     approvalDetails?: Record<string, string>;
     isApproved: boolean;
     reconcileDetails?: Record<string, string>;

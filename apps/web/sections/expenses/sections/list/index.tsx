@@ -26,17 +26,16 @@ export function ExpenseList() {
 
   const {
     sorting,
-    setSorting,
     columnFilters,
     columnFiltersObject,
-    setColumnFilters,
     columnVisibility,
     setColumnVisibility,
     rowSelection,
     setRowSelection,
     pagination,
     setPagination,
-    updateQueryParams,
+    onColumnFiltersChange,
+    onSortingChange,
   } = useDataTableState(searchParams, router);
   const columns = ListColumns<Expense>();
 
@@ -53,17 +52,8 @@ export function ExpenseList() {
   const table = useReactTable({
     data: (data?.data as Expense[]) || [],
     columns,
-    onSortingChange: (updater) => {
-      const newSorting =
-        typeof updater === 'function' ? updater(sorting) : updater;
-      setSorting(newSorting);
-      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-      updateQueryParams({
-        sort: newSorting[0]?.id || '',
-        order: newSorting[0]?.desc ? 'desc' : 'asc',
-      });
-    },
-    onColumnFiltersChange: setColumnFilters,
+    onSortingChange,
+    onColumnFiltersChange,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -105,15 +95,7 @@ export function ExpenseList() {
         </div>
         <DataTablePagination
           table={table}
-          setPagination={(updater: any) => {
-            const newPagination =
-              typeof updater === 'function' ? updater(pagination) : updater;
-            setPagination(newPagination);
-            updateQueryParams({
-              page: newPagination.pageIndex + 1,
-              limit: newPagination.pageSize,
-            });
-          }}
+          setPagination={setPagination}
           pagination={pagination}
         />
       </div>

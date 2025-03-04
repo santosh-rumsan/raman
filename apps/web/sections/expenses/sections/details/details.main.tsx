@@ -1,6 +1,7 @@
 'use client';
 
 import { useWebSocketEvent } from '@/hooks/ws-event.hook';
+import { AppStyles } from '@/misc/app.style';
 import { PATHS } from '@/routes/paths';
 import {
   useDeleteAttachment,
@@ -8,6 +9,8 @@ import {
   useUploadAttachments,
 } from '@rumsan/raman-ui/queries/expense.query';
 import { Expense } from '@rumsan/raman/types';
+import { Button } from '@rumsan/shadcn-ui/components/button';
+import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { AttachmentCard } from './attachment.card';
 import ExpenseDetailCard from './details.card';
@@ -52,12 +55,11 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
         <div className="flex items-start gap-1"></div>
         {expense?.isApproved === false && (
           <div className="flex gap-2">
-            <button
-              onClick={handleEditButton}
-              className="bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600"
-            >
+            <Button className={AppStyles.button} onClick={handleEditButton}>
+              <SquarePen />
               Edit
-            </button>
+            </Button>
+
             <CloseVerifyDailog expenseId={expenseId} />
           </div>
         )}

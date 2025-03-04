@@ -13,7 +13,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
         <DataTableColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => {
-        const item = row.getValue('name') as string
+        const item = row.getValue('name') as string;
         return (
           <div>
             <span>{item}</span>

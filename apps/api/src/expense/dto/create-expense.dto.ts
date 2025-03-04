@@ -3,9 +3,13 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsDate,
+  IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
+  Min,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 
@@ -50,16 +54,23 @@ export class CreateExpenseDto implements CreateExpense {
   projectId?: string;
 
   @IsNotEmpty()
+  @IsEnum(InvoiceType, {
+    message: `invoiceType must be one of ${Object.values(InvoiceType).join(', ')}`,
+  })
   @ApiProperty({
     example: 'ESTIMATE',
   })
   invoiceType: InvoiceType;
 
-  @IsOptional()
-  @ApiProperty({
-    example: '23',
+  @ValidateIf((obj) => obj.invoiceType === InvoiceType.VAT)
+  @IsNumber()
+  @Min(0.001, {
+    message: 'VAT amount must be greater than 0 if invoiceType is VAT',
   })
-  vatAmount: number;
+  @ApiProperty({
+    example: 23,
+  })
+  vatAmount?: number;
 
   @IsString()
   @IsNotEmpty()

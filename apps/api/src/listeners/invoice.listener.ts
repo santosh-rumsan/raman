@@ -6,7 +6,6 @@ import { PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { EmailInvoiceApproval } from '../email/invoice-approval.email';
-import { UploadFileToGdrive } from '../utils/file-attachment.utils';
 import { GDriveService } from '../utils/gdrive.utils';
 
 @Injectable()
@@ -27,35 +26,30 @@ export class InvoiceListener {
   }
 
   async addAttachmentsToInvoice(cuid: string, files: Express.Multer.File[]) {
-    const invoice = await this.prisma.invoice.findUnique({
-      where: { cuid },
-      select: { receipts: true },
-    });
-
-    if (!invoice) return;
-
-    let existingReceipts = (invoice.receipts as any[]) || [];
-    if (typeof invoice.receipts === 'string') existingReceipts = [];
-
-    let newReceipts: any[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const gFile = await UploadFileToGdrive(files[i], this.gdrive);
-      newReceipts.push(gFile);
-    }
-
-    const mergedReceipts = [...existingReceipts, ...newReceipts].reduce(
-      (acc, item) => {
-        if (!acc.some((att) => att.hash === item.hash)) {
-          acc.push(item);
-        }
-        return acc;
-      },
-      [] as { hash: string; name: string }[],
-    );
-
-    return this.prisma.invoice.update({
-      where: { cuid },
-      data: { receipts: mergedReceipts },
-    });
+    // const invoice = await this.prisma.invoice.findUnique({
+    //   where: { cuid },
+    //   select: { receipts: true },
+    // });
+    // if (!invoice) return;
+    // let existingReceipts = (invoice.receipts as any[]) || [];
+    // if (typeof invoice.receipts === 'string') existingReceipts = [];
+    // let newReceipts: any[] = [];
+    // for (let i = 0; i < files.length; i++) {
+    //   const gFile = await UploadFileToGdrive(files[i], this.gdrive);
+    //   newReceipts.push(gFile);
+    // }
+    // const mergedReceipts = [...existingReceipts, ...newReceipts].reduce(
+    //   (acc, item) => {
+    //     if (!acc.some((att) => att.hash === item.hash)) {
+    //       acc.push(item);
+    //     }
+    //     return acc;
+    //   },
+    //   [] as { hash: string; name: string }[],
+    // );
+    // return this.prisma.invoice.update({
+    //   where: { cuid },
+    //   data: { receipts: mergedReceipts },
+    // });
   }
 }

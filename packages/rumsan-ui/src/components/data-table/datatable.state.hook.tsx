@@ -1,4 +1,10 @@
-import { SortingState, VisibilityState } from '@tanstack/react-table';
+import {
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
 import { useState } from 'react';
 
 function convertArrayToObject(
@@ -33,7 +39,7 @@ export function useDataTableState(
   >([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-  const [pagination, setPagination] = useState({
+  const [pagination, setPaginationState] = useState({
     pageIndex: Math.max(initialPage - 1, 0),
     pageSize: initialLimit,
   });
@@ -55,6 +61,36 @@ export function useDataTableState(
     router.replace(`?${newParams.toString()}`);
   };
 
+  const onSortingChange = (updater: Updater<SortingState>) => {
+    const newSorting =
+      typeof updater === 'function' ? updater(sorting) : updater;
+    setSorting(newSorting);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    updateQueryParams({
+      page: 1,
+      sort: newSorting[0]?.id || '',
+      order: newSorting[0]?.desc ? 'desc' : 'asc',
+    });
+  };
+
+  const onColumnFiltersChange = (updater: Updater<ColumnFiltersState>) => {
+    const newFilters =
+      typeof updater === 'function' ? updater(columnFilters) : updater;
+    setColumnFilters(newFilters);
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+    updateQueryParams({ page: 1 });
+  };
+
+  const setPagination = (updater: Updater<PaginationState>) => {
+    const newPagination =
+      typeof updater === 'function' ? updater(pagination) : updater;
+    setPaginationState(newPagination);
+    updateQueryParams({
+      page: newPagination.pageIndex + 1,
+      limit: newPagination.pageSize,
+    });
+  };
+
   return {
     sorting,
     setSorting,
@@ -67,6 +103,9 @@ export function useDataTableState(
     setRowSelection,
     pagination,
     setPagination,
+    setPaginationState,
+    onSortingChange,
+    onColumnFiltersChange,
     updateQueryParams,
   };
 }
