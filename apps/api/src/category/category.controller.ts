@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -16,7 +17,7 @@ import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryFilterDto, ListCategoryDto, UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 @ApiTags('Category')
@@ -24,7 +25,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class CategoryController {
   private logger = new Logger('CategoryController');
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.CATEGORY })
@@ -34,8 +35,19 @@ export class CategoryController {
 
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.CATEGORY })
-  getCategories() {
-    return this.categoryService.findAll();
+  //TODO: fix any
+  getCategories(@Query() query: ListCategoryDto): any {
+    return this.categoryService.findAll(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.CATEGORY })
+  //TODO:fix any
+  listCategoryWithFilter(
+    @Query() query: ListCategoryDto,
+    @Body() filters: CategoryFilterDto,
+  ): any {
+    return this.categoryService.findAll(query, filters);
   }
 
   @Get(':id')

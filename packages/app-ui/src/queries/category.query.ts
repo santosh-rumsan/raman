@@ -1,18 +1,22 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { Category, CreateCategory, EditCategory } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-export const useCategoryList = () => {
+export const useCategoryList = (pagination: Pagination, filters: any,) => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
-      queryKey: ['category_list'],
-      queryFn: async () => {
-        const { data } = await RsClient.Category.list({ limit: 1000, page: 1 });
+      queryKey: ['category_list', { ...pagination, ...filters }],
 
-        return data;
+      queryFn: async () => {
+        const { response } = await RsClient.Category.search(pagination, filters);
+        return {
+          data: response.data,
+          meta: response.meta
+        };
       },
     },
     queryClient,
