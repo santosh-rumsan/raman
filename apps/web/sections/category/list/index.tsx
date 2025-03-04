@@ -45,10 +45,6 @@ export function CategoryList() {
   },
     columnFiltersObject,
   );
-  console.log(columnFiltersObject, 'columnFiltersObject');
-  console.log(categoryList, 'categoryList');
-  console.log(categoryList?.data, 'categoryList?.data');
-  console.log(categoryList?.data?.data, 'categoryList?.data?.data');
 
   const table = useReactTable({
     data: (categoryList?.data?.data as Category[]) || [],

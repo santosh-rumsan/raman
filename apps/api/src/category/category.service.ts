@@ -55,12 +55,6 @@ export class CategoryService {
         mode: 'insensitive',
       };
     }
-    // if (filters?.group) {
-    //   console.log('filters.group', filters.group);
-    //   where['group'] = {
-    //     in: Array.isArray(filters.group) ? filters.group : [filters.group],
-    //   };
-    // }
 
     if (filters?.group) {
       console.log('filters.group', filters.group);
@@ -70,10 +64,6 @@ export class CategoryService {
 
       };
     }
-    // if (filters?.group) {
-    //   console.log('filters.group', filters.group);
-    //   where['group'] = { equals: filters.group };
-    // }
 
     return paginate(
       this.prisma.category,

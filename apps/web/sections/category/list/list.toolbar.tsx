@@ -1,6 +1,5 @@
 'use client';
 
-import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Input } from '@rumsan/shadcn-ui/components/input';
 import { ListFilter } from '@rumsan/ui/components/data-table/datatable.filter';
@@ -11,14 +10,12 @@ import { PlusCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { CategoryAdd } from '../form/category.add';
 //import { DepartmentAdd } from '../form/department.add copy';
-
+import groups from '../group.json';
 interface ListToolbarProps<TData> {
   table: Table<TData>;
 }
 
 export function ListToolbar<T>({ table }: ListToolbarProps<T>) {
-  const { categories } = useSelectLookUp();
-  console.log(categories, 'categories');
 
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
@@ -45,7 +42,7 @@ export function ListToolbar<T>({ table }: ListToolbarProps<T>) {
           <ListFilter
             column={table.getColumn('group')}
             title="Group"
-            options={categories}
+            options={groups}
           />
         )}
       </div>

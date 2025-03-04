@@ -13,9 +13,10 @@ export const useCategoryList = (pagination: Pagination, filters: any,) => {
 
       queryFn: async () => {
         const { response } = await RsClient.Category.search(pagination, filters);
-        console.log(filters, '📌 Filters Sent to Backend');
-        console.log(response, '🔍 API Response Nabina');
-        return { data: response.data, meta: response.meta };
+        return {
+          data: response.data,
+          meta: response.meta
+        };
       },
     },
     queryClient,
