@@ -3,9 +3,12 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
+import { FileAttachment } from '@rumsan/raman/types';
 import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
+import { createIpfsHash } from '../utils/ipfs.utils';
+import { FileAttachmentWithBuffer } from '../utils/types';
 import { CreateInvoiceDto } from './dto/invoice.dto';
 import { GetInvoiceDto, UpdateInvoiceDto } from './dto/update-invoice.dto';
 
@@ -16,7 +19,7 @@ export class InvoiceService {
   constructor(
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   async createInvoice(
     dto: CreateInvoiceDto,
@@ -30,18 +33,43 @@ export class InvoiceService {
       updatedBy: ctx.currentUser?.cuid,
     };
 
-    const rec = await this.prisma.invoice.create({
+    const attachmentsWithBuffer: FileAttachmentWithBuffer[] = [];
+    const attachments: FileAttachment[] = [];
+
+    for (const file of files) {
+      const hash = await createIpfsHash(file.buffer);
+      const attachment: FileAttachment = {
+        hash,
+        url: 'pending',
+        filename: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      };
+      attachments.push(attachment);
+      attachmentsWithBuffer.push({
+        ...attachment,
+        buffer: file.buffer,
+      });
+    }
+
+    const newReceipt = await this.prisma.invoice.create({
       data: {
         ...data,
-        receipts: files.length > 0 ? 'pending' : undefined,
+        receipts: attachments,
       },
     });
 
-    if (files.length > 0) {
-      this.eventEmitter.emit(EVENTS.INVOICE.CREATED, data, files);
-    }
+    this.eventEmitter.emit(
+      EVENTS.INVOICE.CREATED,
+      newReceipt,
+      attachmentsWithBuffer,
+      {
+        clientId: ctx.clientId,
+        currentUser: ctx.currentUser,
+      },
+    );
 
-    return rec as Invoice;
+    return newReceipt as Invoice;
   }
 
   async updateInvoice(cuid: string, payload: UpdateInvoiceDto, ctx: tRC) {

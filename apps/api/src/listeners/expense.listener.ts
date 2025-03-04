@@ -6,11 +6,11 @@ import { PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
 import { FileAttachment } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
-import { mergeArraysByUniqueKey } from 'src/utils/array.utils';
-import { FileAttachmentWithBuffer } from 'src/utils/types';
 import { WebSocketService } from '../app/websocket.service';
+import { mergeArraysByUniqueKey } from '../utils/array.utils';
 import { UploadFileToGdrive } from '../utils/file-attachment.utils';
 import { GDriveService } from '../utils/gdrive.utils';
+import { FileAttachmentWithBuffer } from '../utils/types';
 
 @Injectable()
 export class ExpenseListener {
@@ -25,17 +25,17 @@ export class ExpenseListener {
   @OnEvent(EVENTS.EXPENSE.UPLOAD)
   async OnExpenseUpload(
     expense: Expense,
-    attchments: FileAttachmentWithBuffer[],
+    attachments: FileAttachmentWithBuffer[],
     meta: EventMeta,
   ) {
     if (!expense) return;
 
-    for (const attachment of attchments) {
-      await this.addAttachmentsToExpense(expense, attachment, meta?.clientId);
+    for (const attachment of attachments) {
+      await this.uploadAttachment(expense, attachment, meta?.clientId);
     }
   }
 
-  async addAttachmentsToExpense(
+  async uploadAttachment(
     expense: Expense,
     attachment: FileAttachmentWithBuffer,
     clientId?: string,
@@ -57,8 +57,6 @@ export class ExpenseListener {
         ),
       },
     });
-
-    console.log(updatedRec);
 
     if (clientId) {
       this.ws.sendToClient(clientId, EVENTS.EXPENSE.UPLOAD, {

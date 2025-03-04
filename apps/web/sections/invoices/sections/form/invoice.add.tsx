@@ -28,7 +28,7 @@ const defaultValues: Invoice = {
   currency: 'NPR',
   invoiceType: InvoiceType.ESTIMATE,
   date: new Date(),
-  receipts: [] as unknown as Record<string, string>,
+  receipts: [] as unknown as Record<string, string>[],
   vatAmount: undefined,
   approvalChallenge: '',
 };
@@ -71,8 +71,8 @@ export default function InvoiceAdd() {
           formData.append(key, value.toString());
         }
       });
-      await saveInvoice(formData);
-      router.push(PATHS.INVOICE.HOME);
+      const { cuid } = await saveInvoice(formData);
+      router.push(PATHS.INVOICE.DETAILS(cuid));
     } catch (error) {
       console.error('Error submitting invoice:', error);
     } finally {

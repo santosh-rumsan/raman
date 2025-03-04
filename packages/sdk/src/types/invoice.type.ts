@@ -23,7 +23,13 @@ export type InvoiceBase<T = string> = {
   extras?: Record<string, T>;
 };
 export type Invoice<T = string> = InvoiceBase<T> &
-  CommonFields & { cuid: string; receipts?: Record<string, string>[] };
+  CommonFields & { cuid: string; receipts?: Record<string, any>[] };
+
+export type InvoiceExtended = Invoice & {
+  Category: Record<string, any>;
+  Project: Record<string, any>;
+  Department: Record<string, any>;
+};
 
 export type CreateInvoice = InvoiceBase;
 export type EditInvoice = Partial<CreateInvoice>;

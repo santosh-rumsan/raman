@@ -1,7 +1,6 @@
 import { Currency, InvoiceType } from '@rumsan/raman/types/enums';
 import { InvoiceBase } from '@rumsan/raman/types/invoice.type';
 
-
 import * as z from 'zod';
 
 export type Invoice = Omit<
@@ -10,7 +9,7 @@ export type Invoice = Omit<
 > & {
   amount?: string | null;
   vatAmount?: string | null;
-  attachments?: string[];
+  receipts?: Record<string, string>[];
 };
 
 export const invoiceSchema = (additional?: object) => {
@@ -25,7 +24,9 @@ export const invoiceSchema = (additional?: object) => {
     categoryId: z.string().min(1, 'Category is required'),
     description: z.string().min(1, 'Description is required'),
     projectId: z.string().nonempty({ message: 'Project is required' }),
-    receipts: z.array(z.string()).min(1, { message: 'At least one attachment is required' }),
+    receipts: z
+      .array(z.string())
+      .min(1, { message: 'At least one attachment is required' }),
     currency: z.nativeEnum(Currency).refine((type) => !!type, {
       message: 'Currency is required',
     }),

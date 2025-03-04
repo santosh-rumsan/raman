@@ -8,6 +8,7 @@ import {
   useExpenseById,
   useUploadAttachments,
 } from '@rumsan/raman-ui/queries/expense.query';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { Expense } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { SquarePen } from 'lucide-react';
@@ -24,7 +25,7 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
   const router = useRouter();
   const formData = new FormData();
   const expenseDetails = useExpenseById(expenseId);
-  useWebSocketEvent('expense.upload', expenseDetails.refetch);
+  useWebSocketEvent(EVENTS.EXPENSE.UPLOAD, expenseDetails.refetch);
 
   const {
     mutateAsync: uploadAttachments,

@@ -4,9 +4,15 @@ import { OnEvent } from '@nestjs/event-emitter';
 
 import { PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants/events';
+import { FileAttachment } from '@rumsan/raman/types';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
+import { EventMeta } from '@rumsan/sdk/types/event.types';
+import { WebSocketService } from '../app/websocket.service';
 import { EmailInvoiceApproval } from '../email/invoice-approval.email';
+import { mergeArraysByUniqueKey } from '../utils/array.utils';
+import { UploadFileToGdrive } from '../utils/file-attachment.utils';
 import { GDriveService } from '../utils/gdrive.utils';
+import { FileAttachmentWithBuffer } from '../utils/types';
 
 @Injectable()
 export class InvoiceListener {
@@ -17,39 +23,47 @@ export class InvoiceListener {
     private prisma: PrismaService,
     private gdrive: GDriveService,
     private email: EmailInvoiceApproval,
+    private ws: WebSocketService,
   ) {}
 
   @OnEvent(EVENTS.INVOICE.CREATED)
-  async OnInvoiceCreation(data: Invoice, files: Express.Multer.File[]) {
-    await this.addAttachmentsToInvoice(data.cuid, files);
-    this.email.send(data.cuid);
+  async OnInvoiceCreation(
+    receipt: Invoice,
+    attachments: FileAttachmentWithBuffer[],
+    meta: EventMeta,
+  ) {
+    if (!receipt) return;
+
+    for (const attachment of attachments) {
+      await this.uploadAttachment(receipt, attachment, meta?.clientId);
+    }
+
+    this.email.send(receipt.cuid);
   }
 
-  async addAttachmentsToInvoice(cuid: string, files: Express.Multer.File[]) {
-    // const invoice = await this.prisma.invoice.findUnique({
-    //   where: { cuid },
-    //   select: { receipts: true },
-    // });
-    // if (!invoice) return;
-    // let existingReceipts = (invoice.receipts as any[]) || [];
-    // if (typeof invoice.receipts === 'string') existingReceipts = [];
-    // let newReceipts: any[] = [];
-    // for (let i = 0; i < files.length; i++) {
-    //   const gFile = await UploadFileToGdrive(files[i], this.gdrive);
-    //   newReceipts.push(gFile);
-    // }
-    // const mergedReceipts = [...existingReceipts, ...newReceipts].reduce(
-    //   (acc, item) => {
-    //     if (!acc.some((att) => att.hash === item.hash)) {
-    //       acc.push(item);
-    //     }
-    //     return acc;
-    //   },
-    //   [] as { hash: string; name: string }[],
-    // );
-    // return this.prisma.invoice.update({
-    //   where: { cuid },
-    //   data: { receipts: mergedReceipts },
-    // });
+  async uploadAttachment(
+    receipt: Invoice,
+    attachment: FileAttachmentWithBuffer,
+    clientId?: string,
+  ) {
+    if (!receipt) return;
+
+    const existingAttachments: FileAttachment[] =
+      (receipt.receipts as FileAttachment[]) || [];
+
+    const { file } = await UploadFileToGdrive(attachment, this.gdrive);
+
+    const updatedRec = await this.prisma.invoice.update({
+      where: { cuid: receipt.cuid },
+      data: {
+        receipts: mergeArraysByUniqueKey(existingAttachments, [file], 'hash'),
+      },
+    });
+
+    if (clientId) {
+      this.ws.sendToClient(clientId, EVENTS.INVOICE.UPLOAD, {
+        cuid: updatedRec.cuid,
+      });
+    }
   }
 }
