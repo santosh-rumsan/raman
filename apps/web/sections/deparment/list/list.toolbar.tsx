@@ -5,8 +5,10 @@ import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Input } from '@rumsan/shadcn-ui/components/input';
 import { ListFilter } from '@rumsan/ui/components/data-table/datatable.filter';
 import { DataTableViewOptions } from '@rumsan/ui/components/data-table/datatable.options.view';
+import { useDebounce } from '@rumsan/ui/hooks/debounce.hook';
 import { Table } from '@tanstack/react-table';
 import { PlusCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { DepartmentAdd } from '../form/department.add';
 import groups from '../group.json';
 
@@ -15,7 +17,18 @@ interface ListToolbarProps<TData> {
 }
 //TODO: fix any
 export function ListToolbar<T>({ table }: ListToolbarProps<T>): any {
+  const isFiltered = table.getState().columnFilters.length > 0;
   const { users } = useSelectLookUp();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    const column = table.getColumn('name');
+    if (column) {
+      column.setFilterValue(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
 
   return (
     <div className="flex items-center justify-between">
@@ -23,10 +36,8 @@ export function ListToolbar<T>({ table }: ListToolbarProps<T>): any {
         <Input
           className="h-8 w-[150px] lg:w-[400px] bg-white"
           placeholder="Search Department"
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
           type="text"
         />
 

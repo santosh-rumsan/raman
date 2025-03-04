@@ -17,7 +17,8 @@ import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
-  GetDepartmentDto,
+  DepartmentFilterDto,
+  ListDepartmentDto,
   UpdateDepartmentDto,
 } from './dto/update-department.dto';
 
@@ -26,7 +27,7 @@ import {
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) {}
+  constructor(private readonly departmentService: DepartmentService) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.DEPARTMENT })
@@ -40,8 +41,18 @@ export class DepartmentController {
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.DEPARTMENT })
   //TODO: fix any
-  getCategories(@Query() query: GetDepartmentDto): any {
+  getDepartments(@Query() query: ListDepartmentDto): any {
     return this.departmentService.findAll(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.DEPARTMENT })
+  //TODO:fix any
+  listDepartmentsWithFilter(
+    @Query() query: ListDepartmentDto,
+    @Body() filters: DepartmentFilterDto
+  ): any {
+    return this.departmentService.findAll(query, filters)
   }
 
   @Get(':id')

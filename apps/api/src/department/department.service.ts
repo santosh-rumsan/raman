@@ -6,7 +6,8 @@ import { Department } from '@rumsan/raman/types/department.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import {
-  GetDepartmentDto,
+  DepartmentFilterDto,
+  ListDepartmentDto,
   UpdateDepartmentDto,
 } from './dto/update-department.dto';
 
@@ -17,7 +18,7 @@ export class DepartmentService {
   constructor(
     private prisma: PrismaService,
     private readonly eventMgr: EventEmitter2,
-  ) {}
+  ) { }
 
   async create(createDepartmentDto: CreateDepartmentDto, ctx: tRC) {
     try {
@@ -42,23 +43,50 @@ export class DepartmentService {
     }
   }
 
-  async findAll(query: GetDepartmentDto) {
+  async findAll(dto: ListDepartmentDto, filters?: DepartmentFilterDto) {
+    const orderBy = {};
+    dto.sort = dto.sort || 'createdAt';
+    dto.order = dto.order || 'desc';
+    if (dto.sort) {
+      orderBy[dto.sort] = dto.order;
+    }
+
     const where: Record<any, any> = {
       deletedAt: null,
     };
-    if (query.name) {
-      where.name = query.name;
+    if (filters?.name) {
+      where['name'] = {
+        contains: filters.name,
+        mode: 'insensitive',
+      };
+    }
+    if (filters?.group) {
+      where['group'] = {
+        in: filters.group,
+      };
     }
 
+    if (filters?.owner) {
+      where['owner'] = {
+        in: filters.owner,
+      };
+    }
     return paginate(
       this.prisma.department,
       {
         where,
+        orderBy,
+        include: {
+          Owner: {
+            select: {
+              details: {
+                select: { name: true }
+              }
+            }
+          },
+        },
       },
-      {
-        page: query.page,
-        perPage: query.limit,
-      },
+      { page: dto.page, perPage: dto.limit },
     );
   }
 

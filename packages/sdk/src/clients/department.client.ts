@@ -23,6 +23,21 @@ export class DepartmentClient {
     return formatResponse<Department[]>(response);
   }
 
+  async search(
+    params?: Pagination,
+    filters?: any,
+    config?: AxiosRequestConfig,) {
+    const response = await this._client.post(
+      `${this._prefix}/search`,
+      filters,
+      {
+        params,
+        ...config,
+      },
+    );
+    return formatResponse<Department[]>(response);
+  }
+
   async get(id: string, config?: AxiosRequestConfig) {
     const response = await this._client.get(`${this._prefix}/${id}`, config);
     return formatResponse<Department>(response);
