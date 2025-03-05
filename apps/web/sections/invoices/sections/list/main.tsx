@@ -49,8 +49,6 @@ export function InvoiceList() {
     columnFiltersObject,
   );
 
-  console.log('data', columnFiltersObject);
-
   const table = useReactTable({
     data: (data?.data as Invoice[]) || [],
     columns,

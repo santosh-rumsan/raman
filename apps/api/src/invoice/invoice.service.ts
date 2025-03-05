@@ -19,7 +19,7 @@ export class InvoiceService {
   constructor(
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async createInvoice(
     dto: CreateInvoiceDto,
@@ -95,9 +95,11 @@ export class InvoiceService {
 
     const where = {};
     if (filters?.name) {
-      where['name'] = {
-        contains: filters.name,
-        mode: 'insensitive',
+      where['name'] = {  // Adjusted this to filter on the User model's name field
+        name: {
+          contains: filters.name,
+          mode: 'insensitive',
+        },
       };
     }
     if (filters?.categoryId) {
@@ -132,50 +134,16 @@ export class InvoiceService {
         include: {
           Project: { select: { name: true } },
           Category: { select: { name: true } },
-          User: { select: { name: true } },
+          User: {
+            select: {
+              name: true
+            }
+          }
         },
+
       },
-      { page: dto.page, perPage: dto.limit },
+      { page: dto.page, perPage: dto.limit }
     );
-
-    //   const whereCondition = `WHERE "deletedAt" IS NULL`;
-    //   const invoices = await this.prisma.$queryRawUnsafe(`
-    //   SELECT *
-    //   FROM "tbl_invoices"
-    //   ${whereCondition}
-    //   ORDER BY
-    //     CASE "status"
-    //       WHEN 'PENDING' THEN 1
-    //       WHEN 'APPROVED' THEN 2
-    //       WHEN 'REIMBURSED' THEN 3
-    //       WHEN 'REJECTED' THEN 4
-    //       ELSE 5
-    //     END,
-    //     "createdAt" DESC
-    //   LIMIT ${limit} OFFSET ${offset}
-    // `);
-
-    //   const totalCountResult: any = await this.prisma.$queryRawUnsafe(`
-    //   SELECT COUNT(*) AS total
-    //   FROM "tbl_invoices"
-    //   ${whereCondition}
-    // `);
-    //   const totalCount = Number(totalCountResult[0]?.total || 0);
-
-    //   const lastPage = Math.ceil(totalCount / limit);
-    //   const meta = {
-    //     total: totalCount,
-    //     lastPage,
-    //     currentPage: page,
-    //     perPage: limit,
-    //     prev: page > 1 ? page - 1 : null,
-    //     next: page < lastPage ? page + 1 : null,
-    //   };
-
-    //   return {
-    //     meta,
-    //     data: invoices,
-    //   };
 
   }
 

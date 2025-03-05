@@ -45,12 +45,7 @@ export class InvoiceFilterDto {
 
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-  // @IsEnum(InvoiceStatusType, { each: true })
   status?: string[];
-
-  // @IsOptional()
-  // @IsEnum(InvoiceStatusType)
-  // status?: InvoiceStatusType[];
 
 }
 

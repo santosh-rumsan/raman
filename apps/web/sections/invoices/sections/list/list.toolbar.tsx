@@ -44,10 +44,6 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Search invoices..."
-          // value={(table.getColumn('userId')?.getFilterValue() as string) ?? ''}
-          // onChange={(event) =>
-          //   table.getColumn('userId')?.setFilterValue(event.target.value)
-          // }
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px] bg-white"
@@ -90,9 +86,7 @@ export function DataTableToolbar<TData>({
         {isFiltered && (
           <Button
             variant="ghost"
-            // onClick={() => setSearchTerm('')}
-            onClick={() => table.resetColumnFilters()}
-
+            onClick={() => setSearchTerm('')}
             className="h-8 px-2 lg:px-3"
           >
             Reset

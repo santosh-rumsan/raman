@@ -33,14 +33,6 @@ export const invoiceStatusColors: StatusColors = {
 export function useColumns<T>(): ColumnDef<T>[] {
   const { lookupByCuid } = useSelectLookUp();
 
-  // const userFilterFn: FilterFn<T> = (row, columnId, filterValue) => {
-  //   const userName = lookupByCuid(
-  //     'users',
-  //     row.getValue(columnId),
-  //   )?.name.toLowerCase();
-  //   return userName ? userName.includes(filterValue.toLowerCase()) : false;
-  // };
-
   return [
     {
       accessorKey: 'userId',
@@ -78,7 +70,6 @@ export function useColumns<T>(): ColumnDef<T>[] {
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
       },
-      // filterFn: userFilterFn,
 
     },
 
