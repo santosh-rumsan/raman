@@ -6,7 +6,7 @@ import { EVENTS } from '@rumsan/raman/constants/events';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateInvoiceForInvoiceAppDto } from './dto/invoice.dto';
-import { GetInvoiceDto } from './dto/update-invoice.dto';
+import { ListInvoiceDto } from './dto/update-invoice.dto';
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
 @Injectable()
@@ -14,7 +14,7 @@ export class MyInvoiceService {
   constructor(
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async createInvoice(
     dto: CreateInvoiceForInvoiceAppDto,
@@ -55,7 +55,7 @@ export class MyInvoiceService {
     return myInvoice as Invoice;
   }
 
-  async findMyInvoice(query: GetInvoiceDto, ctx: tRC) {
+  async findMyInvoice(query: ListInvoiceDto, ctx: tRC) {
     const where: Record<any, any> = {
       deletedAt: null,
       userId: ctx.currentUser?.cuid,

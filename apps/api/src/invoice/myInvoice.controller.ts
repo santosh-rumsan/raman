@@ -16,7 +16,7 @@ import { tRC } from '@rumsan/sdk/types';
 
 import { InvoiceFile } from '../decorator/invoiceBody';
 import { CreateInvoiceForInvoiceAppDto } from './dto/invoice.dto';
-import { GetInvoiceDto } from './dto/update-invoice.dto';
+import { ListInvoiceDto } from './dto/update-invoice.dto';
 
 import { APP } from '@rumsan/raman/constants';
 import { JwtGuard } from '@rumsan/user';
@@ -27,7 +27,7 @@ import { MyInvoiceService } from './myInvoice.service';
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard)
 export class MyInvoiceController {
-  constructor(private readonly invoiceService: MyInvoiceService) {}
+  constructor(private readonly invoiceService: MyInvoiceService) { }
 
   @Post()
   //@CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.INVOICE })
@@ -45,7 +45,7 @@ export class MyInvoiceController {
 
   @Get()
   //@CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
-  getMyInvoice(@Query() query: GetInvoiceDto, @xRC() rc: tRC): any {
+  getMyInvoice(@Query() query: ListInvoiceDto, @xRC() rc: tRC): any {
     return this.invoiceService.findMyInvoice(query, rc);
   }
 

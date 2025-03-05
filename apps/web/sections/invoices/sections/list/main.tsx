@@ -1,76 +1,89 @@
 'use client';
 
 import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
-import * as React from 'react';
 
 import { PATHS } from '@/routes/paths';
 import { useInvoiceList } from '@rumsan/raman-ui/queries/invoice.query';
 import { Invoice } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
+import { useDataTableState } from '@rumsan/ui/components/data-table/datatable.state.hook';
 import { DataTable } from '@rumsan/ui/components/data-table/datatable.table';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useColumns } from './list.column';
 import { DataTableToolbar } from './list.toolbar';
 
 export function InvoiceList() {
   const router = useRouter();
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const searchParams = useSearchParams();
+
+  const {
+    sorting,
+    setSorting,
+    columnFilters,
+    columnFiltersObject,
+    setColumnFilters,
+    columnVisibility,
+    setColumnVisibility,
+    rowSelection,
+    setRowSelection,
+    pagination,
+    setPagination,
+    updateQueryParams,
+  } = useDataTableState(searchParams, router);
   const columns = useColumns<Invoice>();
 
-  const invoiceList = useInvoiceList(pagination);
+  const { data, isLoading } = useInvoiceList({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    sort: sorting[0]?.id,
+    order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
+  },
+    columnFiltersObject,
+  );
 
   const table = useReactTable({
-    data: (invoiceList?.data?.data as Invoice[]) || [],
+    data: (data?.data as Invoice[]) || [],
     columns,
-    pageCount: invoiceList?.data?.response?.meta?.lastPage || 1,
-    enableRowSelection: true,
-    manualPagination: true,
-    manualSorting: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
+    onSortingChange: (updater) => {
+      const newSorting =
+        typeof updater === 'function' ? updater(sorting) : updater;
+      setSorting(newSorting);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+      updateQueryParams({
+        sort: newSorting[0]?.id || '',
+        order: newSorting[0]?.desc ? 'desc' : 'asc',
+      });
+    },
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualSorting: true,
+    manualPagination: true,
+    manualFiltering: true,
+    enableRowSelection: true,
+    rowCount: data?.meta?.total,
     state: {
       sorting,
+      columnFilters,
       columnVisibility,
       rowSelection,
-      columnFilters,
       pagination,
     },
-    initialState: {
-      pagination: {
-        pageSize: 10,
-      },
-    },
   });
-
   const handleRowClick = (row: any) => {
     router.push(PATHS.INVOICE.DETAILS(row.original.cuid));
   };
@@ -85,7 +98,7 @@ export function InvoiceList() {
             table={table}
             columns={columns}
             handleRowClick={handleRowClick}
-            isLoading={invoiceList.isLoading}
+            isLoading={isLoading}
             entityName="Invoice"
           />
         </div>

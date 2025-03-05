@@ -1,7 +1,7 @@
 import { IconByName } from '@/utils';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatable.column.header';
-import { ColumnDef, FilterFn } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
 type StatusColors = {
@@ -32,14 +32,6 @@ export const invoiceStatusColors: StatusColors = {
 
 export function useColumns<T>(): ColumnDef<T>[] {
   const { lookupByCuid } = useSelectLookUp();
-
-  const userFilterFn: FilterFn<T> = (row, columnId, filterValue) => {
-    const userName = lookupByCuid(
-      'users',
-      row.getValue(columnId),
-    )?.name.toLowerCase();
-    return userName ? userName.includes(filterValue.toLowerCase()) : false;
-  };
 
   return [
     {
@@ -75,9 +67,10 @@ export function useColumns<T>(): ColumnDef<T>[] {
           </div>
         );
       },
-      enableSorting: false,
-      enableHiding: false,
-      filterFn: userFilterFn,
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+
     },
 
     {
@@ -117,6 +110,8 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      enableSorting: false,
+      enableHiding: false,
     },
 
     {
@@ -136,6 +131,8 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      enableSorting: false,
+      enableHiding: false,
     },
 
     {
@@ -153,6 +150,8 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      enableSorting: false,
+      enableHiding: false,
     },
 
     {
@@ -163,15 +162,16 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div
-            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${
-              invoiceStatusColors[row.getValue('status') as keyof StatusColors]
-            }`}
+            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${invoiceStatusColors[row.getValue('status') as keyof StatusColors]
+              }`}
           >
             <span className="truncate text-xs">{row.getValue('status')}</span>
           </div>
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      enableSorting: false,
+      enableHiding: false,
     },
 
     {
@@ -191,6 +191,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
+
     },
 
     // {
