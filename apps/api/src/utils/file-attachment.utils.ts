@@ -1,28 +1,41 @@
 import { FileAttachment } from '@rumsan/raman/types';
 import { GDriveService } from './gdrive.utils';
 import { createIpfsHash } from './ipfs.utils';
+import { FileAttachmentWithBuffer } from './types';
 
 export const UploadFileToGdrive = async (
-  file: Express.Multer.File,
+  file: FileAttachmentWithBuffer,
   gdrive: GDriveService,
 ) => {
-  const gFile: FileAttachment = {
-    hash: await createIpfsHash(file.buffer),
-    url: null,
-    filename: file.originalname,
-    size: file.size,
-    mimeType: file.mimetype,
-    cloudStorage: 'gdrive',
-  };
+  if (!file.buffer)
+    return {
+      file,
+      cloudInfo: {
+        storage: 'gdrive',
+      },
+    };
 
   const { url, gdriveInfo } = await gdrive.upload({
-    hash: gFile.hash,
-    filename: gFile.filename,
+    hash: file.hash || (await createIpfsHash(file.buffer)),
+    filename: file.filename,
     data: file.buffer,
-    mimeType: file.mimetype,
+    mimeType: file.mimeType,
   });
-  gFile.url = url;
-  gFile.cloudStorageId = gdriveInfo.id ?? undefined;
 
-  return gFile;
+  file.url = url;
+  const newFile: FileAttachment = {
+    hash: file.hash,
+    url,
+    filename: file.filename,
+    size: file.buffer.length,
+    mimeType: file.mimeType,
+  };
+
+  return {
+    file: newFile,
+    cloudInfo: {
+      storage: 'gdrive',
+      id: gdriveInfo.id,
+    },
+  };
 };

@@ -617,7 +617,7 @@ importers:
         version: link:../typescript-config
       typescript:
         specifier: latest
-        version: 5.7.3
+        version: 5.8.2
 
   packages/shadcn-ui:
     dependencies:
@@ -9972,6 +9972,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typestub-ipfs-only-hash@4.0.0:
     resolution: {integrity: sha512-HKLePX0XiPiyqoueSfvCLL9SIzvKBXjASaRoR0yk/gUbbK7cqejU6/tjhihwmzBCvWbx5aMQ2LYsYIpMK7Ikpg==}
 
@@ -12137,7 +12142,7 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       tsconfig: 7.0.0
-      typescript: 5.7.3
+      typescript: 5.8.2
     transitivePeerDependencies:
       - react-native
 
@@ -21612,6 +21617,8 @@ snapshots:
   typescript@5.5.4: {}
 
   typescript@5.7.3: {}
+
+  typescript@5.8.2: {}
 
   typestub-ipfs-only-hash@4.0.0:
     dependencies:

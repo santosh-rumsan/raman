@@ -6,8 +6,10 @@ import { EVENTS } from '@rumsan/raman/constants/events';
 import { FileAttachment } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';
+import { mergeArraysByUniqueKey } from '../utils/array.utils';
 import { GDriveService } from '../utils/gdrive.utils';
 import { createIpfsHash } from '../utils/ipfs.utils';
+import { FileAttachmentWithBuffer } from '../utils/types';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import {
   ExpenseFilterDto,
@@ -40,20 +42,44 @@ export class ExpenseService {
       updatedBy: ctx.currentUser?.cuid,
     };
 
+    const attachmentsWithBuffer: FileAttachmentWithBuffer[] = [];
+    const attachments: FileAttachment[] = [];
+
+    for (const file of files) {
+      const hash = await createIpfsHash(file.buffer);
+      const attachment: FileAttachment = {
+        hash,
+        url: 'pending',
+        filename: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      };
+      attachments.push(attachment);
+      attachmentsWithBuffer.push({
+        ...attachment,
+        buffer: file.buffer,
+      });
+    }
+
     const newExpense = await this.prisma.$transaction(async (prisma) => {
       return prisma.expense.create({
         data: {
           ...data,
-          attachments: files.length > 0 ? 'pending' : undefined,
+          attachments,
         },
       });
     });
 
     if (files.length > 0) {
-      this.eventEmitter.emit(EVENTS.EXPENSE.UPLOAD, data, files, {
-        clientId: ctx.clientId,
-        currentUser: ctx.currentUser,
-      });
+      this.eventEmitter.emit(
+        EVENTS.EXPENSE.UPLOAD,
+        newExpense,
+        attachmentsWithBuffer,
+        {
+          clientId: ctx.clientId,
+          currentUser: ctx.currentUser,
+        },
+      );
     }
 
     this.eventEmitter.emit(EVENTS.EXPENSE.CREATED, newExpense);
@@ -81,38 +107,49 @@ export class ExpenseService {
     });
     if (!expense) throw new Error('Expense not found');
 
-    const attachments: FileAttachment[] =
-      typeof expense.attachments === 'string' || expense.attachments == null
-        ? []
-        : (expense.attachments as [FileAttachment]);
+    const existingAttachments: FileAttachment[] =
+      (expense.attachments as FileAttachment[]) || [];
+
+    const attachmentsWithBuffer: FileAttachmentWithBuffer[] = [];
+    const newAttachments: FileAttachment[] = [];
 
     for (const file of files) {
+      const hash = await createIpfsHash(file.buffer);
       const attachment: FileAttachment = {
-        hash: await createIpfsHash(file.buffer),
+        hash,
         url: 'pending',
         filename: file.originalname,
         size: file.size,
         mimeType: file.mimetype,
       };
-      attachments.push(attachment);
-
-      this.eventEmitter.emit(
-        EVENTS.EXPENSE.UPLOAD,
-        {
-          cuid: expense.cuid,
-          file,
-        },
-        { clientId: ctx.clientId },
-      );
+      newAttachments.push(attachment);
+      attachmentsWithBuffer.push({
+        ...attachment,
+        buffer: file.buffer,
+      });
     }
 
-    return await this.prisma.expense.update({
+    const newRec = await this.prisma.expense.update({
       where: { cuid },
       data: {
-        attachments,
+        attachments: mergeArraysByUniqueKey(
+          existingAttachments,
+          newAttachments,
+          'hash',
+        ),
         updatedBy: ctx.currentUser ? ctx.currentUser.cuid : null,
       },
     });
+
+    this.eventEmitter.emit(
+      EVENTS.EXPENSE.UPLOAD,
+      newRec,
+      attachmentsWithBuffer,
+      {
+        clientId: ctx.clientId,
+      },
+    );
+    return newRec;
   }
 
   async deleteAttachment(cuid: string, attachmentHash: string, ctx: tRC) {

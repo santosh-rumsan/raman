@@ -5,11 +5,11 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 
 import { useColumns } from '@/sections/projects/list/list.column';
-import { useProjectList } from '@rumsan/raman-ui/queries/project.query';
+import { useProjectSearch } from '@rumsan/raman-ui/queries/project.query';
 import { Project } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
 import { useDataTableState } from '@rumsan/ui/components/data-table/datatable.state.hook';
@@ -37,7 +37,7 @@ export function ProjectList() {
   } = useDataTableState(searchParams, router);
   const columns = useColumns<Project>();
 
-  const { data, isLoading } = useProjectList(
+  const { data, isLoading } = useProjectSearch(
     {
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
@@ -91,11 +91,7 @@ export function ProjectList() {
         </div>
         <ListToolbar table={table} />
         <div className="rounded-md border">
-          <DataTable
-            table={table}
-            columns={columns}
-            isLoading={isLoading}
-          />
+          <DataTable table={table} columns={columns} isLoading={isLoading} />
         </div>
         <DataTablePagination
           table={table}

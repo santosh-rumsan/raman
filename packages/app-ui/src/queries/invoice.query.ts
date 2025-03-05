@@ -1,5 +1,5 @@
 import { ApiClient } from '@rumsan/raman/clients';
-import { Invoice } from '@rumsan/raman/types';
+import { Invoice, InvoiceExtended } from '@rumsan/raman/types';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 
@@ -23,17 +23,20 @@ export const useInvoiceList = (pagination: any, filters: any): any => {
   return query;
 };
 
-export const useGetInvoice = (id: string): UseQueryResult<any, Error> => {
+export const useGetInvoice = (
+  id: string,
+): UseQueryResult<InvoiceExtended, Error> => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
-  const query = useQuery(
+  return useQuery(
     {
-      queryKey: ['invoice', id],
-      queryFn: () => RsClient.Invoice.get(id),
+      queryKey: ['invoice_get', id],
+      queryFn: async () => {
+        const { data } = await RsClient.Invoice.get(id);
+        return data;
+      },
     },
     queryClient,
   );
-
-  return query;
 };
 
 // export const useAddInvoice = () => {

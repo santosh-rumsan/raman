@@ -1,7 +1,7 @@
 import { cn } from '@/utils';
 import { FileAttachment, Invoice } from '@rumsan/raman/types';
 import { Card, CardContent } from '@rumsan/shadcn-ui/components/card';
-import { FileImage, Link2, PlusCircle, X } from 'lucide-react';
+import { FileImage, Link2, X } from 'lucide-react';
 
 type Props = {
   className?: string;
@@ -63,12 +63,6 @@ export const ReceiptCard = ({ className, invoice }: Props) => {
                 Attachments
               </h5>
             </div>
-            <button
-              //   onClick={handleAddAttachment}
-              className="flex items-center text-sm text-blue-500 hover:text-blue-600"
-            >
-              <PlusCircle className="h-4 w-4 mr-1" /> Upload
-            </button>
           </div>
 
           <div className="grid gap-2">

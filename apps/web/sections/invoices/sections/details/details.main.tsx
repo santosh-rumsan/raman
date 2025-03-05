@@ -1,8 +1,10 @@
 'use client';
 
+import { useWebSocketEvent } from '@/hooks/ws-event.hook';
 import { PATHS } from '@/routes/paths';
 import { useGetInvoice } from '@rumsan/raman-ui/queries/invoice.query';
-import { Invoice } from '@rumsan/raman/types';
+import { EVENTS } from '@rumsan/raman/constants/events';
+import { InvoiceExtended, InvoiceStatusType } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Handshake } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -27,9 +29,10 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
   const router = useRouter();
   const [isRejected, setIsRejected] = useState(false);
 
-  const { data: invoiceDetails } = useGetInvoice(invoiceId);
+  const invoiceDetails = useGetInvoice(invoiceId);
+  const invoice = invoiceDetails?.data as InvoiceExtended;
 
-  const invoice: Invoice = invoiceDetails?.data as unknown as Invoice;
+  useWebSocketEvent(EVENTS.INVOICE.UPLOAD, invoiceDetails.refetch);
 
   const statusColors: StatusColors = {
     PENDING: 'bg-yellow-100 text-yellow-700',
@@ -38,22 +41,11 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
     APPROVED: 'bg-blue-50 text-blue-500',
   };
 
-  const handleBackButton = () => {
-    router.push(PATHS.INVOICE.HOME);
-  };
-
   const handleReimburse = () => {
     if (invoice?.status === 'PENDING' || invoice?.status === 'REJECTED') {
       setIsRejected(!isRejected);
     } else {
       router.push(PATHS.INVOICE.REIMBURSE(invoiceId));
-    }
-  };
-
-  const handleImageClick = (receipt: string) => {
-    if (receipt) {
-      const imageUrl = `${receipt}`;
-      window.open(imageUrl, '_blank');
     }
   };
 
@@ -78,7 +70,7 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
 
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-start gap-1"></div>
-        {invoice?.status === 'APPROVED' ? (
+        {invoice?.status === InvoiceStatusType.APPROVED ? (
           <Button onClick={handleReimburse}>
             <Handshake className="h-10 w-10" strokeWidth={2.5} />
             Reimburse
@@ -87,7 +79,7 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
       </div>
 
       <div className="grid grid-cols-12 gap-6">
-        {invoice?.status === 'REJECTED' && (
+        {invoice?.status === InvoiceStatusType.REJECTED && (
           <InvoiceRejectedDetails className="col-span-12" invoice={invoice} />
         )}
         <InvoiceDetailCard className="col-span-8" invoice={invoice} />
@@ -100,7 +92,7 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
         />
       </div>
 
-      {invoice?.status === 'REIMBURSED' && (
+      {invoice?.status === InvoiceStatusType.REIMBURSED && (
         <InvoiceReimbursedDetails className="col-span-12" invoice={invoice} />
       )}
     </div>

@@ -1,0 +1,46 @@
+[
+    {
+        "label": "Inventroy",
+        "value": "Inventory"
+    },
+    {
+        "label": "Utilities",
+        "value": "Utilities"
+    },
+    {
+        "label": "Fees",
+        "value": "Fees"
+    },
+    {
+        "label": "Salary",
+        "value": "Salary"
+    },
+    {
+        "label": "Software",
+        "value": "Software"
+    },
+    {
+        "label": "Travel",
+        "value": "Travel"
+    },
+    {
+        "label": "Accomodation",
+        "value": "Accomodation"
+    },
+    {
+        "label": "Meal",
+        "value": "Meal"
+    },
+    {
+        "label": "Marketing",
+        "value": "Marketing"
+    },
+    {
+        "label": "Tax",
+        "value": "Tax"
+    },
+    {
+        "label": "Office",
+        "value": "Office"
+    }
+]

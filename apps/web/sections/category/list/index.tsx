@@ -1,51 +1,75 @@
 'use client';
 
 import {
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
-import * as React from 'react';
 
 import { useCategoryList } from '@rumsan/raman-ui/queries/category.query';
 import { Category } from '@rumsan/raman/types';
 import { DataTablePagination } from '@rumsan/ui/components/data-table/datatable.pagination';
+import { useDataTableState } from '@rumsan/ui/components/data-table/datatable.state.hook';
 import { DataTable } from '@rumsan/ui/components/data-table/datatable.table';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useColumns } from './list.columns';
 import { ListToolbar } from './list.toolbar';
 
 export function CategoryList() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const categoryList = useCategoryList();
+  const {
+    sorting,
+    setSorting,
+    columnFilters,
+    columnFiltersObject,
+    setColumnFilters,
+    columnVisibility,
+    setColumnVisibility,
+    rowSelection,
+    setRowSelection,
+    pagination,
+    setPagination,
+    updateQueryParams,
+  } = useDataTableState(searchParams, router);
   const columns = useColumns<Category>();
 
+  const categoryList = useCategoryList({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
+    sort: sorting[0]?.id,
+    order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
+  },
+    columnFiltersObject,
+  );
+
   const table = useReactTable({
-    data: (categoryList.data as Category[]) || [],
+    data: (categoryList?.data?.data as Category[]) || [],
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: (updater) => {
+      const newSorting =
+        typeof updater === 'function' ? updater(sorting) : updater;
+      setSorting(newSorting);
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+      updateQueryParams({
+        sort: newSorting[0]?.id || '',
+        order: newSorting[0]?.desc ? 'desc' : 'asc',
+      });
+    }, onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    manualSorting: true,
+    manualPagination: true,
+    manualFiltering: true,
+    enableRowSelection: true,
+    rowCount: categoryList?.data?.meta?.total,
     state: {
       sorting,
       columnFilters,
@@ -65,12 +89,19 @@ export function CategoryList() {
             table={table}
             columns={columns}
             isLoading={categoryList.isLoading}
-            entityName="Category"
           />
         </div>
         <DataTablePagination
           table={table}
-          setPagination={setPagination}
+          setPagination={(updater: any) => {
+            const newPagination =
+              typeof updater === 'function' ? updater(pagination) : updater;
+            setPagination(newPagination);
+            updateQueryParams({
+              page: newPagination.pageIndex + 1,
+              limit: newPagination.pageSize,
+            });
+          }}
           pagination={pagination}
         />
       </div>

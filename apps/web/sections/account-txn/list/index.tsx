@@ -2,6 +2,8 @@
 
 import {
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -23,15 +25,15 @@ export function AccountTxnList(props: { accountId: string }) {
 
   const {
     sorting,
-    setSorting,
     columnFilters,
-    setColumnFilters,
     columnVisibility,
     setColumnVisibility,
     rowSelection,
     setRowSelection,
     pagination,
     setPagination,
+    onSortingChange,
+    onColumnFiltersChange,
     updateQueryParams,
   } = useDataTableState(searchParams, router);
   const columns = useColumns<AccountTxn>();
@@ -48,32 +50,27 @@ export function AccountTxnList(props: { accountId: string }) {
   const table = useReactTable({
     data: (accountList.data?.data as AccountTxn[]) || [],
     columns,
-    onSortingChange: (updater) => {
-      const newSorting =
-        typeof updater === 'function' ? updater(sorting) : updater;
-      setSorting(newSorting);
-      updateQueryParams({
-        sort: newSorting[0]?.id || '',
-        order: newSorting[0]?.desc ? 'desc' : 'asc',
-      });
-    },
-    onColumnFiltersChange: setColumnFilters,
+    onSortingChange,
+    onColumnFiltersChange,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     manualSorting: true,
     manualPagination: true,
     manualFiltering: true,
+    enableRowSelection: true,
     rowCount: accountList.data?.meta?.total,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      pagination,
       rowSelection,
+      pagination,
     },
   });
 

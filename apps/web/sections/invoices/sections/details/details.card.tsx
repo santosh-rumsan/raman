@@ -2,8 +2,7 @@
 
 import { cn, formatCurrency } from '@/utils';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
-import { useProjectGet } from '@rumsan/raman-ui/queries/project.query';
-import { Invoice } from '@rumsan/raman/types';
+import { InvoiceExtended } from '@rumsan/raman/types';
 import {
   Card,
   CardContent,
@@ -17,7 +16,7 @@ import { invoiceStatusColors } from '../list/list.column';
 
 type InvoiceDetailsProps = {
   className: string;
-  invoice: Invoice;
+  invoice: InvoiceExtended;
 };
 
 export default function InvoiceDetailCard({
@@ -25,9 +24,6 @@ export default function InvoiceDetailCard({
   invoice,
 }: InvoiceDetailsProps) {
   const { lookupByCuid } = useSelectLookUp();
-
-  const projectData = useProjectGet(invoice?.projectId ?? '');
-  const departmentId = projectData?.data?.departmentId;
 
   return (
     <Card className={cn('relative rounded-lg shadow-sm', className)}>
@@ -74,7 +70,7 @@ export default function InvoiceDetailCard({
             <Label className="text-xs font-normal text-gray-400">
               Invoice Type
             </Label>
-            <p className="font-medium bg-gray-100 flex justify-center items-center text-gray-600 text-sm rounded-2xl w-[80px] h-[25px] mt-[3px]">
+            <p className="text-black font-normal text-sm">
               {invoice?.invoiceType}
             </p>
           </div>
@@ -101,7 +97,8 @@ export default function InvoiceDetailCard({
               Department
             </Label>
             <p className="text-black font-normal text-sm">
-              {departmentId && lookupByCuid('departments', departmentId)?.name}
+              {invoice?.Project?.Department &&
+                invoice?.Project?.Department?.name}
             </p>
           </div>
 
