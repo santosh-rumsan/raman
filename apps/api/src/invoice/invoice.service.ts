@@ -7,7 +7,7 @@ import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateInvoiceDto } from './dto/invoice.dto';
-import { GetInvoiceDto, UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { InvoiceFilterDto, ListInvoiceDto, UpdateInvoiceDto } from './dto/update-invoice.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 100 });
 
@@ -57,48 +57,98 @@ export class InvoiceService {
     })) as Invoice;
   }
 
-  async findAll(query: GetInvoiceDto) {
-    const { page = 1, limit = 10 } = query;
-    const offset = (page - 1) * limit;
+  async findAll(dto: ListInvoiceDto, filters?: InvoiceFilterDto) {
+    const orderBy = {};
+    dto.sort = dto.sort || 'date';
+    dto.order = dto.order || 'desc';
+    if (dto.sort) {
+      orderBy[dto.sort] = dto.order;
+    }
 
-    const whereCondition = `WHERE "deletedAt" IS NULL`;
-    const invoices = await this.prisma.$queryRawUnsafe(`
-    SELECT * 
-    FROM "tbl_invoices"
-    ${whereCondition}
-    ORDER BY 
-      CASE "status"
-        WHEN 'PENDING' THEN 1
-        WHEN 'APPROVED' THEN 2
-        WHEN 'REIMBURSED' THEN 3
-        WHEN 'REJECTED' THEN 4
-        ELSE 5
-      END,
-      "createdAt" DESC
-    LIMIT ${limit} OFFSET ${offset}
-  `);
+    const where = {};
+    if (filters?.name) {
+      where['name'] = {
+        contains: filters.name,
+        mode: 'insensitive',
+      };
+    }
+    if (filters?.categoryId) {
+      where['categoryId'] = {
+        in: filters.categoryId,
+      };
+    }
 
-    const totalCountResult: any = await this.prisma.$queryRawUnsafe(`
-    SELECT COUNT(*) AS total
-    FROM "tbl_invoices"
-    ${whereCondition}
-  `);
-    const totalCount = Number(totalCountResult[0]?.total || 0);
+    if (filters?.projectId) {
+      where['projectId'] = {
+        in: filters.projectId,
+      };
+    }
 
-    const lastPage = Math.ceil(totalCount / limit);
-    const meta = {
-      total: totalCount,
-      lastPage,
-      currentPage: page,
-      perPage: limit,
-      prev: page > 1 ? page - 1 : null,
-      next: page < lastPage ? page + 1 : null,
-    };
+    if (filters?.userId) {
+      where['userId'] = {
+        in: filters.userId,
+      };
+    }
 
-    return {
-      meta,
-      data: invoices,
-    };
+    if (filters?.status) {
+      where['status'] = {
+        in: filters.status,
+      };
+    }
+
+    return paginate(
+      this.prisma.invoice,
+      {
+        where,
+        orderBy,
+        include: {
+          Project: { select: { name: true } },
+          Category: { select: { name: true } },
+          User: { select: { name: true } },
+        },
+      },
+      { page: dto.page, perPage: dto.limit },
+    );
+
+    //   const whereCondition = `WHERE "deletedAt" IS NULL`;
+    //   const invoices = await this.prisma.$queryRawUnsafe(`
+    //   SELECT *
+    //   FROM "tbl_invoices"
+    //   ${whereCondition}
+    //   ORDER BY
+    //     CASE "status"
+    //       WHEN 'PENDING' THEN 1
+    //       WHEN 'APPROVED' THEN 2
+    //       WHEN 'REIMBURSED' THEN 3
+    //       WHEN 'REJECTED' THEN 4
+    //       ELSE 5
+    //     END,
+    //     "createdAt" DESC
+    //   LIMIT ${limit} OFFSET ${offset}
+    // `);
+
+    //   const totalCountResult: any = await this.prisma.$queryRawUnsafe(`
+    //   SELECT COUNT(*) AS total
+    //   FROM "tbl_invoices"
+    //   ${whereCondition}
+    // `);
+    //   const totalCount = Number(totalCountResult[0]?.total || 0);
+
+    //   const lastPage = Math.ceil(totalCount / limit);
+    //   const meta = {
+    //     total: totalCount,
+    //     lastPage,
+    //     currentPage: page,
+    //     perPage: limit,
+    //     prev: page > 1 ? page - 1 : null,
+    //     next: page < lastPage ? page + 1 : null,
+    //   };
+
+    //   return {
+    //     meta,
+    //     data: invoices,
+    //   };
+
   }
 
   async findOne(cuid: string) {

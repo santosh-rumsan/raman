@@ -21,8 +21,9 @@ import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { InvoiceFile } from '../decorator/invoiceBody';
 import { CreateInvoiceDto } from './dto/invoice.dto';
 import {
-  GetInvoiceDto,
   // ReimburseInvoiceDto,
+  InvoiceFilterDto,
+  ListInvoiceDto,
   UpdateInvoiceDto,
 } from './dto/update-invoice.dto';
 import { InvoiceService } from './invoice.service';
@@ -66,10 +67,22 @@ export class InvoiceController {
     return this.invoiceService.reimburseInvoice(invoiceId, dto);
   }
 
+
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
-  getInvoice(@Query() query: GetInvoiceDto) {
+  //TODO:fix any
+  getInvoice(@Query() query: ListInvoiceDto): any {
     return this.invoiceService.findAll(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
+  //TODO:fix any
+  listExpensesWithFilter(
+    @Query() query: ListInvoiceDto,
+    @Body() filters: InvoiceFilterDto,
+  ): any {
+    return this.invoiceService.findAll(query, filters);
   }
 
   @Get(':invoiceId')

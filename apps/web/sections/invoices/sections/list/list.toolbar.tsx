@@ -10,7 +10,9 @@ import { DataTableViewOptions } from '@rumsan/ui/components/data-table/datatable
 import { PATHS } from '@/routes/paths';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { InvoiceStatusType } from '@rumsan/raman/types/enums';
+import { useDebounce } from '@rumsan/ui/hooks/debounce.hook';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { DataTableFacetedFilter } from './list.filter';
 
 interface DataTableToolbarProps<TData> {
@@ -23,6 +25,16 @@ export function DataTableToolbar<TData>({
   const router = useRouter();
   const isFiltered = table.getState().columnFilters.length > 0;
   const { users, projects, categories } = useSelectLookUp();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    const column = table.getColumn('userId');
+    if (column) {
+      column.setFilterValue(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
   const redirectToInvoiceCreate = () => {
     router.push(PATHS.INVOICE.ADD);
   };
@@ -32,10 +44,12 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Search invoices..."
-          value={(table.getColumn('userId')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('userId')?.setFilterValue(event.target.value)
-          }
+          // value={(table.getColumn('userId')?.getFilterValue() as string) ?? ''}
+          // onChange={(event) =>
+          //   table.getColumn('userId')?.setFilterValue(event.target.value)
+          // }
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
         {table.getColumn('status') && (
@@ -76,7 +90,9 @@ export function DataTableToolbar<TData>({
         {isFiltered && (
           <Button
             variant="ghost"
+            // onClick={() => setSearchTerm('')}
             onClick={() => table.resetColumnFilters()}
+
             className="h-8 px-2 lg:px-3"
           >
             Reset
