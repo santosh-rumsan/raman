@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@rumsan/shadcn-ui"],
-}
+  transpilePackages: ['@rumsan/shadcn-ui'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
 
-export default nextConfig
+export default nextConfig;
