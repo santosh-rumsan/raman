@@ -20,7 +20,7 @@
     "./utils/*": "./src/utils/*.ts"
   },
   "dependencies": {
-    "@rumsan/sdk": "^0.1.152",
+    "@rumsan/sdk": "^0.1.156",
     "axios": "^1.7.9"
   }
 }
