@@ -2,20 +2,33 @@ import { ApiClient } from '@rumsan/raman/clients';
 import { Category, CreateCategory, EditCategory } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
-export const useCategoryList = (pagination: Pagination, filters: any,) => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useCategoryList = (
+  pagination: Pagination,
+  filters: any,
+): UseQueryResult<
+  {
+    data: Category[];
+    meta: any;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
       queryKey: ['category_list', { ...pagination, ...filters }],
 
       queryFn: async () => {
-        const { response } = await RsClient.Category.search(pagination, filters);
+        const { response } = await RsClient.Category.search(
+          pagination,
+          filters,
+        );
         return {
           data: response.data,
-          meta: response.meta
+          meta: response.meta,
         };
       },
     },
@@ -24,7 +37,7 @@ export const useCategoryList = (pagination: Pagination, filters: any,) => {
 };
 
 export const useAddCategory = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -46,7 +59,7 @@ export const useAddCategory = () => {
 };
 
 export const useEditCategory = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {

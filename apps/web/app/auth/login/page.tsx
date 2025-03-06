@@ -1,12 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
-import LoginPage from './login';
+import { AuthMain } from '@/sections/auth';
 
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LoginPage />
-    </Suspense>
-  );
+export default function LoginPage() {
+  return <AuthMain />;
 }

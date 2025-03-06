@@ -35,7 +35,13 @@ import { SelectField } from '@rumsan/ui/components/select.field';
 import { StandardFormField } from '@rumsan/ui/components/standard.field';
 import { format } from 'date-fns';
 import { CalendarIcon, FileImage } from 'lucide-react';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Invoice } from './schema';
 
@@ -48,7 +54,7 @@ interface InvoiceFormProps {
   setFileChoose?: Dispatch<SetStateAction<boolean>>;
   isEditing: boolean;
   defaultValues?: Invoice;
-  children: React.ReactNode;
+  children: ReactNode;
   form: UseFormReturn<Invoice>;
 }
 

@@ -7,15 +7,28 @@ import {
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
-export const useDepartmentList = (pagination: Pagination, filters: any): any => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useDepartmentList = (
+  pagination: Pagination,
+  filters: any,
+): UseQueryResult<
+  {
+    data: Department[];
+    meta: any;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
       queryKey: ['department_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { response } = await RsClient.Department.search(pagination, filters);
+        const { response } = await RsClient.Department.search(
+          pagination,
+          filters,
+        );
         return {
           data: response.data,
           meta: response.meta,
@@ -28,7 +41,7 @@ export const useDepartmentList = (pagination: Pagination, filters: any): any => 
 };
 
 export const useAddDepartment = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -51,7 +64,7 @@ export const useAddDepartment = () => {
 };
 
 export const useEditDepartment = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -83,7 +96,7 @@ export const useEditDepartment = () => {
 export const useDepartmentGet = (
   id: string,
 ): UseQueryResult<Department, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {

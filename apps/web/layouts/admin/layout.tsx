@@ -6,13 +6,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@rumsan/shadcn-ui/components/sidebar';
+import { ReactNode } from 'react';
 
 export default function AdminLayout({
   title,
   children,
 }: {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <AuthGuard>

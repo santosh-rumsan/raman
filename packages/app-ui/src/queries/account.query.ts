@@ -1,10 +1,11 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { Account, CreateAccount, EditAccount } from '@rumsan/raman/types';
 import { useRumsan } from '@rumsan/react-query';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
-export const useAccountList = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useAccountList = (): UseQueryResult<Account[], Error> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
@@ -20,50 +21,64 @@ export const useAccountList = () => {
 };
 
 export const useAddAccount = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
-  return useMutation({
-    mutationFn: async (payload: CreateAccount) => {
-      const { data } = await RsClient.Account.create(payload);
+  return useMutation(
+    {
+      mutationFn: async (payload: CreateAccount) => {
+        const { data } = await RsClient.Account.create(payload);
 
-      return data;
+        return data;
+      },
+      onSuccess: (newAccount) => {
+        queryClient?.setQueryData<Account[]>(
+          ['account_list'],
+          (oldData = []) => {
+            return [newAccount, ...oldData];
+          },
+        );
+      },
     },
-    onSuccess: (newAccount) => {
-      queryClient?.setQueryData<Account[]>(['account_list'], (oldData = []) => {
-        return [newAccount, ...oldData];
-      });
-    },
-  }, queryClient);
+    queryClient,
+  );
 };
 
 export const useEditAccount = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
-  return useMutation({
-    mutationFn: async (payload: { id: string; data: EditAccount }) => {
-      const { data } = await RsClient.Account.update(payload.id, payload.data);
-
-      return data;
-    },
-    onSuccess: (updatedAccount: any) => {
-      queryClient?.setQueryData<Account[]>(['account_list'], (oldData = []) => {
-        return oldData.map((account) =>
-          account.cuid === updatedAccount.cuid ? updatedAccount : account,
+  return useMutation(
+    {
+      mutationFn: async (payload: { id: string; data: EditAccount }) => {
+        const { data } = await RsClient.Account.update(
+          payload.id,
+          payload.data,
         );
-      });
+
+        return data;
+      },
+      onSuccess: (updatedAccount: any) => {
+        queryClient?.setQueryData<Account[]>(
+          ['account_list'],
+          (oldData = []) => {
+            return oldData.map((account) =>
+              account.cuid === updatedAccount.cuid ? updatedAccount : account,
+            );
+          },
+        );
+      },
     },
-  }, queryClient);
+    queryClient,
+  );
 };
 
-export const useAccountGet = (cuid: string) => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useAccountGet = (cuid: string): UseQueryResult<Account, Error> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
       queryKey: ['account_get'],
       queryFn: async () => {
         const { data } = await RsClient.Account.findOne(cuid);
-
         return data;
       },
     },
@@ -71,8 +86,10 @@ export const useAccountGet = (cuid: string) => {
   );
 };
 
-export const useAccountByUuid = (uuid: string) => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useAccountByUuid = (
+  uuid: string,
+): UseQueryResult<Account, Error> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {

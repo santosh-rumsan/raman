@@ -11,10 +11,10 @@ import {
 } from '@rumsan/shadcn-ui/components/dialog';
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 import { AlertError } from '@rumsan/ui/components/alert.error';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { CommonCategoryForm } from './categories.form';
 
-export function CategoryAdd({ children }: { children: React.ReactNode }) {
+export function CategoryAdd({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   const addCategory = useAddCategory();

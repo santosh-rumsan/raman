@@ -5,14 +5,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@rumsan/shadcn-ui/components/form';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 type Props = {
   name: string;
   label: string;
   placeholder?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   disabled?: boolean;
 };
 

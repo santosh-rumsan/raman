@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { config } from './config';
-import { View, ViewProps } from 'react-native';
 import { OverlayProvider } from '@gluestack-ui/overlay';
 import { ToastProvider } from '@gluestack-ui/toast';
 import { useColorScheme } from 'nativewind';
+import React, { ReactNode, useEffect } from 'react';
+import { View, ViewProps } from 'react-native';
+import { config } from './config';
 import { ModeType } from './types';
 
 export function GluestackUIProvider({
@@ -11,7 +11,7 @@ export function GluestackUIProvider({
   ...props
 }: {
   mode?: ModeType;
-  children?: React.ReactNode;
+  children?: ReactNode;
   style?: ViewProps['style'];
 }) {
   const { colorScheme, setColorScheme } = useColorScheme();

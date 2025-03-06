@@ -3,10 +3,10 @@
 import { PATHS } from '@/routes/paths';
 import { useRumsanAppStore } from '@rumsan/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function GuestGuard({ children }: Props) {

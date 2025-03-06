@@ -1,10 +1,11 @@
 import { ApiClient } from '@rumsan/raman/clients';
-import { Invoice } from '@rumsan/raman/types';
+import { Category, Invoice } from '@rumsan/raman/types';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
 export const useGetApproval = (id: string): UseQueryResult<Invoice, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
@@ -19,7 +20,7 @@ export const useGetApproval = (id: string): UseQueryResult<Invoice, Error> => {
 };
 
 export const useInvoiceRejection = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -46,7 +47,7 @@ export const useInvoiceRejection = () => {
 };
 
 export const useInvoiceApproval = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -72,15 +73,17 @@ export const useInvoiceApproval = () => {
   );
 };
 
-export const usePublicCategoryList = (): UseQueryResult<any, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const usePublicCategoryList = (): UseQueryResult<Category, Error> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
-  const query = useQuery(
+  return useQuery(
     {
       queryKey: ['category'],
-      queryFn: async () => await RsClient.Public.getAllCategories(),
+      queryFn: async () => {
+        const { data } = await RsClient.Public.getAllCategories();
+        return data;
+      },
     },
     queryClient,
   );
-  return query;
 };

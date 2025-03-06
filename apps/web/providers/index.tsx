@@ -2,25 +2,14 @@
 
 import { TitleProvider } from '@/contexts/title.context';
 import { CONFIG } from '@/misc/config';
+import { queryClient } from '@rumsan/raman-ui/queries/query.client';
 import { ApiClient } from '@rumsan/raman/clients/index';
 import { RumsanProvider, useRumsanAppStore } from '@rumsan/react-query';
 import { TooltipProvider } from '@rumsan/shadcn-ui/components/tooltip';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ReactNode, useEffect } from 'react';
 import { WebSocketProvider } from './websocket.provider';
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-    },
-    mutations: {
-      retry: false,
-    },
-  },
-});
 
 export const apiClient = new ApiClient({
   baseURL: CONFIG.API_URL,
@@ -46,11 +35,13 @@ export function Providers({ children }: { children: ReactNode }) {
       enableColorScheme
     >
       <WebSocketProvider url={CONFIG.WS.URL}>
-        <RumsanProvider rumsanClient={apiClient} queryClient={queryClient}>
-          <TooltipProvider>
-            <TitleProvider>{children}</TitleProvider>
-          </TooltipProvider>
-        </RumsanProvider>
+        <QueryClientProvider client={queryClient}>
+          <RumsanProvider rumsanClient={apiClient}>
+            <TooltipProvider>
+              <TitleProvider>{children}</TitleProvider>
+            </TooltipProvider>
+          </RumsanProvider>
+        </QueryClientProvider>
       </WebSocketProvider>
     </NextThemesProvider>
   );

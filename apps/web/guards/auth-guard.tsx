@@ -3,10 +3,10 @@
 import { PATHS } from '@/routes/paths';
 import { useRumsanAppStore } from '@rumsan/react-query';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function AuthGuard({ children }: Props) {

@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@rumsan/shadcn-ui/components/table';
+import { ReactNode } from 'react';
 import { DataTableNoData } from './datatable.nodata';
 
 interface DataTableProps<T, TData> {
@@ -103,7 +104,12 @@ export function DataTable<T, TData>({
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {
+                    flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext(),
+                    ) as ReactNode
+                  }
                 </TableCell>
               ))}
             </TableRow>

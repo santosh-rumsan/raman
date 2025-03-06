@@ -3,6 +3,7 @@ import { Expense, ExpenseExtended } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
 const booleanFilters = (filters: any, field: string) => {
   let filterField = filters[field];
@@ -18,10 +19,19 @@ const booleanFilters = (filters: any, field: string) => {
 };
 
 //TODO: fix any
-export const useExpenseList = (pagination: Pagination, filters: any): any => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useExpenseList = (
+  pagination: Pagination,
+  filters: any,
+): UseQueryResult<
+  {
+    data: Expense[];
+    meta: any;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
-  const query = useQuery(
+  return useQuery(
     {
       queryKey: ['expense_list', { ...pagination, ...filters }],
       queryFn: async () => {
@@ -37,12 +47,10 @@ export const useExpenseList = (pagination: Pagination, filters: any): any => {
     },
     queryClient,
   );
-
-  return query;
 };
 
 export const useAddExpense = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -69,7 +77,7 @@ export const useAddExpense = () => {
 };
 
 export const useUploadAttachments = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -104,7 +112,7 @@ export const useUploadAttachments = () => {
 };
 
 export const useDeleteAttachment = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -126,7 +134,7 @@ export const useDeleteAttachment = () => {
 };
 
 export const useEditExpense = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -158,7 +166,7 @@ export const useEditExpense = () => {
 export const useExpenseById = (
   expenseId: string,
 ): UseQueryResult<ExpenseExtended, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
@@ -174,7 +182,7 @@ export const useExpenseById = (
 };
 
 export const useVerifyExpense = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
   return useMutation(
     {
       mutationFn: async (payload: { id: string }) => {

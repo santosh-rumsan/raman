@@ -2,9 +2,10 @@ import { ApiClient } from '@rumsan/raman/clients';
 
 import { useRumsan } from '@rumsan/react-query';
 import { useQuery } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
 export const usePing = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {

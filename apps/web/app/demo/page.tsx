@@ -23,7 +23,7 @@ export default function Page() {
         </Button>
         <Alert variant="default">
           <AlertDescription>
-            <pre>{data && <p>{JSON.stringify(data)}</p>}</pre>
+            <pre><>{data && <p>{JSON.stringify(data)}</p>}</></pre>
           </AlertDescription>
         </Alert>
         <Alert variant="destructive">

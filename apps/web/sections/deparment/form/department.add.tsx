@@ -13,10 +13,10 @@ import {
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 import { AlertError } from '@rumsan/ui/components/alert.error';
 
-import React, { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { CommonDepartmentForm } from './department.form';
 
-export function DepartmentAdd({ children }: { children: React.ReactNode }) {
+export function DepartmentAdd({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   const addDepartment = useAddDepartment();

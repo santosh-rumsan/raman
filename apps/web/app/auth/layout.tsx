@@ -1,7 +1,7 @@
 'use client';
 
 import GuestGuard from '@/guards/guest-guard';
-import * as React from 'react';
+import { ReactNode, Suspense, useEffect, useState } from 'react';
 
 const images: string[] = [
   'https://i.pinimg.com/736x/8a/d3/62/8ad36243abc77ebf4d5b34d62510fa52.jpg',
@@ -12,20 +12,16 @@ const images: string[] = [
   'https://assets.rumsan.net/rumsan-group/hlb.jpg',
 ];
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [bgImage, setBgImage] = React.useState<string | null>(null);
+export default function AuthLayout({ children }: { children: ReactNode }) {
+  const [bgImage, setBgImage] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Run only on the client
     setBgImage(images[Math.floor(Math.random() * images.length)] as string);
   }, []);
 
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <GuestGuard>
         <div className="h-screen flex">
           <div
@@ -35,6 +31,6 @@ export default function AuthLayout({
           <div className="w-1/2">{children}</div>
         </div>
       </GuestGuard>
-    </React.Suspense>
+    </Suspense>
   );
 }

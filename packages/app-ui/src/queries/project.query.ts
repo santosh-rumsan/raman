@@ -3,10 +3,20 @@ import { CreateProject, EditProject, Project } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { queryClient } from './query.client';
 
 //TODO: fix any
-export const useProjectSearch = (pagination: Pagination, filters: any) => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useProjectSearch = (
+  pagination: Pagination,
+  filters: any,
+): UseQueryResult<
+  {
+    data: Project[];
+    meta: Record<string, any>;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
@@ -23,8 +33,16 @@ export const useProjectSearch = (pagination: Pagination, filters: any) => {
   );
 };
 
-export const useProjectList = (pagination: Pagination) => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useProjectList = (
+  pagination: Pagination,
+): UseQueryResult<
+  {
+    data: Project[] | null;
+    meta: any;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
@@ -42,7 +60,7 @@ export const useProjectList = (pagination: Pagination) => {
 };
 
 export const useAddProject = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -70,7 +88,7 @@ export const useAddProject = () => {
 };
 
 export const useEditProject = () => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useMutation(
     {
@@ -98,7 +116,7 @@ export const useEditProject = () => {
 };
 
 export const useProjectGet = (id: string): UseQueryResult<Project, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
