@@ -25,14 +25,16 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <GuestGuard>
-      <div className="h-screen flex">
-        <div
-          className="w-1/2 bg-cover bg-center"
-          style={{ backgroundImage: `url(${bgImage})` }}
-        ></div>
-        <div className="w-1/2">{children}</div>
-      </div>
-    </GuestGuard>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <GuestGuard>
+        <div className="h-screen flex">
+          <div
+            className="w-1/2 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          ></div>
+          <div className="w-1/2">{children}</div>
+        </div>
+      </GuestGuard>
+    </React.Suspense>
   );
 }
