@@ -1,6 +1,6 @@
+import { LookupData } from '@rumsan/raman/types/misc.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LookupData } from '../types/misc.type';
 
 export class MiscClient {
   private _client: AxiosInstance;

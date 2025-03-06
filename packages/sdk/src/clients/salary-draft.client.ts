@@ -1,7 +1,11 @@
+import {
+  CreateSalaryDraft,
+  EditSalaryDraft,
+  SalaryDraft,
+} from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateSalaryDraft, EditSalaryDraft, SalaryDraft } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class SalaryDraftClient {
   private _client: AxiosInstance;

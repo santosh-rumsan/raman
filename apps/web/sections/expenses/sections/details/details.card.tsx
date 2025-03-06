@@ -1,21 +1,29 @@
-import { cn, formatCurrency } from '@/utils';
-import { Expense } from '@rumsan/raman';
+import { cn, formatCurrency, IconByName } from '@/utils';
+import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
+import { ExpenseExtended } from '@rumsan/raman/types';
 import {
   Card,
   CardContent,
   CardHeader,
 } from '@rumsan/shadcn-ui/components/card';
 import { Label } from '@rumsan/shadcn-ui/components/label';
-import { BadgeCheck, BadgeHelp, Wallet } from 'lucide-react';
-import { statusColor } from '../list/list.columns';
+import { CheckCircle, FileQuestion, XCircle } from 'lucide-react';
 
 export default function ExpenseDetailCard({
   className,
   expense,
 }: {
   className?: string;
-  expense: Expense;
+  expense: ExpenseExtended;
 }) {
+  const { lookupByCuid } = useSelectLookUp();
+  const iconColor =
+    expense?.isVerified && expense?.isReconciled
+      ? 'text-green-600'
+      : expense?.isVerified || expense?.isReconciled
+        ? 'text-yellow-600'
+        : 'text-red-600';
+  const category = lookupByCuid('categories', expense?.categoryId);
   return (
     <Card className={cn('relative rounded-lg shadow-sm', className)}>
       <div className="absolute top-6 right-6 z-10">
@@ -31,16 +39,17 @@ export default function ExpenseDetailCard({
       <CardHeader className="px-6 py-4">
         <div className="flex items-center mb-3">
           <div className="rounded-full border flex justify-center items-center bg-gray-100 w-[30px] h-[30px]">
-            <Wallet className="h-4" strokeWidth={1.75} />
+            {/* <Wallet className="h-4" strokeWidth={1.75} /> */}
+            <IconByName
+              name={category?.meta?.icon}
+              defaultIcon="HandCoins"
+              className={cn(iconColor, 'h-4 w-4')}
+              strokeWidth={2.5}
+            />
           </div>
-          <h3 className="text-base ml-3 text-gray-700">
+          <h3 className="text-base ml-2 text-gray-700">
             {expense?.description}
           </h3>
-          {expense?.isApproved ? (
-            <BadgeCheck strokeWidth={2.5} className="h-4" color="#4CAF50" />
-          ) : (
-            <BadgeHelp strokeWidth={2.5} className="h-4" color="#FFC107" />
-          )}
         </div>
       </CardHeader>
 
@@ -81,18 +90,6 @@ export default function ExpenseDetailCard({
           </div>
 
           <div>
-            <Label className="text-xs font-normal text-gray-400">Status</Label>
-            <p
-              className={`flex space-x-2 h-6 w-[80px] font-normal text-sm items-center justify-center rounded-2xl p-2 ${statusColor
-              [String(expense?.isPending) as keyof typeof statusColor
-              ]
-                }`}
-            >
-              {expense?.isPending ? 'Pending' : 'Reconciled'}
-            </p>
-          </div>
-
-          <div>
             <Label className="text-xs font-normal text-gray-400">
               {' '}
               Invoice Type
@@ -101,6 +98,69 @@ export default function ExpenseDetailCard({
               {expense?.invoiceType}
             </p>
           </div>
+
+          <div>
+            <Label className="text-xs font-normal text-gray-400">
+              Reconcilation Status
+            </Label>
+            {/* <p className="text-black font-normal text-sm">
+              {expense?.isReconciled ? 'Reconciled' : 'Not Reconciled'}
+            </p> */}
+
+            <p className="text-black font-normal text-sm flex items-center">
+              {expense?.isReconciled ? (
+                <>
+                  <CheckCircle
+                    strokeWidth={2.5}
+                    className="text-green-600 h-4"
+                  />
+                  Reconciled
+                </>
+              ) : (
+                <>
+                  <FileQuestion
+                    strokeWidth={2.5}
+                    className="text-amber-600 h-4"
+                  />
+                  Not Reconciled
+                </>
+              )}
+            </p>
+          </div>
+
+          <div>
+            <Label className="text-xs font-normal text-gray-400">
+              Verification
+            </Label>
+            <p className="text-black font-normal text-sm flex items-center">
+              {expense?.isVerified ? (
+                <>
+                  <CheckCircle
+                    strokeWidth={2.5}
+                    className="text-green-600 h-4"
+                  />
+                  Verified
+                </>
+              ) : (
+                <>
+                  <XCircle strokeWidth={2.5} className="text-red-600 h-4" />
+                  Unverified
+                </>
+              )}
+            </p>
+          </div>
+
+          <div>
+            <Label className="text-xs font-normal text-gray-400">
+              Verified By
+            </Label>
+            <p className="text-black font-normal text-sm">
+              {expense?.verificationDetails?.verifiedBy &&
+                lookupByCuid('users', expense?.verificationDetails?.verifiedBy)
+                  ?.name}
+            </p>
+          </div>
+
           {expense?.vatAmount && expense.vatAmount > 0 ? (
             <>
               <div>

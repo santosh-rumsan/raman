@@ -3,7 +3,7 @@
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { ToastAction } from '@rumsan/shadcn-ui/components/toast';
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
-import { AlertType } from '../types/alert.type.js';
+import { AlertType } from '../types/alert.type';
 
 export function ToastComp({ message, title, btnOkay, isError }: AlertType) {
   const ok_altText = btnOkay?.altText || 'Okay';

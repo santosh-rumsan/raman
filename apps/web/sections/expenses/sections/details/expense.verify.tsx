@@ -1,5 +1,5 @@
 import { AppStyles } from '@/misc/app.style';
-import { useApproveExpense } from '@rumsan/raman-ui/queries/expense.query';
+import { useVerifyExpense } from '@rumsan/raman-ui/queries/expense.query';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
   Dialog,
@@ -15,14 +15,14 @@ import { ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
 export function CloseVerifyDailog({ expenseId }: { expenseId: string }) {
-  const approveExpense = useApproveExpense();
+  const verify = useVerifyExpense();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleApprove = async () => {
     setIsLoading(true);
     try {
-      await approveExpense.mutateAsync({ id: expenseId });
+      await verify.mutateAsync({ id: expenseId });
       window.location.reload();
       setDialogOpen(false);
     } catch (error) {

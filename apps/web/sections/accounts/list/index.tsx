@@ -73,7 +73,6 @@ export function AccountList() {
             columns={columns}
             handleRowClick={handleRowClick}
             isLoading={accountList.isLoading}
-            entityName="Account"
           />
         </div>
         <DataTablePagination

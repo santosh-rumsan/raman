@@ -1,7 +1,7 @@
+import { CreateExpense, EditExpense, Expense } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateExpense, EditExpense, Expense } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class ExpenseClient {
   private _client: AxiosInstance;
@@ -86,9 +86,9 @@ export class ExpenseClient {
     return formatResponse<Expense>(response);
   }
 
-  async approve(cuid: string, config?: AxiosRequestConfig) {
+  async verify(cuid: string, config?: AxiosRequestConfig) {
     const response = await this._client.patch(
-      `${this._prefix}/${cuid}/approve`,
+      `${this._prefix}/${cuid}/verify`,
       config,
     );
     return formatResponse<Expense>(response);

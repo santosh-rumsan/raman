@@ -7,7 +7,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 
 import { PATHS } from '@/routes/paths';
@@ -40,12 +40,13 @@ export function InvoiceList() {
   } = useDataTableState(searchParams, router);
   const columns = useColumns<Invoice>();
 
-  const { data, isLoading } = useInvoiceList({
-    page: pagination.pageIndex + 1,
-    limit: pagination.pageSize,
-    sort: sorting[0]?.id,
-    order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
-  },
+  const { data, isLoading } = useInvoiceList(
+    {
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      sort: sorting[0]?.id,
+      order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
+    },
     columnFiltersObject,
   );
 
@@ -93,13 +94,12 @@ export function InvoiceList() {
       <div className="space-y-4">
         <div className="flex flex-col gap-1 my-3"></div>
         <DataTableToolbar table={table} />
-        <div className="rounded-md border bg-white p-1 min-h-96">
+        <div className="rounded-md border min-h-96">
           <DataTable
             table={table}
             columns={columns}
             handleRowClick={handleRowClick}
             isLoading={isLoading}
-            entityName="Invoice"
           />
         </div>
         <DataTablePagination

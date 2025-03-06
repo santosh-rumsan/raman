@@ -1,7 +1,12 @@
+import {
+  Account,
+  AccountTxn,
+  CreateAccount,
+  EditAccount,
+} from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Account, AccountTxn, CreateAccount, EditAccount } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class AccountClient {
   private _client: AxiosInstance;

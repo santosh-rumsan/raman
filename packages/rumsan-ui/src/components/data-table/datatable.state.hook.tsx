@@ -5,7 +5,7 @@ import {
   Updater,
   VisibilityState,
 } from '@tanstack/react-table';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function convertArrayToObject(
   arr: { id: string; value: any }[],
@@ -26,22 +26,25 @@ export function useDataTableState(
   defaultLimit = 15,
 ) {
   // Parse query params for initial state
-  const initialPage = Number(searchParams.get('page')) || defaultPage;
-  const initialLimit = Number(searchParams.get('limit')) || defaultLimit;
-  const initialSort = searchParams.get('sort') || '';
-  const initialOrder = searchParams.get('order') === 'desc';
+  // const initialPage = Number(searchParams.get('page')) || defaultPage;
+  // const initialLimit = Number(searchParams.get('limit')) || defaultLimit;
+  // const initialSort = searchParams.get('sort') || '';
+  // const initialOrder = searchParams.get('order') === 'desc';
 
-  const [sorting, setSorting] = useState<SortingState>(
-    initialSort ? [{ id: initialSort, desc: initialOrder }] : [],
-  );
+  const getPageFromParams = () =>
+    Number(searchParams.get('page')) || defaultPage;
+  const getLimitFromParams = () =>
+    Number(searchParams.get('limit')) || defaultLimit;
+
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<
     { id: string; value: any }[]
   >([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [pagination, setPaginationState] = useState({
-    pageIndex: Math.max(initialPage - 1, 0),
-    pageSize: initialLimit,
+    pageIndex: Math.max(getPageFromParams() - 1, 0),
+    pageSize: getPageFromParams(),
   });
 
   // Function to update query parameters
@@ -77,8 +80,10 @@ export function useDataTableState(
     const newFilters =
       typeof updater === 'function' ? updater(columnFilters) : updater;
     setColumnFilters(newFilters);
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-    updateQueryParams({ page: 1 });
+    if (newFilters.length) {
+      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+      updateQueryParams({ page: 1 });
+    }
   };
 
   const setPagination = (updater: Updater<PaginationState>) => {
@@ -90,6 +95,21 @@ export function useDataTableState(
       limit: newPagination.pageSize,
     });
   };
+
+  useEffect(() => {
+    const newPage = getPageFromParams();
+    const newLimit = getLimitFromParams();
+
+    if (
+      pagination.pageIndex !== newPage - 1 ||
+      pagination.pageSize !== newLimit
+    ) {
+      setPaginationState({
+        pageIndex: Math.max(newPage - 1, 0),
+        pageSize: newLimit,
+      });
+    }
+  }, [searchParams]);
 
   return {
     sorting,

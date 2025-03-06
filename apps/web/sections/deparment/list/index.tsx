@@ -5,7 +5,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 
 import { useDepartmentList } from '@rumsan/raman-ui/queries/department.query';
@@ -23,43 +23,35 @@ export function DepartmentList() {
 
   const {
     sorting,
-    setSorting,
     columnFilters,
     columnFiltersObject,
-    setColumnFilters,
     columnVisibility,
     setColumnVisibility,
     rowSelection,
     setRowSelection,
     pagination,
     setPagination,
-    updateQueryParams,
+    onSortingChange,
+    onColumnFiltersChange,
   } = useDataTableState(searchParams, router);
 
   const columns = useColumns<Department>();
 
-  const { data, isLoading } = useDepartmentList({
-    page: pagination.pageIndex + 1,
-    limit: pagination.pageSize,
-    sort: sorting[0]?.id,
-    order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
-  },
+  const { data, isLoading } = useDepartmentList(
+    {
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      sort: sorting[0]?.id,
+      order: (sorting[0]?.desc ?? true) ? 'desc' : 'asc',
+    },
     columnFiltersObject,
   );
 
   const table = useReactTable({
     data: (data?.data as Department[]) || [],
     columns,
-    onSortingChange: (updater) => {
-      const newSorting =
-        typeof updater === 'function' ? updater(sorting) : updater;
-      setSorting(newSorting);
-      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-      updateQueryParams({
-        sort: newSorting[0]?.id || '',
-        order: newSorting[0]?.desc ? 'desc' : 'asc',
-      });
-    }, onColumnFiltersChange: setColumnFilters,
+    onSortingChange,
+    onColumnFiltersChange,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -91,23 +83,11 @@ export function DepartmentList() {
         </div>
         <ListToolbar table={table} />
         <div className="rounded-md border">
-          <DataTable
-            table={table}
-            columns={columns}
-            isLoading={isLoading}
-          />
+          <DataTable table={table} columns={columns} isLoading={isLoading} />
         </div>
         <DataTablePagination
           table={table}
-          setPagination={(updater: any) => {
-            const newPagination =
-              typeof updater === 'function' ? updater(pagination) : updater;
-            setPagination(newPagination);
-            updateQueryParams({
-              page: newPagination.pageIndex + 1,
-              limit: newPagination.pageSize,
-            });
-          }}
+          setPagination={setPagination}
           pagination={pagination}
         />
       </div>

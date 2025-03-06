@@ -3,8 +3,8 @@
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { useLookUpList } from '@rumsan/raman-ui/queries/misc.query';
 import { InvoiceType } from '@rumsan/raman/types/enums';
-import { FileAttachment } from '@rumsan/raman/types/index';
 
+import { InvoiceExtended } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Calendar } from '@rumsan/shadcn-ui/components/calendar';
 import {
@@ -37,17 +37,16 @@ import { format } from 'date-fns';
 import { CalendarIcon, FileImage, User } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { Invoice } from './schema';
 
 interface ReimburseInvoiceReimburseProps {
-  saveForm: (invoiceData: Invoice) => void;
+  saveForm: (invoiceData: InvoiceExtended) => void;
   files?: File[];
   setFiles?: Dispatch<SetStateAction<File[]>>;
   fileChoose?: boolean;
   setFileChoose?: Dispatch<SetStateAction<boolean>>;
-  defaultValues?: Invoice;
+  defaultValues?: InvoiceExtended;
   children: React.ReactNode;
-  form: UseFormReturn<Invoice>;
+  form: UseFormReturn<InvoiceExtended>;
 }
 
 export function InvoiceReimburseForm({
@@ -296,7 +295,8 @@ export function InvoiceReimburseForm({
             <Label>Attachments</Label>
             {Array.isArray(defaultValues?.receipts) ? (
               defaultValues?.receipts.map(
-                (attachment: FileAttachment, index: number) => (
+                //TODO: Fix any FileAttachment
+                (attachment: any, index: number) => (
                   <div
                     key={index}
                     className="flex items-center justify-between text-left bg-gray-50 p-2 rounded-md hover:shadow-sm hover:bg-gray-100"
@@ -353,9 +353,9 @@ export function InvoiceReimburseForm({
                 selectOptions={
                   accounts
                     ? Object.values(accounts).map((account) => ({
-                      label: account.name,
-                      value: account.cuid,
-                    }))
+                        label: account.name,
+                        value: account.cuid,
+                      }))
                     : []
                 }
                 showClearButton={false}

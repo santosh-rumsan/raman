@@ -10,7 +10,6 @@ import {
   Settings2,
   SquareTerminal,
 } from 'lucide-react';
-import * as React from 'react';
 
 import {
   Sidebar,
@@ -114,7 +113,7 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

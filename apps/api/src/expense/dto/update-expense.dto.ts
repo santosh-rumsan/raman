@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateExpenseDto } from './create-expense.dto';
 
 export class UpdateExpenseDto extends PartialType(CreateExpenseDto) {}
@@ -40,8 +40,10 @@ export class ExpenseFilterDto {
   departmentId?: string[];
 
   @IsOptional()
-  isApproved?: boolean | string[];
+  @IsBoolean()
+  isVerified?: boolean;
 
   @IsOptional()
-  isReconciled?: boolean | string[];
+  @IsBoolean()
+  isReconciled?: boolean;
 }

@@ -1,7 +1,11 @@
+import {
+  CreateDepartment,
+  Department,
+  EditDepartment,
+} from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateDepartment, Department, EditDepartment } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class DepartmentClient {
   private _client: AxiosInstance;
@@ -26,7 +30,8 @@ export class DepartmentClient {
   async search(
     params?: Pagination,
     filters?: any,
-    config?: AxiosRequestConfig,) {
+    config?: AxiosRequestConfig,
+  ) {
     const response = await this._client.post(
       `${this._prefix}/search`,
       filters,

@@ -3,7 +3,7 @@ import { useWebSocket } from '../context/WebSocketContext';
 
 export function useWebSocketEvent(
   eventName: string,
-  callback: (data: any) => void
+  callback: (data: any) => void,
 ) {
   const { socket } = useWebSocket();
 

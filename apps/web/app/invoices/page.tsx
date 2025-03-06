@@ -1,5 +1,5 @@
 import AdminLayout from '@/layouts/admin/layout';
-import { InvoiceList } from '@/sections/invoices/sections/list/main';
+import { InvoiceList } from '@/sections/invoices/sections/list';
 
 export default function Page() {
   return (

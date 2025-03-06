@@ -1,6 +1,6 @@
+import { AccountTxn } from '@rumsan/raman/types';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { AccountTxn } from '../types';
 
 export class AccountTxnClient {
   private _client: AxiosInstance;

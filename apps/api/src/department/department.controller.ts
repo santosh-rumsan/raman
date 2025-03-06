@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { xRC } from '@rumsan/extensions/decorators';
-import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants/index';
+import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants';
 import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { DepartmentService } from './department.service';
@@ -27,7 +27,7 @@ import {
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) { }
+  constructor(private readonly departmentService: DepartmentService) {}
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.DEPARTMENT })
@@ -50,9 +50,9 @@ export class DepartmentController {
   //TODO:fix any
   listDepartmentsWithFilter(
     @Query() query: ListDepartmentDto,
-    @Body() filters: DepartmentFilterDto
+    @Body() filters: DepartmentFilterDto,
   ): any {
-    return this.departmentService.findAll(query, filters)
+    return this.departmentService.findAll(query, filters);
   }
 
   @Get(':id')

@@ -149,8 +149,8 @@ model Expense {
 
   isReconciled     Boolean @default(false)
   reconcileDetails Json?   @db.JsonB()
-  isApproved       Boolean @default(false)
-  approvalDetails  Json?   @db.JsonB()
+  isVerified       Boolean @default(false)
+  verificationDetails  Json?   @db.JsonB()
 
   AccountTransaction AccountTransaction[]
   Salaries           Salary[]

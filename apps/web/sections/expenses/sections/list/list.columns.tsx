@@ -5,14 +5,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { IconByName } from '@/utils';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { Expense } from '@rumsan/raman/types';
+import { cn } from '@rumsan/shadcn-ui/lib/utils';
 import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatable.column.header';
 import { format } from 'date-fns';
 import { Check } from 'lucide-react';
-
-export const statusColor = {
-  true: 'bg-red-50 text-red-600',
-  false: 'bg-green-50 text-green-800',
-};
 
 export function ListColumns<T>(): ColumnDef<T>[] {
   const { lookupByCuid } = useSelectLookUp();
@@ -48,17 +44,23 @@ export function ListColumns<T>(): ColumnDef<T>[] {
         <DataTableColumnHeader column={column} title="Date" />
       ),
       cell: ({ row }) => {
-        const expense = row.original as Expense;
         const item = lookupByCuid('categories', row.getValue('categoryId'));
+        const { isVerified, isReconciled } = row.original as Expense;
+        const iconColor =
+          isVerified && isReconciled
+            ? 'text-green-600'
+            : isVerified || isReconciled
+              ? 'text-yellow-600'
+              : 'text-red-600';
+
         return (
           <div className="flex items-center space-x-2">
             <div className="rounded-full bg-gray-100 h-6 w-6 flex items-center justify-center">
               <IconByName
                 name={item?.meta?.icon}
                 defaultIcon="HandCoins"
-                className="h-4 w-4"
+                className={cn(iconColor, 'h-4 w-4')}
                 strokeWidth={2.5}
-                color={expense?.isApproved ? '#4CAF50' : '#FFC107'}
               />
             </div>
             <span>
@@ -68,9 +70,6 @@ export function ListColumns<T>(): ColumnDef<T>[] {
             </span>
           </div>
         );
-      },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
       },
     },
 
@@ -91,9 +90,6 @@ export function ListColumns<T>(): ColumnDef<T>[] {
           </div>
         );
       },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
       enableSorting: false,
       enableHiding: false,
     },
@@ -112,9 +108,7 @@ export function ListColumns<T>(): ColumnDef<T>[] {
           </div>
         );
       },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
+
       enableSorting: false,
       enableHiding: false,
     },
@@ -131,28 +125,24 @@ export function ListColumns<T>(): ColumnDef<T>[] {
           </div>
         );
       },
-      filterFn: (row, id, value) => {
-        return value.includes(row.getValue(id));
-      },
       enableSorting: false,
       enableHiding: false,
     },
 
     {
-      accessorKey: 'isApproved',
+      accessorKey: 'isVerified',
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Approved" />
+        <DataTableColumnHeader column={column} title="Verified" />
       ),
       cell: ({ row }) => {
         return (
           <div className="flex pl-4">
-            <Check />
+            {row.getValue('isVerified') ? <Check /> : ''}
           </div>
         );
       },
       enableSorting: false,
       enableHiding: false,
-      //filterFn: (row, id, value) => value.includes(row.getValue(id)),
     },
 
     {
@@ -163,7 +153,7 @@ export function ListColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div className="flex pl-6">
-            <Check />
+            {row.getValue('isReconciled') ? <Check /> : ''}
           </div>
         );
       },

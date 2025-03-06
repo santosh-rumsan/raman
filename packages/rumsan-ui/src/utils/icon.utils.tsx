@@ -32,14 +32,14 @@ export const AppIconCollection = (
       IconComponent = iconMap[defaultIcon];
     }
 
-    return (
+    return IconComponent ? (
       <IconComponent
         size={size}
         color={color}
         strokeWidth={strokeWidth}
         className={className}
       />
-    );
+    ) : null;
   };
 
   return _IconByName;

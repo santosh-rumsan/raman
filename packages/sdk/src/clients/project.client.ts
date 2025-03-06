@@ -1,7 +1,7 @@
+import { CreateProject, EditProject, Project } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateProject, EditProject, Project } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class ProjectClient {
   private _client: AxiosInstance;
@@ -27,7 +27,8 @@ export class ProjectClient {
   async search(
     params?: Pagination,
     filters?: any,
-    config?: AxiosRequestConfig,) {
+    config?: AxiosRequestConfig,
+  ) {
     const response = await this._client.post(
       `${this._prefix}/search`,
       filters,

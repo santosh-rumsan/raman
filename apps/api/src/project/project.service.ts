@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { Project } from '@rumsan/raman/types/project.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateProjectDto } from './dto/create-project.dto';
-import { ListProjectDto, ProjectFilterDto, UpdateProjectDto } from './dto/update-project.dto';
+import {
+  ListProjectDto,
+  ProjectFilterDto,
+  UpdateProjectDto,
+} from './dto/update-project.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
@@ -14,7 +18,7 @@ export class ProjectService {
   constructor(
     private prisma: PrismaService,
     private eventMgr: EventEmitter2,
-  ) { }
+  ) {}
 
   async create(payload: CreateProjectDto, ctx: tRC) {
     const result = await this.prisma.project.findFirst({
@@ -33,7 +37,7 @@ export class ProjectService {
     })) as Project;
   }
 
-  async findAll(dto: ListProjectDto, filters?: ProjectFilterDto,) {
+  async findAll(dto: ListProjectDto, filters?: ProjectFilterDto) {
     const orderBy = {};
     dto.sort = dto.sort || 'createdAt';
     dto.order = dto.order || 'desc';

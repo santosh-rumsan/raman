@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@rumsan/raman/*": ["../../packages/sdk/dist/*"],
       "@rumsan/shadcn-ui/*": ["../../packages/shadcn-ui/src/*"]
     }
   },

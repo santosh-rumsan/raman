@@ -15,7 +15,7 @@
   - Added the required column `txnCurrencyCode` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnDate` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
   - Added the required column `txnId` to the `tbl_accounts_txns` table without a default value. This is not possible if the table is not empty.
-dd
+
 */
 -- CreateEnum
 CREATE TYPE "AccountTxnStatus" AS ENUM ('UNRECONCILED', 'RECONCILED', 'DISCARDED');
@@ -60,10 +60,10 @@ ALTER COLUMN "updatedBy" SET DATA TYPE TEXT;
 
 -- AlterTable
 ALTER TABLE "tbl_expenses" DROP COLUMN "isPending",
-ADD COLUMN     "approvalDetails" JSONB,
-ADD COLUMN     "isApproved" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN     "isReconciled" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isVerified" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN     "reconcileDetails" JSONB,
+ADD COLUMN     "verificationDetails" JSONB,
 ALTER COLUMN "amount" SET DATA TYPE DOUBLE PRECISION,
 ALTER COLUMN "vatAmount" SET DATA TYPE DOUBLE PRECISION;
 

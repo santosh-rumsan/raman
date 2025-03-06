@@ -6,6 +6,7 @@ import {
   useGetInvoice,
   useInvoiceReimburse,
 } from '@rumsan/raman-ui/queries/invoice.query';
+import { InvoiceExtended } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
   Card,
@@ -20,7 +21,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { InvoiceReimburseForm } from './invoice.reimburse.form';
-import { Invoice, invoiceSchema } from './schema';
+import { invoiceSchema } from './schema';
 
 type InvoiceAddProps = {
   cuid: string;
@@ -32,7 +33,7 @@ export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
 
   const { mutateAsync: reimburseInvoice, isPending } = useInvoiceReimburse();
 
-  const invoiceDetails = invoiceData?.data?.data;
+  const invoiceDetails = invoiceData?.data;
 
   if (invoiceDetails?.date) {
     invoiceDetails.date = new Date(invoiceDetails.date || '');
@@ -40,7 +41,7 @@ export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const form = useForm<Invoice>({
+  const form = useForm<InvoiceExtended>({
     resolver: zodResolver(
       invoiceSchema({
         accountId: z.string().min(1, 'Payment account is required'),
@@ -50,10 +51,10 @@ export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
         reimbursedRemarks: z.string().min(1, 'Reimbursed Remarks is required'),
       }),
     ),
-    defaultValues: invoiceData?.data,
+    defaultValues: invoiceDetails,
   });
 
-  const handleInvoiceSubmit = async (data: Invoice) => {
+  const handleInvoiceSubmit = async (data: InvoiceExtended) => {
     try {
       // await new Promise((resolve) => setTimeout(resolve, 2000));
       const payload = {

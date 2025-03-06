@@ -1,6 +1,6 @@
-import { AlertType } from '../types/alert.type.js';
-import { AlertComp } from './alert.js';
-import { ToastComp } from './toast.js';
+import { AlertType } from '../types/alert.type';
+import { AlertComp } from './alert';
+import { ToastComp } from './toast';
 
 export function AlertError(props: AlertType) {
   if (props.isToast) {

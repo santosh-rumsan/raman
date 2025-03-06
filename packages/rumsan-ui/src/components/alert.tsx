@@ -7,8 +7,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@rumsan/shadcn-ui/components/alert-dialog';
-import { AlertType } from '../types/alert.type.js';
-import { ToastComp } from './toast.js';
+import { AlertType } from '../types/alert.type';
+import { ToastComp } from './toast';
 
 export function AlertComp({ message, title, btnOkay }: AlertType) {
   const ok_altText = btnOkay?.altText || 'Okay';

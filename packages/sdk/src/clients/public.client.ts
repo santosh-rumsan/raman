@@ -1,11 +1,11 @@
-import { formatResponse } from '@rumsan/sdk/utils';
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Category } from '../types';
+import { Category } from '@rumsan/raman/types';
 import {
   Invoice,
   InvoiceApprovalDto,
   InvoiceRejectionDto,
-} from '../types/invoice.type';
+} from '@rumsan/raman/types/invoice.type';
+import { formatResponse } from '@rumsan/sdk/utils';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export class PublicClient {
   private _client: AxiosInstance;

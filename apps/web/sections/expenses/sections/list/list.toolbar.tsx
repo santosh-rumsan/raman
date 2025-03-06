@@ -16,12 +16,12 @@ import { useEffect, useState } from 'react';
 
 interface ListToolbarProps<TData> {
   table: Table<TData>;
-  resetPagination?: () => void;
+  showViewOptions?: boolean;
 }
 
 export function ListToolbar<T>({
   table,
-  resetPagination,
+  showViewOptions = false,
 }: ListToolbarProps<T>) {
   const router = useRouter();
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -52,6 +52,7 @@ export function ListToolbar<T>({
             column={table.getColumn('categoryId')}
             title="Category"
             options={categories}
+            hideCount={table.options.manualFiltering}
           />
         )}
 
@@ -60,16 +61,28 @@ export function ListToolbar<T>({
             column={table.getColumn('departmentId')}
             title="Department"
             options={departments}
+            hideCount={table.options.manualFiltering}
           />
         )}
 
-        {table.getColumn('departmentId') && (
+        {table.getColumn('isVerified') && (
           <ListFilter
-            column={table.getColumn('isApproved')}
-            title="Approval"
+            column={table.getColumn('isVerified')}
+            title="Verification"
             options={[
               { label: 'Approved', value: 'true' },
               { label: 'Pending', value: 'false' },
+            ]}
+          />
+        )}
+
+        {table.getColumn('isReconciled') && (
+          <ListFilter
+            column={table.getColumn('isReconciled')}
+            title="Reconciliation"
+            options={[
+              { label: 'Reconciled', value: 'true' },
+              { label: 'Unreconciled', value: 'false' },
             ]}
           />
         )}
@@ -85,7 +98,7 @@ export function ListToolbar<T>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      {showViewOptions && <DataTableViewOptions table={table} />}
       <Button
         className="m-auto text-sm h-8 ml-2 px-3"
         onClick={() => router.push(PATHS.EXPENSE.ADD)}

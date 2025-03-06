@@ -1,16 +1,16 @@
+import { AccountTxnClient } from '@rumsan/raman/clients/account-transaction.client';
+import { AccountClient } from '@rumsan/raman/clients/account.client';
+import { CategoryClient } from '@rumsan/raman/clients/category.client';
+import { DemoClient } from '@rumsan/raman/clients/demo.client';
+import { DepartmentClient } from '@rumsan/raman/clients/department.client';
+import { ExpenseClient } from '@rumsan/raman/clients/expense.client';
+import { InvoiceClient } from '@rumsan/raman/clients/invoice.client';
+import { MiscClient } from '@rumsan/raman/clients/misc.client';
+import { MyInvoiceClient } from '@rumsan/raman/clients/my-invoice.client';
+import { ProjectClient } from '@rumsan/raman/clients/project.client';
+import { PublicClient } from '@rumsan/raman/clients/public.client';
 import { RumsanClient } from '@rumsan/sdk/clients';
 import { CreateAxiosDefaults } from 'axios';
-import { AccountTxnClient } from './account-transaction.client';
-import { AccountClient } from './account.client';
-import { CategoryClient } from './category.client';
-import { DemoClient } from './demo.client';
-import { DepartmentClient } from './department.client';
-import { ExpenseClient } from './expense.client';
-import { InvoiceClient } from './invoice.client';
-import { MiscClient } from './misc.client';
-import { MyInvoiceClient } from './my-invoice.client';
-import { ProjectClient } from './project.client';
-import { PublicClient } from './public.client';
 
 export class ApiClient extends RumsanClient {
   constructor(config: CreateAxiosDefaults) {

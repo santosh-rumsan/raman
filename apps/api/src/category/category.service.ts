@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { Category } from '@rumsan/raman/types/category.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { CategoryFilterDto, ListCategoryDto, UpdateCategoryDto } from './dto/update-category.dto';
-
+import {
+  CategoryFilterDto,
+  ListCategoryDto,
+  UpdateCategoryDto,
+} from './dto/update-category.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 20 });
 
@@ -16,7 +19,7 @@ export class CategoryService {
   constructor(
     private prisma: PrismaService,
     private readonly eventMgr: EventEmitter2,
-  ) { }
+  ) {}
 
   async create(payload: CreateCategoryDto, ctx: tRC): Promise<Category> {
     const category = await this.prisma.category.findFirst({
@@ -59,7 +62,6 @@ export class CategoryService {
     if (filters?.group) {
       where['group'] = {
         in: filters.group,
-
       };
     }
 
@@ -68,10 +70,8 @@ export class CategoryService {
       {
         where,
         orderBy,
-
       },
       { page: dto.page, perPage: dto.limit },
-
     );
   }
 

@@ -1,5 +1,5 @@
 import { cn } from '@/utils';
-import { FileAttachment, Invoice } from '@rumsan/raman/types';
+import { Invoice } from '@rumsan/raman/types';
 import { Card, CardContent } from '@rumsan/shadcn-ui/components/card';
 import { FileImage, Link2, X } from 'lucide-react';
 
@@ -76,7 +76,8 @@ export const ReceiptCard = ({ className, invoice }: Props) => {
               )
             ) : Array.isArray(invoice?.receipts) ? (
               invoice?.receipts.map(
-                (attachment: FileAttachment, index: number) => (
+                //TODO: Fix any FileAttachment
+                (attachment: any, index: number) => (
                   <div
                     key={index}
                     className="flex items-center justify-between text-left bg-gray-50 p-2 rounded-md hover:shadow-sm hover:bg-gray-100"

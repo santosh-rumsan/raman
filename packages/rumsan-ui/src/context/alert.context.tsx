@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, createContext, useState } from 'react';
-import CustomAlertDialog from '../components/alert.dialog.js';
+import CustomAlertDialog from '../components/alert.dialog';
 
 type AlertType = 'Success' | 'Error' | 'Warning' | 'Info';
 

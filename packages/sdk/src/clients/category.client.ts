@@ -1,7 +1,7 @@
+import { Category, CreateCategory, EditCategory } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Category, CreateCategory, EditCategory } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class CategoryClient {
   private _client: AxiosInstance;
@@ -32,7 +32,8 @@ export class CategoryClient {
   async search(
     params?: Pagination,
     filters?: any,
-    config?: AxiosRequestConfig,) {
+    config?: AxiosRequestConfig,
+  ) {
     const response = await this._client.post(
       `${this._prefix}/search`,
       filters,

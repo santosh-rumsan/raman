@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { FileAttachment } from '@rumsan/raman/types';
 import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
@@ -10,7 +10,11 @@ import { tRC } from '@rumsan/sdk/types';
 import { createIpfsHash } from '../utils/ipfs.utils';
 import { FileAttachmentWithBuffer } from '../utils/types';
 import { CreateInvoiceDto } from './dto/invoice.dto';
-import { InvoiceFilterDto, ListInvoiceDto, UpdateInvoiceDto } from './dto/update-invoice.dto';
+import {
+  InvoiceFilterDto,
+  ListInvoiceDto,
+  UpdateInvoiceDto,
+} from './dto/update-invoice.dto';
 
 const paginate: PaginatorTypes.PaginateFunction = paginator({ perPage: 100 });
 
@@ -19,7 +23,7 @@ export class InvoiceService {
   constructor(
     private prisma: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   async createInvoice(
     dto: CreateInvoiceDto,
@@ -95,7 +99,8 @@ export class InvoiceService {
 
     const where = {};
     if (filters?.name) {
-      where['name'] = {  // Adjusted this to filter on the User model's name field
+      where['name'] = {
+        // Adjusted this to filter on the User model's name field
         name: {
           contains: filters.name,
           mode: 'insensitive',
@@ -136,15 +141,13 @@ export class InvoiceService {
           Category: { select: { name: true } },
           User: {
             select: {
-              name: true
-            }
-          }
+              name: true,
+            },
+          },
         },
-
       },
-      { page: dto.page, perPage: dto.limit }
+      { page: dto.page, perPage: dto.limit },
     );
-
   }
 
   async findOne(cuid: string) {

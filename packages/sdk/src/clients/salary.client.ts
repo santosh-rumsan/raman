@@ -1,7 +1,7 @@
+import { CreateSalary, EditSalary, Salary } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { CreateSalary, EditSalary, Salary } from '../types';
-import { Pagination } from '../types/pagination.type';
 export class SalaryClient {
   private _client: AxiosInstance;
   private _prefix = 'salary';

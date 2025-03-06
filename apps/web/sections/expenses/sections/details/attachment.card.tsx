@@ -1,5 +1,5 @@
 import { cn } from '@/utils';
-import { Expense, FileAttachment } from '@rumsan/raman';
+import { Expense } from '@rumsan/raman/types';
 import { Card, CardContent } from '@rumsan/shadcn-ui/components/card';
 import { FileImage, Link2, PlusCircle, X } from 'lucide-react';
 
@@ -108,7 +108,8 @@ export const AttachmentCard = ({
               )
             ) : Array.isArray(expense?.attachments) ? (
               expense?.attachments.map(
-                (attachment: FileAttachment, index: number) => (
+                //TODO: fix any type FileAttachment
+                (attachment: any, index: number) => (
                   <div
                     key={index}
                     className="flex items-center justify-between text-left bg-gray-50 p-2 rounded-md hover:shadow-sm hover:bg-gray-100"

@@ -1,6 +1,6 @@
+import { ReportingDTO } from '@rumsan/raman/types/reporting.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { ReportingDTO } from '../types/reporting.type';
 
 export class ReportingClient {
   private _client: AxiosInstance;

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { tRC } from '@rumsan/sdk';
 import { WebSocketService } from '../app/websocket.service';
 

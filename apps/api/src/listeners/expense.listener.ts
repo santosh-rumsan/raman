@@ -3,7 +3,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { EventMeta } from '@rumsan/sdk/types/event.types';
 
 import { PrismaService } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { FileAttachment } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { WebSocketService } from '../app/websocket.service';

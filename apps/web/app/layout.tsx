@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import { Providers } from '@/providers';
 import '@rumsan/shadcn-ui/styles/globals.css';
+import { ReactNode } from 'react';
 import '../misc/app.css';
 
 const fontSans = Geist({
@@ -16,7 +17,7 @@ const fontMono = Geist_Mono({
 
 //TODO: Update app metadata
 export const metadata = {
-  title: '[App Name]',
+  title: 'Raman App (Rumsan)',
   description:
     'This is a Rumsan sample app. Update this description for SEO friendliness.',
 };
@@ -24,7 +25,7 @@ export const metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>

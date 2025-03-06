@@ -1,4 +1,4 @@
-import { InvoiceList } from './sections/list/main';
+import { InvoiceList } from './sections/list';
 
 const Invoice = () => {
   return <InvoiceList />;

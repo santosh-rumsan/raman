@@ -7,7 +7,7 @@ import { RumsanProvider, useRumsanAppStore } from '@rumsan/react-query';
 import { TooltipProvider } from '@rumsan/shadcn-ui/components/tooltip';
 import { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import * as React from 'react';
+import { ReactNode, useEffect } from 'react';
 import { WebSocketProvider } from './websocket.provider';
 
 export const queryClient = new QueryClient({
@@ -26,10 +26,10 @@ export const apiClient = new ApiClient({
   baseURL: CONFIG.API_URL,
 });
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   const { isInitialized, initialize } = useRumsanAppStore();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isInitialized) {
       initialize({
         log: 'App initialized',

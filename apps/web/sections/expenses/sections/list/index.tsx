@@ -7,6 +7,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -37,8 +38,8 @@ export function ExpenseList() {
     onColumnFiltersChange,
     onSortingChange,
   } = useDataTableState(searchParams, router);
-  const columns = ListColumns<Expense>();
 
+  const columns = ListColumns<Expense>();
   const { data, isLoading } = useExpenseList(
     {
       page: pagination.pageIndex + 1,
@@ -76,14 +77,14 @@ export function ExpenseList() {
     },
   });
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Row<Expense>) => {
     router.push(PATHS.EXPENSE.DETAILS(row.original.cuid));
   };
 
   return (
     <main className="gap-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="space-y-4">
-        <div className="flex flex-col gap-1 my-3"></div>
+        <div className="flex flex-col gap-1"></div>
         <ListToolbar table={table} />
         <div className="rounded-md border">
           <DataTable

@@ -26,8 +26,8 @@ export type Expense<T = string> = ExpenseBase<T> &
   CommonFields & {
     cuid: string;
     attachments?: Record<string, any>[];
-    approvalDetails?: Record<string, string>;
-    isApproved: boolean;
+    verificationDetails?: Record<string, string>;
+    isVerified: boolean;
     reconcileDetails?: Record<string, string>;
     isReconciled: boolean;
   };

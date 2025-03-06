@@ -4,6 +4,19 @@ import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
+const booleanFilters = (filters: any, field: string) => {
+  let filterField = filters[field];
+  if (filterField) {
+    if (typeof filterField === 'string') filterField = [filterField];
+
+    if (filterField.indexOf('true') > -1 && filterField.indexOf('false') > -1)
+      delete filters[field];
+    else if (filterField.indexOf('true') > -1) filters[field] = true;
+    else filters[field] = false;
+  }
+  return filters;
+};
+
 //TODO: fix any
 export const useExpenseList = (pagination: Pagination, filters: any): any => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
@@ -12,7 +25,9 @@ export const useExpenseList = (pagination: Pagination, filters: any): any => {
     {
       queryKey: ['expense_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        console.log(filters);
+        filters = booleanFilters(filters, 'isVerified');
+        filters = booleanFilters(filters, 'isReconciled');
+
         const { response } = await RsClient.Expense.search(pagination, filters);
         return {
           data: response.data,
@@ -158,17 +173,17 @@ export const useExpenseById = (
   );
 };
 
-export const useApproveExpense = () => {
+export const useVerifyExpense = () => {
   const { queryClient, RsClient } = useRumsan<ApiClient>();
   return useMutation(
     {
       mutationFn: async (payload: { id: string }) => {
-        const { data } = await RsClient.Expense.approve(payload.id);
+        const { data } = await RsClient.Expense.verify(payload.id);
         return data;
       },
       onSuccess: (updatedExpense) => {
         queryClient?.invalidateQueries({
-          queryKey: ['expense_list'],
+          queryKey: ['expense_list', 'expense_get'],
         });
         queryClient?.setQueryData<Expense[]>(
           ['expense_list'],

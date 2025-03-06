@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { Department } from '@rumsan/raman/types/department.type';
 import { tRC } from '@rumsan/sdk/types';
 import { CreateDepartmentDto } from './dto/create-department.dto';
@@ -18,7 +18,7 @@ export class DepartmentService {
   constructor(
     private prisma: PrismaService,
     private readonly eventMgr: EventEmitter2,
-  ) { }
+  ) {}
 
   async create(createDepartmentDto: CreateDepartmentDto, ctx: tRC) {
     try {
@@ -80,9 +80,9 @@ export class DepartmentService {
           Owner: {
             select: {
               details: {
-                select: { name: true }
-              }
-            }
+                select: { name: true },
+              },
+            },
           },
         },
       },

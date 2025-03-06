@@ -1,7 +1,7 @@
+import { Client } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Client } from '../types';
-import { Pagination } from '../types/pagination.type';
 
 export class RClient {
   private _client: AxiosInstance;

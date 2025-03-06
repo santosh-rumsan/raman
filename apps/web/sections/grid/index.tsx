@@ -104,12 +104,7 @@ export function SampleGrid() {
         <div className="flex flex-col gap-1 my-3"></div>
         <ListToolbar table={table} />
         <div className="rounded-md border">
-          <DataTable
-            table={table}
-            columns={columns}
-            isLoading={false}
-            entityName="Department"
-          />
+          <DataTable table={table} columns={columns} isLoading={false} />
         </div>
         <DataTablePagination
           table={table}

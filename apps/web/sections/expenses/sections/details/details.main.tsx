@@ -54,16 +54,18 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
     <div className="px-6">
       <div className="flex justify-between items-center">
         <div className="flex items-start gap-1"></div>
-        {expense?.isApproved === false && (
-          <div className="flex gap-2">
+
+        <div className="flex gap-2">
+          {!(expense?.isVerified || expense?.isReconciled) && (
             <Button className={AppStyles.button} onClick={handleEditButton}>
               <SquarePen />
               Edit
             </Button>
-
+          )}
+          {expense?.isVerified === false && (
             <CloseVerifyDailog expenseId={expenseId} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="grid grid-cols-12 gap-6 mt-4">
         <ExpenseDetailCard className="col-span-8" expense={expense} />

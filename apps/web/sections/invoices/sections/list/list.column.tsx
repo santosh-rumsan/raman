@@ -57,20 +57,17 @@ export function useColumns<T>(): ColumnDef<T>[] {
               <IconByName
                 name={item?.meta?.icon}
                 defaultIcon="ReceiptIndianRupee"
-                className="h-5 w-5"
+                className="h-4 w-4"
                 strokeWidth={2.5}
               />
             </div>
-            <span className="truncate font-medium text-center">
-              {userName?.name || ''}
-            </span>
+            <span>{userName?.name || ''}</span>
           </div>
         );
       },
       filterFn: (row, id, value) => {
         return value.includes(row.getValue(id));
       },
-
     },
 
     {
@@ -81,9 +78,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="truncate font-medium">
-              {row.getValue('amount')}
-            </span>
+            <span>{row.getValue('amount')}</span>
           </div>
         );
       },
@@ -103,9 +98,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
         return (
           <div className="flex space-x-2">
-            <span className="truncate font-medium">
-              {categoryName?.name || 'Unknown Category'}
-            </span>
+            <span>{categoryName?.name || 'Unknown Category'}</span>
           </div>
         );
       },
@@ -124,9 +117,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
 
         return (
           <div className="flex space-x-2">
-            <span className="truncate font-medium">
-              {projectName?.name || 'Unknown Project'}
-            </span>
+            <span>{projectName?.name || 'Unknown Project'}</span>
           </div>
         );
       },
@@ -162,8 +153,9 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div
-            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${invoiceStatusColors[row.getValue('status') as keyof StatusColors]
-              }`}
+            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${
+              invoiceStatusColors[row.getValue('status') as keyof StatusColors]
+            }`}
           >
             <span className="truncate text-xs">{row.getValue('status')}</span>
           </div>
@@ -182,7 +174,7 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div className="flex space-x-2">
-            <span className="truncate font-medium">
+            <span>
               {row.getValue('date')
                 ? format(row.getValue('date'), 'dd MMM yyyy')
                 : ''}
@@ -191,7 +183,6 @@ export function useColumns<T>(): ColumnDef<T>[] {
         );
       },
       filterFn: (row, id, value) => value.includes(row.getValue(id)),
-
     },
 
     // {

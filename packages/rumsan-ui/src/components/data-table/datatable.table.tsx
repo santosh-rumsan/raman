@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@rumsan/shadcn-ui/components/table';
-import { DataTableNoData } from './datatable.nodata.js';
+import { DataTableNoData } from './datatable.nodata';
 
 interface DataTableProps<T, TData> {
   columns: ColumnDef<T>[];

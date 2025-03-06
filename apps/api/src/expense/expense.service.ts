@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
-import { EVENTS } from '@rumsan/raman/constants/events';
+import { EVENTS } from '@rumsan/raman/constants';
 import { FileAttachment } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';
@@ -36,7 +36,7 @@ export class ExpenseService {
     const data: Expense = {
       cuid: createId(),
       ...expenseData,
-      isApproved: false,
+      isVerified: false,
       isReconciled: false,
       createdBy: ctx.currentUser?.cuid,
       updatedBy: ctx.currentUser?.cuid,
@@ -208,6 +208,13 @@ export class ExpenseService {
       };
     }
 
+    if (filters?.isVerified !== undefined) {
+      where['isVerified'] = filters.isVerified;
+    }
+    if (filters?.isReconciled !== undefined) {
+      where['isReconciled'] = filters.isReconciled;
+    }
+
     return paginate(
       this.prisma.expense,
       {
@@ -347,7 +354,7 @@ export class ExpenseService {
       });
   }
 
-  async approveExpense(cuid: string, approvedBy: string) {
+  async verifyExpense(cuid: string, verifiedBy: string) {
     const expense = await this.prisma.expense.findUnique({
       where: { cuid },
     });
@@ -359,10 +366,10 @@ export class ExpenseService {
     return this.prisma.expense.update({
       where: { cuid },
       data: {
-        isApproved: true,
-        approvalDetails: {
+        isVerified: true,
+        verificationDetails: {
           approvedAt: new Date(),
-          approvedBy: approvedBy,
+          verifiedBy,
         },
       },
     });
