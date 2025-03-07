@@ -32,6 +32,10 @@ export function DepartmentAdd({ children }: { children: ReactNode }) {
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add department:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to add department',
+      });
     }
   };
 

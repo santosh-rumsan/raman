@@ -39,7 +39,8 @@ export function DepartmentEdit({
           description: 'Department edited successfully',
         });
 
-        setDialogOpen(false);
+        // setDialogOpen(false);
+        onClose()
       } else {
         console.error('Department or its ID is undefined');
       }
@@ -67,7 +68,7 @@ export function DepartmentEdit({
           defaultValues={{ name: row.name, group: row.group, owner: row.owner }}
           isEdit={true}
           onCancel={() => {
-            setDialogOpen(false);
+            onClose()
           }}
         />
       </DialogContent>

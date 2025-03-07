@@ -29,6 +29,10 @@ export function AccountAdd({ children }: { children: ReactNode }) {
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add account:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to add account',
+      });
     }
   };
 

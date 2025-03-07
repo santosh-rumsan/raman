@@ -36,6 +36,10 @@ export function AccountEdit({ row, isOpen, onClose }: AccountEditProps) {
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to edit account:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to edit account',
+      });
     }
   };
 

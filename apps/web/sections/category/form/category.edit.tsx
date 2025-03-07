@@ -36,6 +36,10 @@ export function CategoryEdit({ row, isOpen, onClose }: CategoryEditProps) {
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to edit category:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to edit category',
+      });
     }
   };
 

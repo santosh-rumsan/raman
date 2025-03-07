@@ -29,6 +29,10 @@ export function CategoryAdd({ children }: { children: ReactNode }) {
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add category:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to add category',
+      });
     }
   };
 
