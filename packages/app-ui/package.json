@@ -22,12 +22,12 @@
   "devDependencies": {
     "@rumsan/shadcn-ui": "workspace:*",
     "@turbo/gen": "^2.2.3",
-    "@types/node": "^22.9.0",
-    "@types/react": "18.3.1",
-    "@types/react-dom": "18.3.1",
+    "@types/node": "^22.10.7",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "typescript": "^5.6.3"
+    "typescript": "*"
   },
   "exports": {
     "./components/*": "./src/components/*.tsx",

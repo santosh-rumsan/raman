@@ -22,7 +22,7 @@
       }
     ],
     "paths": {
-      "@rumsan/raman-ui/*": ["./src/*"]
+      "@rumsan/raman/*": ["../sdk/dist/*"]
     }
   },
   "include": ["."],
