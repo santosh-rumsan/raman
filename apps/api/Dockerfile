@@ -36,7 +36,8 @@ COPY turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN pnpm turbo build --filter=api...
+RUN pnpm run prisma:generate
+RUN pnpm turbo build --filter=api
 
 FROM base AS runner
 WORKDIR /app
