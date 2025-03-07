@@ -17,8 +17,8 @@ import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { AccountTxnService } from '../account-txn/account-txn.service';
 import { GetAccountTxnDto } from '../account-txn/dto/update-account-txn.dto';
 import { AccountService } from './account.service';
-import { CreateAccountDto, GetAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { AccountFilterDto, ListAccountDto, UpdateAccountDto } from './dto/update-account.dto';
 
 @Controller('accounts')
 @ApiTags('Account')
@@ -28,7 +28,7 @@ export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly accountTxns: AccountTxnService,
-  ) {}
+  ) { }
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.ACCOUNT })
@@ -39,8 +39,19 @@ export class AccountController {
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.ACCOUNT })
   //TODO: fix any
-  getAccounts(@Query() query: GetAccountDto): any {
-    return this.accountService.list(query);
+  getAccounts(@Query() query: ListAccountDto): any {
+    return this.accountService.findAll(query);
+  }
+
+  @Post('search')
+  @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.ACCOUNT }
+  )
+  //TODO: fix any
+  listAccountsWithFilter(
+    @Query() query: ListAccountDto,
+    @Body() filters: AccountFilterDto,
+  ): any {
+    return this.accountService.findAll(query, filters);
   }
 
   @Get(':cuid')

@@ -1,19 +1,28 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { Account, CreateAccount, EditAccount } from '@rumsan/raman/types';
+import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 
-export const useAccountList = (): UseQueryResult<Account[], Error> => {
-  const { RsClient } = useRumsan<ApiClient>();
+export const useAccountList = (pagination: Pagination, filters: any): UseQueryResult<{
+  data: Account[];
+  meta: any;
+}, Error> => {
+  const { queryClient, RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
-      queryKey: ['account_list'],
+      queryKey: ['account_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { data } = await RsClient.Account.list({ page: 1, limit: 20 });
-
-        return data;
+        const { response } = await RsClient.Account.search(
+          pagination,
+          filters,
+        );
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
     },
     queryClient,
