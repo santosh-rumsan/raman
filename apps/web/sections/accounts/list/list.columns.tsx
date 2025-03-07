@@ -1,45 +1,87 @@
-import { Button } from '@rumsan/shadcn-ui/components/button';
 import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatable.column.header';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
 import { DataTableRowActions } from './list.actions';
 
 export function useColumns<T>(): ColumnDef<T>[] {
     return [
         {
             accessorKey: 'name',
-            header: ({ column }) => {
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Name" />
+            ),
+            cell: ({ row }) => {
+                const item = row.getValue('name') as string
                 return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                        className="px-0 py-0 hover:bg-transparent"
-                    >
-                        Name
-                        <ArrowUpDown className="ml-2" />
-                    </Button>
+                    <div>
+                        <span>{item}</span>
+                    </div>
                 );
             },
-
-
+            filterFn: (row, id, value) => {
+                return value.includes(row.getValue(id));
+            },
         },
 
         {
             accessorKey: 'currency',
-            header: () => <div className="text-left">Currency</div>,
-            cell: ({ row }) => <div>{row.getValue('currency')}</div>,
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Currency" />
+            ),
+            cell: ({ row }) => {
+                const item = row.getValue('currency') as string;
+
+                return (
+                    <div>
+                        <span>{item}</span>
+                    </div>
+                );
+            },
+            enableSorting: false,
+            enableHiding: false,
         },
 
         {
             accessorKey: 'acctNumber',
-            header: () => <div className="text-left">Account Number</div>,
-            cell: ({ row }) => <div>{row.getValue('acctNumber')}</div>
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Account Number" />
+            ),
+            cell: ({ row }) => {
+                const item = row.getValue('acctNumber') as string;
+
+                return (
+                    <div>
+                        <span>{item}</span>
+                    </div>
+                );
+            },
+            filterFn: (row, id, value) => {
+                return value.includes(row.getValue(id));
+            },
+
+            enableSorting: false,
+            enableHiding: false,
         },
+
         {
             accessorKey: 'balance',
-            header: () => <div className="text-left">Balance</div>,
-            cell: ({ row }) => <div>{row.getValue('balance')}</div>
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Balance" />
+            ),
+            cell: ({ row }) => {
+                const item = row.getValue('balance') as string;
+
+                return (
+                    <div>
+                        <span>{item}</span>
+                    </div>
+                );
+            },
+            filterFn: (row, id, value) => {
+                return value.includes(row.getValue(id));
+            },
+
         },
+
         {
             id: 'actions',
             header: ({ column }) => (

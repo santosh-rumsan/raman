@@ -28,6 +28,21 @@ export class AccountClient {
     });
     return formatResponse<Account[]>(response);
   }
+  async search(
+    params?: Pagination,
+    filters?: any,
+    config?: AxiosRequestConfig,
+  ) {
+    const response = await this._client.post(
+      `${this._prefix}/search`,
+      filters,
+      {
+        params,
+        ...config,
+      },
+    );
+    return formatResponse<Account[]>(response);
+  }
 
   async listTransactions(
     id: string,

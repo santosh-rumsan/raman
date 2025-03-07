@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAccountDto, GetAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { AccountFilterDto, ListAccountDto, UpdateAccountDto } from './dto/update-account.dto';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
@@ -14,7 +14,7 @@ export class AccountService {
   constructor(
     private prisma: PrismaService,
     private readonly eventMgr: EventEmitter2,
-  ) {}
+  ) { }
   async create(dto: CreateAccountDto, ctx: tRC) {
     const data = { ...dto, createdBy: ctx.currentUserId };
 
@@ -25,9 +25,29 @@ export class AccountService {
     return result as Account;
   }
 
-  async list(dto: GetAccountDto) {
+  async findAll(dto: ListAccountDto, filters?: AccountFilterDto) {
+    const orderBy = {};
+    dto.sort = dto.sort || 'createdAt';
+    dto.order = dto.order || 'desc';
+    if (dto.sort) {
+      orderBy[dto.sort] = dto.order;
+    }
+
     const where = dto.show_archived ? {} : { deletedAt: null };
-    return this.prisma.account.findMany({ where });
+    if (filters?.name) {
+      where['name'] = {
+        contains: filters.name,
+        mode: 'insensitive',
+      };
+    }
+
+    return paginate(
+      this.prisma.account, {
+      where,
+      orderBy,
+    },
+      { page: dto.page, perPage: dto.limit },
+    )
   }
 
   async findOne(cuid: string) {

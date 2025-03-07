@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { CreateAccount } from '@rumsan/raman/types/account.type';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
@@ -27,10 +27,4 @@ export class CreateAccountDto implements CreateAccount {
   @IsNumber()
   @IsOptional()
   balance: number;
-}
-
-export class GetAccountDto {
-  @ApiPropertyOptional({ example: true })
-  @IsOptional()
-  show_archived: boolean;
 }
