@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@rumsan/shadcn-ui/components/dialog';
+import { cn } from '@rumsan/shadcn-ui/lib/utils';
 import { ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
@@ -34,7 +35,10 @@ export function CloseVerifyDailog({ expenseId }: { expenseId: string }) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className={AppStyles.button}>
+        <Button
+          className={cn(AppStyles.button, 'bg-green-500')}
+          variant={'default'}
+        >
           <ShieldCheck />
           Verify
         </Button>

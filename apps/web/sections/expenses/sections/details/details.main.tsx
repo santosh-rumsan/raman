@@ -15,7 +15,6 @@ import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { AttachmentCard } from './attachment.card';
 import ExpenseDetailCard from './details.card';
-import { CloseVerifyDailog } from './expense.verify';
 
 type ExpensesDetailsProps = {
   expenseId: string;
@@ -63,7 +62,12 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
             </Button>
           )}
           {expense?.isVerified === false && (
-            <CloseVerifyDailog expenseId={expenseId} />
+            <Button
+              className={AppStyles.button}
+              onClick={() => router.push(PATHS.EXPENSE.VERIFY(expenseId))}
+            >
+              Verify
+            </Button>
           )}
         </div>
       </div>

@@ -36,7 +36,7 @@ export function Providers({ children }: { children: ReactNode }) {
     >
       <WebSocketProvider url={CONFIG.WS.URL}>
         <QueryClientProvider client={queryClient}>
-          <RumsanProvider rumsanClient={apiClient}>
+          <RumsanProvider rumsanClient={apiClient} queryClient={queryClient}>
             <TooltipProvider>
               <TitleProvider>{children}</TitleProvider>
             </TooltipProvider>

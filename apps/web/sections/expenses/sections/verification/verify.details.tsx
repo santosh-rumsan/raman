@@ -1,4 +1,4 @@
-import { cn, formatCurrency, IconByName } from '@/utils';
+import { cn, formatCurrency } from '@/utils';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
 import { ExpenseExtended } from '@rumsan/raman/types';
 import {
@@ -9,7 +9,7 @@ import {
 import { Label } from '@rumsan/shadcn-ui/components/label';
 import { CheckCircle, FileQuestion, XCircle } from 'lucide-react';
 
-export default function ExpenseDetailCard({
+export default function ExpenseVerificationDetails({
   className,
   expense,
 }: {
@@ -17,43 +17,21 @@ export default function ExpenseDetailCard({
   expense: ExpenseExtended;
 }) {
   const { lookupByCuid } = useSelectLookUp();
-  const iconColor =
-    expense?.isVerified && expense?.isReconciled
-      ? 'text-green-600'
-      : expense?.isVerified || expense?.isReconciled
-        ? 'text-yellow-600'
-        : 'text-red-600';
-  const category = lookupByCuid('categories', expense?.categoryId);
   return (
     <Card className={cn('relative rounded-lg shadow-sm', className)}>
-      <div className="absolute top-6 right-6 z-10">
-        <div className="flex flex-col items-end">
+      <CardHeader className="px-6 py-4 flex flex-col items-center justify-center">
+        <div className="text-center flex flex-col items-center">
           <span className="text-2xl font-bold">
             {expense?.amount && formatCurrency(expense?.amount)}
           </span>
-          <Label className="text-xs font-normal text-gray-400">
+          <Label className="text-xs font-normal text-gray-400 mt-1">
             {expense?.currency}
           </Label>
-        </div>
-      </div>
-      <CardHeader className="px-6 py-4">
-        <div className="flex items-center mb-3">
-          <div className="rounded-full border flex justify-center items-center bg-gray-100 w-[30px] h-[30px]">
-            <IconByName
-              name={category?.meta?.icon}
-              defaultIcon="HandCoins"
-              className={cn(iconColor, 'h-4 w-4')}
-              strokeWidth={2.5}
-            />
-          </div>
-          <h3 className="text-base ml-2 text-gray-700">
-            {expense?.description}
-          </h3>
         </div>
       </CardHeader>
 
       <CardContent className="px-6">
-        <div className="grid grid-cols-2 gap-6 gap-x-6">
+        <div className="flex flex-col gap-4">
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Payment Account
@@ -90,7 +68,6 @@ export default function ExpenseDetailCard({
 
           <div>
             <Label className="text-xs font-normal text-gray-400">
-              {' '}
               Invoice Type
             </Label>
             <p className="text-black font-normal text-sm">
@@ -100,12 +77,8 @@ export default function ExpenseDetailCard({
 
           <div>
             <Label className="text-xs font-normal text-gray-400">
-              Reconcilation Status
+              Reconciliation Status
             </Label>
-            {/* <p className="text-black font-normal text-sm">
-              {expense?.isReconciled ? 'Reconciled' : 'Not Reconciled'}
-            </p> */}
-
             <p className="text-black font-normal text-sm flex items-center">
               {expense?.isReconciled ? (
                 <>
@@ -160,19 +133,15 @@ export default function ExpenseDetailCard({
             </p>
           </div>
 
-          {expense?.vatAmount && expense.vatAmount > 0 ? (
-            <>
-              <div>
-                <Label className="text-xs font-normal text-gray-400">
-                  VAT Amount
-                </Label>
-                <p className="text-black font-normal text-sm">
-                  {expense?.vatAmount}
-                </p>
-              </div>
-            </>
-          ) : (
-            ''
+          {expense?.vatAmount && expense.vatAmount > 0 && (
+            <div>
+              <Label className="text-xs font-normal text-gray-400">
+                VAT Amount
+              </Label>
+              <p className="text-black font-normal text-sm">
+                {expense?.vatAmount}
+              </p>
+            </div>
           )}
         </div>
 

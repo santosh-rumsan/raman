@@ -34,6 +34,7 @@ export const PATHS = {
     HOME: `${ROOTS.EXPENSE}`,
     ADD: `${ROOTS.EXPENSE}/add`,
     DETAILS: (cuid: string) => `${ROOTS.EXPENSE}/${cuid}`,
+    VERIFY: (cuid: string) => `${ROOTS.EXPENSE}/${cuid}/verification`,
     EDIT: (cuid: string) => `${ROOTS.EXPENSE}/${cuid}`,
   },
   INVOICE: {

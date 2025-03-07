@@ -1,5 +1,6 @@
 import { cn } from '@/utils';
 import { Expense } from '@rumsan/raman/types';
+import { Button } from '@rumsan/shadcn-ui/components/button';
 import { Card, CardContent } from '@rumsan/shadcn-ui/components/card';
 import { FileImage, Link2, PlusCircle, X } from 'lucide-react';
 
@@ -89,12 +90,15 @@ export const AttachmentCard = ({
                 Attachments
               </h5>
             </div>
-            <button
-              onClick={handleAddAttachment}
-              className="flex items-center text-sm text-blue-500 hover:text-blue-600"
-            >
-              <PlusCircle className="h-4 w-4 mr-1" /> Upload
-            </button>
+            {!expense?.isVerified && (
+              <Button
+                onClick={handleAddAttachment}
+                variant={'ghost'}
+                title="Add Attachment"
+              >
+                <PlusCircle />
+              </Button>
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -112,7 +116,7 @@ export const AttachmentCard = ({
                 (attachment: any, index: number) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between text-left bg-gray-50 p-2 rounded-md hover:shadow-sm hover:bg-gray-100"
+                    className="flex items-center justify-between text-left bg-gray-50 p-2 rounded-md bg-gray-100"
                   >
                     <div
                       onClick={() => handleImageClick(attachment)}
@@ -143,12 +147,13 @@ export const AttachmentCard = ({
                     {attachment.url === 'pending' ? (
                       <div className="loader"></div>
                     ) : (
-                      <button
+                      <Button
                         onClick={() => handleDeleteAttachment(attachment.hash)}
-                        className="flex items-center justify-center h-6 w-6 bg-red-100 text-red-500 rounded-full hover:bg-red-200"
+                        variant={'ghost'}
+                        className="w-2 h-4 text-red-500 hover:bg-red-600 hover:text-white"
                       >
                         <X className="h-4 w-4" strokeWidth={1.75} />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 ),
