@@ -1,5 +1,5 @@
-import { CommonFields } from './common.type';
-import { DraftStatus } from './enums';
+import { CommonFields } from '@rumsan/raman/types/common.type';
+import { DraftStatus } from '@rumsan/raman/types/enums';
 import { Salary } from './salary.type';
 
 export interface SalaryDraftBase {

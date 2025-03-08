@@ -1,7 +1,7 @@
 import { ApiClient } from '@rumsan/raman/clients';
-import { Expense, ExpenseExtended } from '@rumsan/raman/types';
+import { Expense, ExpenseExtended, InvoiceType } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
-import { useRumsan } from '@rumsan/react-query';
+import { useRumsan } from '@rumsan/ui/providers/query.provider';
 import { UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 
@@ -185,13 +185,19 @@ export const useVerifyExpense = () => {
   const { RsClient } = useRumsan<ApiClient>();
   return useMutation(
     {
-      mutationFn: async (payload: { id: string }) => {
-        const { data } = await RsClient.Expense.verify(payload.id);
+      mutationFn: async (payload: { id: string; receiptType: InvoiceType }) => {
+        const { data } = await RsClient.Expense.verify(
+          payload.id,
+          payload.receiptType,
+        );
         return data;
       },
       onSuccess: (updatedExpense) => {
         queryClient?.invalidateQueries({
-          queryKey: ['expense_list', 'expense_get'],
+          queryKey: ['expense_list'],
+        });
+        queryClient?.invalidateQueries({
+          queryKey: ['expense_get'],
         });
         queryClient?.setQueryData<Expense[]>(
           ['expense_list'],

@@ -1,7 +1,7 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { LookupData } from '@rumsan/raman/types/misc.type';
 
-import { useRumsan } from '@rumsan/react-query';
+import { useRumsan } from '@rumsan/ui/providers/query.provider';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 

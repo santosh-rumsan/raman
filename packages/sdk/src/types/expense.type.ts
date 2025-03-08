@@ -1,8 +1,8 @@
+import { CommonFields } from '@rumsan/raman/types/common.type';
+import { Currency, InvoiceType } from '@rumsan/raman/types/enums';
 import { Account } from './account.type';
 import { Category } from './category.type';
-import { CommonFields } from './common.type';
 import { Department } from './department.type';
-import { Currency, InvoiceType } from './enums';
 import { Project } from './project.type';
 import { Salary } from './salary.type';
 

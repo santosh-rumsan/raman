@@ -356,6 +356,8 @@ enum InvoiceType {
   VAT
   PAN
   ESTIMATE
+  BANK_TRANSFER
+  VOUCHER
 }
 
 // ++++++++++++++++++ END: @rumsan/user - User +++++++++++++++++++++++++++++++

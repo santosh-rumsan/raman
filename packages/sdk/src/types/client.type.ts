@@ -1,4 +1,4 @@
-import { CommonFields } from './common.type';
+import { CommonFields } from '@rumsan/raman/types/common.type';
 
 export interface ClientBase {
   name: string;

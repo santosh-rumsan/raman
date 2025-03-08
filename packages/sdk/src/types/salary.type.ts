@@ -1,5 +1,5 @@
-import { CommonFields } from './common.type';
-import { SalaryStatus } from './enums';
+import { CommonFields } from '@rumsan/raman/types/common.type';
+import { SalaryStatus } from '@rumsan/raman/types/enums';
 
 export interface SalaryBase {
   employeeId: string;

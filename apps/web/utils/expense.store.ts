@@ -1,5 +1,5 @@
 import { Expense } from '@rumsan/raman/types';
-import { createZustandStore } from '@rumsan/react-query';
+import { createZustandStore } from '@rumsan/ui/utils/zustand.store';
 
 export type ExpenseStateType = {
   expense: Expense | null;

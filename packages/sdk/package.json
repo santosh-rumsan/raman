@@ -1,6 +1,6 @@
 {
   "name": "@rumsan/raman",
-   "version": "0.0.1",
+  "version": "0.0.1",
   "scripts": {
     "build": "tsc"
   },
@@ -20,7 +20,7 @@
     "./utils/*": "./src/utils/*.ts"
   },
   "dependencies": {
-    "@rumsan/sdk": "^0.1.156",
+    "@rumsan/sdk": "^0.1.158",
     "axios": "^1.7.9"
   }
 }

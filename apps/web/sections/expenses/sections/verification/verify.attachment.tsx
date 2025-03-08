@@ -5,22 +5,20 @@ import {
   CardContent,
   CardHeader,
 } from '@rumsan/shadcn-ui/components/card';
-import { CloseVerifyDailog } from '../details/expense.verify';
+import { ExpenseVerificationDialog } from './verify.dialog';
 
-export default function PdfViewerCard({
+export default function ExpenseVerificationReceiptViewer({
   expense,
 }: {
   expense: ExpenseExtended;
 }) {
-  console.log(expense);
-
   return (
     <Card className="relative rounded-md shadow-sm p-2">
       <CardHeader className="flex flex-row items-center justify-between p-1">
         <h3 className="text-lg font-semibold pl-2">{expense?.description}</h3>
         {expense?.isVerified === false && (
           <div className="ml-auto">
-            <CloseVerifyDailog expenseId={expense.cuid} />
+            <ExpenseVerificationDialog expenseId={expense.cuid} />
           </div>
         )}
       </CardHeader>

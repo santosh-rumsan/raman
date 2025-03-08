@@ -1,4 +1,4 @@
-import { useRumsanAppStore } from '@rumsan/react-query';
+import { useRumsanAppStore } from '@rumsan/ui/stores/app.store';
 import {
   createContext,
   ReactNode,

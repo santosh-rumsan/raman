@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InvoiceStatusType } from '@prisma/client';
 import { PrismaService } from '@rumsan/prisma';
+import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { UpdatePublicDto } from './dto/update-public.dto';
 
 @Injectable()

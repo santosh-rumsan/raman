@@ -1,7 +1,8 @@
 'use client';
 
 import { PATHS } from '@/routes/paths';
-import { useRumsanAppStore } from '@rumsan/react-query';
+import { AppEventManager } from '@rumsan/raman-ui/event.manger';
+import { useRumsanAppStore } from '@rumsan/ui/stores/app.store';
 import { useRouter } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
@@ -11,7 +12,7 @@ type Props = {
 
 export default function AuthGuard({ children }: Props) {
   const router = useRouter();
-  const { isAuthenticated, isInitialized } = useRumsanAppStore();
+  const { isAuthenticated, isInitialized, logout } = useRumsanAppStore();
   const [checked, setChecked] = useState(false);
 
   const checkIfAuthenticated = useCallback(() => {
@@ -32,6 +33,17 @@ export default function AuthGuard({ children }: Props) {
   useEffect(() => {
     checkIfAuthenticated();
   }, [isAuthenticated, checkIfAuthenticated]);
+
+  useEffect(() => {
+    AppEventManager.on('APIERROR', (data) => {
+      if (data?.status === 401) {
+        logout();
+      }
+    });
+    return () => {
+      AppEventManager.removeAllListeners('APIERROR');
+    };
+  }, []);
 
   if (!checked) {
     return null;

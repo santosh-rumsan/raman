@@ -1,4 +1,4 @@
-FROM  --platform=linux/amd64 node:23-alpine AS base
+FROM node:23-alpine AS base
 RUN corepack enable && corepack prepare pnpm@9.1.2 --activate
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!

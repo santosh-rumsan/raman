@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from 'lucide-react';
+import { ChevronsUpDown, LogOut } from 'lucide-react';
 
 import {
   Avatar,
@@ -17,7 +10,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -29,6 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@rumsan/shadcn-ui/components/sidebar';
+import { useRumsanAppStore } from '@rumsan/ui/stores/app.store';
 
 export function NavUser({
   user,
@@ -40,7 +33,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-
+  const { logout, currentUser } = useRumsanAppStore();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -50,13 +43,17 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+              <Avatar className="h-8 w-8 rounded-xl bg-gray-300">
+                <AvatarImage
+                  src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${currentUser?.details?.name}`}
+                />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-semibold">
+                  {currentUser?.details?.name || 'You'}
+                </span>
+                {/* <span className="truncate text-xs">{user.email}</span> */}
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,18 +66,22 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                <Avatar className="h-8 w-8 rounded-xl bg-gray-300">
+                  <AvatarImage
+                    src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${currentUser?.details?.name}`}
+                  />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">
+                    {currentUser?.details?.name || 'You'}
+                  </span>
+                  {/* <span className="truncate text-xs">{user.email}</span> */}
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
                 Upgrade to Pro
@@ -101,8 +102,8 @@ export function NavUser({
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuSeparator /> */}
+            <DropdownMenuItem onClick={logout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

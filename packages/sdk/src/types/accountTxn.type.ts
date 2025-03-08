@@ -1,5 +1,5 @@
-import { CommonFields } from './common.type';
-import { AccountTxnStatus, AccountTxnType } from './enums';
+import { CommonFields } from '@rumsan/raman/types/common.type';
+import { AccountTxnStatus, AccountTxnType } from '@rumsan/raman/types/enums';
 
 export interface AccountTxnBase {
   accountId: string;

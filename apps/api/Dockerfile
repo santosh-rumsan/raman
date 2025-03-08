@@ -28,6 +28,7 @@ RUN pnpm install
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
+RUN pnpm run prisma:generate
 
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
@@ -35,7 +36,6 @@ COPY turbo.json turbo.json
 
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
-
 RUN pnpm turbo build --filter=api
 
 FROM base AS runner

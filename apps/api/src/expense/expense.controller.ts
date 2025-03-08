@@ -19,6 +19,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { xRC } from '@rumsan/extensions/decorators';
 import { ACTIONS, APP, SUBJECTS } from '@rumsan/raman/constants';
+import { InvoiceType } from '@rumsan/raman/types';
 import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 import { ApiFile } from '../decorator/ApiBody';
@@ -115,8 +116,12 @@ export class ExpenseController {
 
   @Patch(':cuid/verify')
   @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.EXPENSE })
-  async verifyExpense(@Param('cuid') cuid: string, @Req() req: any) {
+  async verifyExpense(
+    @Param('cuid') cuid: string,
+    @Body() params: { receiptType: InvoiceType },
+    @Req() req: any,
+  ) {
     const verifiedBy = req.user.cuid;
-    return this.expenseService.verifyExpense(cuid, verifiedBy);
+    return this.expenseService.verifyExpense(cuid, params, verifiedBy);
   }
 }

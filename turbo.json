@@ -2,18 +2,8 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "prisma:generate": {
-      "cache": false
-    },
-    "prisma:migrate": {
-      "cache": false,
-      "persistent": true
-    },
-    "prisma:deploy": {
-      "cache": false
-    },
     "build": {
-      "dependsOn": ["^build", "^api#prisma:generate"],
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },

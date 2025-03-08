@@ -1,6 +1,6 @@
 import { useExpenseById } from '@rumsan/raman-ui/queries/expense.query';
 import { Expense } from '@rumsan/raman/types';
-import PdfViewerCard from './verify.attachment';
+import ExpenseVerificationReceiptViewer from './verify.attachment';
 import ExpenseVerificationDetails from './verify.details';
 
 export default function ExpenseVerificationCard(props: { expenseId: string }) {
@@ -14,7 +14,7 @@ export default function ExpenseVerificationCard(props: { expenseId: string }) {
         expense={expense}
       />
       <div className="col-span-3 flex flex-col gap-4 overflow-y-auto">
-        <PdfViewerCard expense={expense} />
+        <ExpenseVerificationReceiptViewer expense={expense} />
       </div>
     </div>
   );

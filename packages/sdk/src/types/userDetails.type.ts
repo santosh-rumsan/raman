@@ -1,4 +1,4 @@
-import { UserType } from './enums';
+import { UserType } from '@rumsan/raman/types/enums';
 
 export interface UserDetails {
   departmentId?: string | null;

@@ -1,3 +1,5 @@
+'use client';
+
 import AuthGuard from '@/guards/auth-guard';
 import { AppSidebar } from '@/layouts/admin/sidebar';
 import { Separator } from '@rumsan/shadcn-ui/components/separator';

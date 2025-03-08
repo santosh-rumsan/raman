@@ -1,6 +1,5 @@
 'use client';
 
-import { useRequestOtp } from '@rumsan/react-query';
 import { RSErrorInfo } from '@rumsan/sdk';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
@@ -12,6 +11,7 @@ import {
 } from '@rumsan/shadcn-ui/components/form';
 import { Input } from '@rumsan/shadcn-ui/components/input';
 import { Label } from '@rumsan/shadcn-ui/components/label';
+import { useRequestOtp } from '@rumsan/ui/queries/auth.query';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

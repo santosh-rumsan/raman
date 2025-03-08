@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { PaginatorTypes, PrismaService, paginator } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
-import { FileAttachment } from '@rumsan/raman/types';
+import { FileAttachment, InvoiceType } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';
 import { mergeArraysByUniqueKey } from '../utils/array.utils';
@@ -354,10 +354,16 @@ export class ExpenseService {
       });
   }
 
-  async verifyExpense(cuid: string, verifiedBy: string) {
+  async verifyExpense(
+    cuid: string,
+    params: { receiptType: InvoiceType },
+    verifiedBy: string,
+  ) {
     const expense = await this.prisma.expense.findUnique({
       where: { cuid },
     });
+
+    console.log(params);
 
     if (!expense) {
       throw new Error('Expense not found');
@@ -366,6 +372,7 @@ export class ExpenseService {
     return this.prisma.expense.update({
       where: { cuid },
       data: {
+        invoiceType: params.receiptType,
         isVerified: true,
         verificationDetails: {
           approvedAt: new Date(),

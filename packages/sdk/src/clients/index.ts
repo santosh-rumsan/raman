@@ -13,8 +13,22 @@ import { RumsanClient } from '@rumsan/sdk/clients';
 import { CreateAxiosDefaults } from 'axios';
 
 export class ApiClient extends RumsanClient {
-  constructor(config: CreateAxiosDefaults) {
+  private eventEmitter: any;
+  constructor(config: CreateAxiosDefaults, eventEmitter?: any) {
     super(config);
+    this.eventEmitter = eventEmitter;
+    this.apiClient.interceptors.response.use(
+      (response) => response,
+      (err) => {
+        this.eventEmitter?.emit('APIERROR', {
+          message: err?.message,
+          status: err?.status,
+          name: err?.response?.statusText,
+          data: err?.response?.data,
+        });
+        //throw err;
+      },
+    );
     //this.apiClient = axios.create(config);
   }
 
@@ -63,4 +77,4 @@ export class ApiClient extends RumsanClient {
   }
 }
 
-export const ApiService = new ApiClient({});
+export const ApiService = new ApiClient({}, null);

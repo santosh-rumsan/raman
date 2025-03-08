@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["./*"],
       "@rumsan/raman/*": ["../../packages/sdk/dist/*"],
+      "@rumsan/ui/*": ["../../packages/rumsan-ui/src/*"],
       "@rumsan/raman-ui/*": ["../../packages/app-ui/src/*"],
       "@rumsan/shadcn-ui/*": ["../../packages/shadcn-ui/src/*"]
     }

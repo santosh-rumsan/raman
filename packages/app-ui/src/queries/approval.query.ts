@@ -1,6 +1,6 @@
 import { ApiClient } from '@rumsan/raman/clients';
 import { Category, Invoice } from '@rumsan/raman/types';
-import { useRumsan } from '@rumsan/react-query';
+import { useRumsan } from '@rumsan/ui/providers/query.provider';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 

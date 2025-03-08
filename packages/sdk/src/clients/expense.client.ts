@@ -1,4 +1,9 @@
-import { CreateExpense, EditExpense, Expense } from '@rumsan/raman/types';
+import {
+  CreateExpense,
+  EditExpense,
+  Expense,
+  InvoiceType,
+} from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
@@ -86,9 +91,14 @@ export class ExpenseClient {
     return formatResponse<Expense>(response);
   }
 
-  async verify(cuid: string, config?: AxiosRequestConfig) {
+  async verify(
+    cuid: string,
+    receiptType: InvoiceType,
+    config?: AxiosRequestConfig,
+  ) {
     const response = await this._client.patch(
       `${this._prefix}/${cuid}/verify`,
+      { receiptType },
       config,
     );
     return formatResponse<Expense>(response);

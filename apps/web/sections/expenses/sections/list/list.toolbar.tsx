@@ -104,7 +104,7 @@ export function ListToolbar<T>({
         onClick={() => router.push(PATHS.EXPENSE.ADD)}
       >
         <PlusCircle className="h-5 w-5" />
-        Add
+        Add Expense
       </Button>
     </div>
   );

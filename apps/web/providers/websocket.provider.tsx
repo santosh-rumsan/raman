@@ -1,6 +1,12 @@
-import {useRumsanAppStore} from '@rumsan/react-query';
-import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {io, Socket} from 'socket.io-client';
+import { useRumsanAppStore } from '@rumsan/ui/stores/app.store';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { io, Socket } from 'socket.io-client';
 
 interface WebSocketContextProps {
   socket: Socket | null;
@@ -22,7 +28,7 @@ export const WebSocketProvider: React.FC<WebSocketContextProvider> = ({
   url,
   children,
 }) => {
-  const {setClientId} = useRumsanAppStore();
+  const { setClientId } = useRumsanAppStore();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -82,7 +88,7 @@ export const WebSocketProvider: React.FC<WebSocketContextProvider> = ({
 
   return (
     <WebSocketContext.Provider
-      value={{socket, isConnected, sendMessage, broadcast}}
+      value={{ socket, isConnected, sendMessage, broadcast }}
     >
       {children}
     </WebSocketContext.Provider>

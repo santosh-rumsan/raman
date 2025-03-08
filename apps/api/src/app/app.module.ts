@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { AuthsModule, RolesModule, UsersModule } from '@rumsan/user';
+import { RolesModule, UsersModule } from '@rumsan/user';
+import { AuthModule } from 'src/auth/auth.module';
 import { AccountTxnModule } from '../account-txn/account-txn.module';
 import { AccountModule } from '../account/account.module';
 import { CatergoryModule } from '../category/category.module';
@@ -25,7 +26,7 @@ import { WebSocketService } from './websocket.service';
       maxListeners: 10,
       ignoreErrors: false,
     }),
-    AuthsModule,
+    AuthModule,
     RolesModule,
     UsersModule,
     DemoModule,

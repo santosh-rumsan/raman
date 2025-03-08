@@ -5,9 +5,6 @@ services:
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
-      args:
-        NEXT_PUBLIC_SERVER_URL: http://localhost:3003
-        NEXT_PUBLIC_API_URL: http://localhost:3003/v1
     restart: always
     ports:
       - 3000:3000

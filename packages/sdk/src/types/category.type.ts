@@ -1,4 +1,4 @@
-import { CommonFields } from './common.type';
+import { CommonFields } from '@rumsan/raman/types/common.type';
 import { Invoice } from './invoice.type';
 
 export interface CategoryBase {

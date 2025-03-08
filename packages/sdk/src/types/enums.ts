@@ -27,11 +27,18 @@ export const UserType = {
   INTERN: 'INTERN' as UserType,
 };
 
-export type InvoiceType = 'VAT' | 'PAN' | 'ESTIMATE';
+export type InvoiceType =
+  | 'VAT'
+  | 'PAN'
+  | 'ESTIMATE'
+  | 'BANK_TRANSFER'
+  | 'VOUCHER';
 export const InvoiceType = {
   VAT: 'VAT' as InvoiceType,
   PAN: 'PAN' as InvoiceType,
   ESTIMATE: 'ESTIMATE' as InvoiceType,
+  BANK_TRANSFER: 'BANK_TRANSFER' as InvoiceType,
+  VOUCHER: 'VOUCHER' as InvoiceType,
 };
 
 export type InvoiceStatusType =

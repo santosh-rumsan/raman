@@ -5,7 +5,7 @@ import {
   EditDepartment,
 } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
-import { useRumsan } from '@rumsan/react-query';
+import { useRumsan } from '@rumsan/ui/providers/query.provider';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 

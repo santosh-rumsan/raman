@@ -1,5 +1,9 @@
-import { CommonFields } from './common.type';
-import { Currency, InvoiceStatusType, InvoiceType } from './enums';
+import { CommonFields } from '@rumsan/raman/types/common.type';
+import {
+  Currency,
+  InvoiceStatusType,
+  InvoiceType,
+} from '@rumsan/raman/types/enums';
 
 export type InvoiceBase<T = string> = {
   date: Date;

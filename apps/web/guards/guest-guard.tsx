@@ -1,7 +1,7 @@
 'use client';
 
 import { PATHS } from '@/routes/paths';
-import { useRumsanAppStore } from '@rumsan/react-query';
+import { useRumsanAppStore } from '@rumsan/ui/stores/app.store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ReactNode, useCallback, useEffect } from 'react';
 
