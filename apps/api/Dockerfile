@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:23-alpine AS base
 RUN corepack enable && corepack prepare pnpm@9.1.2 --activate
 # The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
@@ -36,11 +36,13 @@ COPY turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN pnpm run prisma:generate
 RUN pnpm turbo build --filter=api
 
 FROM base AS runner
 WORKDIR /app
+
+# Create log directory and set permissions
+RUN mkdir -p /app/.log && chmod -R 777 /app/.log
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nestjs
@@ -48,4 +50,5 @@ RUN adduser --system --uid 1001 nestjs
 USER nestjs
 COPY --from=installer /app .
 
-CMD node apps/api/dist/index.js
+CMD node apps/api/dist/main.js
+#CMD ["tail", "-f", "/dev/null"]

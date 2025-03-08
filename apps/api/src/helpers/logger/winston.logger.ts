@@ -9,7 +9,7 @@ const customFormat = format.printf((info) => {
 
 const options = {
   file: {
-    filename: '../../.log/error.log',
+    filename: '.log/error.log',
     level: 'error',
   },
   console: {
@@ -39,7 +39,7 @@ const prodLogger = {
   transports: [
     new transports.File(options.file),
     new transports.File({
-      filename: '../../.log/combine.log',
+      filename: '.log/combine.log',
       level: 'info',
     }),
   ],

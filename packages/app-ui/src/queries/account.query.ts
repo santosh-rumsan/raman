@@ -5,20 +5,23 @@ import { useRumsan } from '@rumsan/react-query';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
 
-export const useAccountList = (pagination: Pagination, filters: any): UseQueryResult<{
-  data: Account[];
-  meta: any;
-}, Error> => {
-  const { queryClient, RsClient } = useRumsan<ApiClient>();
+export const useAccountList = (
+  pagination: Pagination,
+  filters: any,
+): UseQueryResult<
+  {
+    data: Account[];
+    meta: any;
+  },
+  Error
+> => {
+  const { RsClient } = useRumsan<ApiClient>();
 
   return useQuery(
     {
       queryKey: ['account_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        const { response } = await RsClient.Account.search(
-          pagination,
-          filters,
-        );
+        const { response } = await RsClient.Account.search(pagination, filters);
         return {
           data: response.data,
           meta: response.meta,

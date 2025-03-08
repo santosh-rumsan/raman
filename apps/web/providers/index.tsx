@@ -24,6 +24,7 @@ export function Providers({ children }: { children: ReactNode }) {
         log: 'App initialized',
       });
     }
+    console.log('xxx', process.env.NEXT_PUBLIC_API_URL);
   }, [isInitialized, initialize]);
 
   return (

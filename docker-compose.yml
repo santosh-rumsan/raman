@@ -1,22 +1,31 @@
 services:
   web:
     container_name: web
+    image: rumsan/raman-ui:main
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_SERVER_URL: http://localhost:3003
+        NEXT_PUBLIC_API_URL: http://localhost:3003/v1
     restart: always
     ports:
       - 3000:3000
+    env_file:
+      - ./apps/web/.env
     networks:
       - app_network
   api:
     container_name: api
+    image: rumsan/raman:main
     build:
       context: .
       dockerfile: ./apps/api/Dockerfile
     restart: always
+    env_file:
+      - ./apps/api/.env
     ports:
-      - 3001:3001
+      - 3003:3003
     networks:
       - app_network
 
@@ -24,4 +33,4 @@ services:
 # with each other, by using their container name as a hostname
 networks:
   app_network:
-    external: true
+    driver: bridge
