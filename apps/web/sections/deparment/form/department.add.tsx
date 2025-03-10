@@ -26,12 +26,17 @@ export function DepartmentAdd({ children }: { children: ReactNode }) {
     try {
       await addDepartment.mutateAsync(data);
       toast({
+        variant: 'success',
         description: 'Department added successfully',
       });
 
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add department:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to add department',
+      });
     }
   };
 
