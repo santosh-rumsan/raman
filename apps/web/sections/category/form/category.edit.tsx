@@ -10,7 +10,6 @@ import {
   DialogTitle,
 } from '@rumsan/shadcn-ui/components/dialog';
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
-import { useState } from 'react';
 import { CommonCategoryForm } from './categories.form';
 
 interface CategoryEditProps {
@@ -21,7 +20,6 @@ interface CategoryEditProps {
 export function CategoryEdit({ row, isOpen, onClose }: CategoryEditProps) {
   const { toast } = useToast();
   const editCategory = useEditCategory();
-  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const onSubmit = async (data: EditCategory) => {
     try {
@@ -31,9 +29,10 @@ export function CategoryEdit({ row, isOpen, onClose }: CategoryEditProps) {
         console.error('Category ID is undefined');
       }
       toast({
+        variant: 'success',
         description: 'Category updated successfully',
       });
-      setDialogOpen(false);
+      onClose()
     } catch (error) {
       console.error('Failed to edit category:', error);
       toast({
@@ -58,7 +57,7 @@ export function CategoryEdit({ row, isOpen, onClose }: CategoryEditProps) {
           defaultValues={{ name: row.name, group: row.group }}
           isEdit={true}
           onCancel={() => {
-            setDialogOpen(false);
+            onClose()
           }}
         />
       </DialogContent>

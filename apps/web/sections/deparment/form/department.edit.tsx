@@ -11,7 +11,6 @@ import {
 } from '@rumsan/shadcn-ui/components/dialog';
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 
-import { useState } from 'react';
 import { CommonDepartmentForm } from './department.form';
 
 interface DepartmentEditProps {
@@ -25,7 +24,6 @@ export function DepartmentEdit({
   isOpen,
   onClose,
 }: DepartmentEditProps): any {
-  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const editDepartment = useEditDepartment();
   const { toast } = useToast();
@@ -36,10 +34,10 @@ export function DepartmentEdit({
         await editDepartment.mutateAsync({ id: row.cuid, data });
 
         toast({
+          variant: 'success',
           description: 'Department edited successfully',
         });
 
-        // setDialogOpen(false);
         onClose()
       } else {
         console.error('Department or its ID is undefined');

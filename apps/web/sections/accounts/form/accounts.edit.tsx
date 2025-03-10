@@ -31,6 +31,7 @@ export function AccountEdit({ row, isOpen, onClose }: AccountEditProps) {
         console.error('Account ID is undefined');
       }
       toast({
+        variant: 'success',
         description: 'Account updated successfully',
       });
       setDialogOpen(false);

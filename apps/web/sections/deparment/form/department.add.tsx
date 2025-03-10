@@ -26,6 +26,7 @@ export function DepartmentAdd({ children }: { children: ReactNode }) {
     try {
       await addDepartment.mutateAsync(data);
       toast({
+        variant: 'success',
         description: 'Department added successfully',
       });
 

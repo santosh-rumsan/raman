@@ -24,6 +24,7 @@ export function AccountAdd({ children }: { children: ReactNode }) {
     try {
       await addAccount.mutateAsync(data);
       toast({
+        variant: 'success',
         description: 'Account added successfully',
       });
       setDialogOpen(false);
