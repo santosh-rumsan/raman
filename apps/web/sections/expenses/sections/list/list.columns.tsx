@@ -169,10 +169,8 @@ export function ListColumns<T>(): ColumnDef<T>[] {
         const source = row.original.source;
 
         return (
-          <div>
-            <span className="w-[250px] overflow-hidden text-ellipsis whitespace-nowrap">
-              {row.getValue('description')}
-            </span>
+          <div className="w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="truncate">{row.getValue('description')}</span>
           </div>
         );
       },

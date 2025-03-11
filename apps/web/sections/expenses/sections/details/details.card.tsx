@@ -1,6 +1,13 @@
 import { cn, formatCurrency, IconByName } from '@/utils';
+import {
+  EditableSelectField,
+  EditableTextArea,
+  EditableTextField,
+} from '@rumsan/raman-ui/components/editable-fields';
 import { useSelectLookUp } from '@rumsan/raman-ui/hooks/select-lookup.hook';
+import { useEditExpense } from '@rumsan/raman-ui/queries/expense.query';
 import { ExpenseExtended } from '@rumsan/raman/types';
+import { InvoiceType } from '@rumsan/raman/types/enums';
 import {
   Card,
   CardContent,
@@ -16,7 +23,9 @@ export default function ExpenseDetailCard({
   className?: string;
   expense: ExpenseExtended;
 }) {
-  const { lookupByCuid } = useSelectLookUp();
+  const { lookupByCuid, accounts, categories, departments, projects, users } =
+    useSelectLookUp();
+  const editExpense = useEditExpense();
   const iconColor =
     expense?.isVerified && expense?.isReconciled
       ? 'text-green-600'
@@ -24,94 +33,110 @@ export default function ExpenseDetailCard({
         ? 'text-yellow-600'
         : 'text-red-600';
   const category = lookupByCuid('categories', expense?.categoryId);
+
+  const handleUpdateField = async (field: string, value: string) => {
+    try {
+      await editExpense.mutateAsync({
+        id: expense.cuid,
+        data: { [field]: value },
+      });
+    } catch (error) {
+      console.error('Failed to update field:', error);
+    }
+  };
+
   return (
     <Card className={cn('relative rounded-lg shadow-sm', className)}>
-      <div className="absolute top-6 right-6 z-10">
-        <div className="flex flex-col items-end">
-          <span className="text-2xl font-bold">
-            {expense?.amount && formatCurrency(expense?.amount)}
-          </span>
-          <Label className="text-xs font-normal text-gray-400">
-            {expense?.currency}
-          </Label>
-        </div>
-      </div>
-      <CardHeader className="px-6 py-4">
-        <div className="flex items-center mb-3">
-          <div className="rounded-full border flex justify-center items-center bg-gray-100 w-[30px] h-[30px]">
-            <IconByName
-              name={category?.meta?.icon}
-              defaultIcon="HandCoins"
-              className={cn(iconColor, 'h-4 w-4')}
-              strokeWidth={2.5}
+      {/* <div className="absolute top-6 right-6 z-10 grid grid-cols-1 gap-2"></div> */}
+
+      <CardHeader className="grid gap-2">
+        <div className="flex items-center mb-3 col-span-8">
+          <div className="flex items-center w-full">
+            <div className="rounded-full border flex justify-center items-center bg-gray-100 w-[30px] h-[30px]">
+              <IconByName
+                name={category?.meta?.icon}
+                defaultIcon="HandCoins"
+                className={cn(iconColor, 'h-4 w-4')}
+                strokeWidth={2.5}
+              />
+            </div>
+            <EditableTextField
+              value={expense?.description || ''}
+              onSave={(value: string) =>
+                handleUpdateField('description', value)
+              }
+              className="ml-2 text-lg w-4/5 max-w-[600px]"
+              isEditable={!expense?.isVerified}
             />
           </div>
-          <h3 className="text-base ml-2 text-gray-700">
-            {expense?.description}
-          </h3>
+          <div className=" col-span-4 text-right">
+            <div className="flex flex-col items-end">
+              <span className="text-2xl font-bold">
+                {expense?.amount && formatCurrency(expense?.amount)}
+              </span>
+              <Label className="text-xs font-normal text-gray-400">
+                {expense?.currency}
+              </Label>
+            </div>
+          </div>
         </div>
       </CardHeader>
 
       <CardContent className="px-6">
         <div className="grid grid-cols-2 gap-6 gap-x-6">
-          <div>
-            <Label className="text-xs font-normal text-gray-400">
-              Payment Account
-            </Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.Account?.name}
-            </p>
-          </div>
+          <EditableSelectField
+            label="Payment Account"
+            value={expense?.accountId || ''}
+            options={accounts}
+            onSave={(value: string) => handleUpdateField('accountId', value)}
+            isEditable={!expense?.isVerified && !expense?.isReconciled}
+          />
 
-          <div>
-            <Label className="text-xs font-normal text-gray-400">
-              Category
-            </Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.Category?.name}
-            </p>
-          </div>
+          <EditableSelectField
+            label="Category"
+            value={expense?.categoryId || ''}
+            options={categories}
+            onSave={(value: string) => handleUpdateField('categoryId', value)}
+            isEditable={!expense?.isVerified}
+          />
 
-          <div>
-            <Label className="text-xs font-normal text-gray-400">
-              Department
-            </Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.Department?.name}
-            </p>
-          </div>
+          <EditableSelectField
+            label="Department"
+            value={expense?.departmentId || ''}
+            options={departments}
+            onSave={(value: string) => handleUpdateField('departmentId', value)}
+            isEditable={!expense?.isVerified}
+          />
 
-          <div>
-            <Label className="text-xs font-normal text-gray-400">Project</Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.Project?.name}
-            </p>
-          </div>
+          <EditableSelectField
+            label="Project"
+            value={expense?.projectId || ''}
+            options={projects}
+            onSave={(value: string) => handleUpdateField('projectId', value)}
+            isEditable={!expense?.isVerified}
+          />
 
-          <div>
-            <Label className="text-xs font-normal text-gray-400">
-              {' '}
-              Invoice Type
-            </Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.invoiceType}
-            </p>
-          </div>
+          <EditableSelectField
+            label="Invoice Type"
+            value={expense?.invoiceType || ''}
+            options={Object.values(InvoiceType).map((type) => ({
+              label: type,
+              value: type,
+            }))}
+            onSave={(value: string) => handleUpdateField('invoiceType', value)}
+            isEditable={!expense?.isVerified}
+          />
 
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Reconcilation Status
             </Label>
-            {/* <p className="text-black font-normal text-sm">
-              {expense?.isReconciled ? 'Reconciled' : 'Not Reconciled'}
-            </p> */}
-
             <p className="text-black font-normal text-sm flex items-center">
               {expense?.isReconciled ? (
                 <>
                   <CheckCircle
                     strokeWidth={2.5}
-                    className="text-green-600 h-4"
+                    className="text-green-600 h-4 mr-1"
                   />
                   Reconciled
                 </>
@@ -119,7 +144,7 @@ export default function ExpenseDetailCard({
                 <>
                   <FileQuestion
                     strokeWidth={2.5}
-                    className="text-amber-600 h-4"
+                    className="text-amber-600 h-4 mr-1"
                   />
                   Not Reconciled
                 </>
@@ -136,13 +161,16 @@ export default function ExpenseDetailCard({
                 <>
                   <CheckCircle
                     strokeWidth={2.5}
-                    className="text-green-600 h-4"
+                    className="text-green-600 h-4 mr-1"
                   />
                   Verified
                 </>
               ) : (
                 <>
-                  <XCircle strokeWidth={2.5} className="text-red-600 h-4" />
+                  <XCircle
+                    strokeWidth={2.5}
+                    className="text-red-600 h-4 mr-1"
+                  />
                   Unverified
                 </>
               )}
@@ -153,32 +181,38 @@ export default function ExpenseDetailCard({
             <Label className="text-xs font-normal text-gray-400">
               Verified By
             </Label>
-            <p className="text-black font-normal text-sm">
-              {expense?.verificationDetails?.verifiedBy &&
-                lookupByCuid('users', expense?.verificationDetails?.verifiedBy)
-                  ?.name}
-            </p>
+            {expense?.isVerified ? (
+              <EditableSelectField
+                value={expense?.verificationDetails?.verifiedBy || ''}
+                options={users}
+                onSave={(value: string) =>
+                  handleUpdateField('verificationDetails.verifiedBy', value)
+                }
+                isEditable={false}
+              />
+            ) : (
+              <p className="text-black font-normal text-sm">Not verified yet</p>
+            )}
           </div>
 
           {expense?.vatAmount && expense.vatAmount > 0 ? (
-            <>
-              <div>
-                <Label className="text-xs font-normal text-gray-400">
-                  VAT Amount
-                </Label>
-                <p className="text-black font-normal text-sm">
-                  {expense?.vatAmount}
-                </p>
-              </div>
-            </>
-          ) : (
-            ''
-          )}
+            <EditableTextField
+              label="VAT Amount"
+              value={expense?.vatAmount || ''}
+              type="number"
+              onSave={(value: string) => handleUpdateField('vatAmount', value)}
+              isEditable={!expense?.isVerified}
+            />
+          ) : null}
         </div>
 
         <div className="mt-6">
-          <Label className="text-xs font-normal text-gray-400">Remarks</Label>
-          <p className="text-black font-normal text-sm">{expense?.remarks}</p>
+          <EditableTextArea
+            label="Remarks"
+            value={expense?.remarks || ''}
+            onSave={(value: string) => handleUpdateField('remarks', value)}
+            isEditable={!expense?.isVerified}
+          />
         </div>
       </CardContent>
     </Card>
