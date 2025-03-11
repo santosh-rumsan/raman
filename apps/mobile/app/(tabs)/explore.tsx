@@ -5,7 +5,7 @@ import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@rumsan/shadcn-ui/components/IconSymbol';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 export default function TabTwoScreen() {
   return (
