@@ -37,6 +37,14 @@ export class CreateInvoiceDto implements CreateInvoice {
   currency: Currency;
 
   @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'User ID',
+    example: 'cm4cx64px0002qp1mh85t02f0',
+  })
+  userId: string;
+
+  @IsString()
   @IsOptional()
   @ApiProperty({
     description: 'Project ID',
@@ -51,14 +59,6 @@ export class CreateInvoiceDto implements CreateInvoice {
     example: 'cm4cx64qk0005qp1mc7tak2io',
   })
   categoryId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'User ID',
-    example: 'cm4cx64px0002qp1mh85t02f0',
-  })
-  userId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -149,9 +149,7 @@ export class CreateInvoiceDto implements CreateInvoice {
   accountId: string;
 }
 
-export class CreateInvoiceForInvoiceAppDto extends OmitType(CreateInvoiceDto, [
-  'userId',
-] as const) {}
+export class CreateMyInvoiceDto extends OmitType(CreateInvoiceDto, ['userId']) {}
 
 export class InvoiceListParamsDto {
   @IsString()

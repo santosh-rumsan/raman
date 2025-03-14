@@ -1,0 +1,31 @@
+meta {
+  name: MyReceipts - Create
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/me/invoices
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  amount: 4000
+  projectId: a75sjm5wznmmhyticpx42j1s
+  categoryId: tdh47ad6q3ognyfazwzy79mg
+  description: Test Receipt
+  invoiceType: VAT
+  receipts: @file(/Users/patti/Documents/Media/Photos/Ruchin/Sutu win.jpg)
+  vatAmount: 0.01
+  date: 2025-03-04
+  currency: GBP
+}
+
+script:post-response {
+  var data = res.getBody().data;
+  if(data)
+  {
+    bru.setVar("receipt-cuid", data.cuid);
+  }
+}

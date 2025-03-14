@@ -15,11 +15,11 @@ import { xRC } from '@rumsan/extensions/decorators';
 import { tRC } from '@rumsan/sdk/types';
 
 import { InvoiceFile } from '../decorator/invoiceBody';
-import { CreateInvoiceForInvoiceAppDto } from './dto/invoice.dto';
 import { ListInvoiceDto } from './dto/update-invoice.dto';
 
 import { APP } from '@rumsan/raman/constants';
 import { JwtGuard } from '@rumsan/user';
+import { CreateMyInvoiceDto } from './dto/invoice.dto';
 import { MyInvoiceService } from './myInvoice.service';
 
 @Controller('me/invoices')
@@ -30,13 +30,12 @@ export class MyInvoiceController {
   constructor(private readonly invoiceService: MyInvoiceService) { }
 
   @Post()
-  //@CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.INVOICE })
   @ApiConsumes('multipart/form-data')
   @InvoiceFile()
   @UseInterceptors(FilesInterceptor('receipts'))
   async createInvoice(
     @UploadedFiles() files: Array<Express.Multer.File>,
-    @Body() dto: CreateInvoiceForInvoiceAppDto,
+    @Body() dto: CreateMyInvoiceDto,
     @xRC() rc: tRC,
   ) {
     const res = await this.invoiceService.createInvoice(dto, files, rc);
@@ -44,14 +43,12 @@ export class MyInvoiceController {
   }
 
   @Get()
-  //@CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
-  getMyInvoice(@Query() query: ListInvoiceDto, @xRC() rc: tRC): any {
+  getMyInvoices(@Query() query: ListInvoiceDto, @xRC() rc: tRC): any {
     return this.invoiceService.findMyInvoice(query, rc);
   }
 
   @Get(':invoiceId')
-  //@CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })
-  getOneInvoice(@Param('invoiceId') invoiceId: string) {
-    return this.invoiceService.findOne(invoiceId);
+  getOneInvoice(@Param('invoiceId') invoiceId: string, @xRC() rc: tRC) {
+    return this.invoiceService.findOne(invoiceId, rc);
   }
 }

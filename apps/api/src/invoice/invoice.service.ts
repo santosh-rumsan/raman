@@ -150,9 +150,14 @@ export class InvoiceService {
     );
   }
 
-  async findOne(cuid: string) {
+  async findOne(cuid: string, userId?: string) {
+    const where = { cuid };
+    if (userId) {
+      where['userId'] = userId;
+    }
+
     const result = await this.prisma.invoice.findUnique({
-      where: { cuid },
+      where,
       include: {
         Category: {
           select: {
