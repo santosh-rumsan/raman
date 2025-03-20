@@ -31,6 +31,7 @@ export default function ExpenseAdd() {
   const [fileChoose, setFileChoose] = useState(false);
 
   const handleAddExpenses = async (data: Expense) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const payload = {

@@ -36,7 +36,7 @@ import { CurrencyAmountField } from '@rumsan/ui/components/currency-amount.field
 import { SelectField } from '@rumsan/ui/components/select.field';
 import { StandardFormField } from '@rumsan/ui/components/standard.field';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import ExpenseAttachment from './expense.attachments';
 import { Expense, expenseSchema } from './schema';
 
@@ -76,7 +76,7 @@ export default function ExpenseBase({
   const [fileName, setFileName] = useState<string | null>(null);
   const [showVat, setShowVat] = useState(
     defaultValues?.invoiceType === 'VAT' &&
-      defaultValues?.vatAmount !== undefined,
+    defaultValues?.vatAmount !== undefined,
   );
   const { accounts, categories, departments, projects } = useSelectLookUp();
   const projectList = useProjectList({ page: 1, limit: 500 });
@@ -176,9 +176,8 @@ export default function ExpenseBase({
                             <FormControl>
                               <Button
                                 variant="outline"
-                                className={`w-full pl-3 text-left font-normal ${
-                                  !field.value && 'text-muted-foreground'
-                                }`}
+                                className={`w-full pl-3 text-left font-normal ${!field.value && 'text-muted-foreground'
+                                  }`}
                               >
                                 {field.value ? (
                                   format(field.value, 'PPP')
@@ -339,7 +338,7 @@ export default function ExpenseBase({
               {mode === 'add' && (
                 <ExpenseAttachment
                   files={files ?? []}
-                  setFiles={setFiles || (() => {})}
+                  setFiles={setFiles || (() => { })}
                   id="attachments"
                 />
               )}
@@ -353,14 +352,31 @@ export default function ExpenseBase({
                     e.preventDefault();
                     history.back();
                   }}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Save Expense</Button>
+                <Button type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin h-5 w-5 text-white" />
+                      <span>Saving....</span>
+                    </>
+                  ) : (
+                    'Add Expense'
+                  )}
+                </Button>
               </div>
             </form>
           </Form>
         </CardContent>
+        {isSubmitting && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+            <Loader2 className="animate-spin h-10 w-10 text-gray-500" />
+          </div>
+        )}
       </Card>
     </div>
   );

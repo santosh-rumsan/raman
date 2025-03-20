@@ -46,6 +46,7 @@ export default function InvoiceAdd() {
   });
 
   const handleInvoiceSubmit = async (data: any) => {
+    if (isLoading) return;
     setIsLoading(true);
 
     try {
