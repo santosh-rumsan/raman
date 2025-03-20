@@ -20,7 +20,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useColumns } from './list.column';
 import { DataTableToolbar } from './list.toolbar';
 
-export function InvoiceList() {
+export function ReceiptList() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -86,7 +86,7 @@ export function InvoiceList() {
     },
   });
   const handleRowClick = (row: any) => {
-    router.push(PATHS.INVOICE.DETAILS(row.original.cuid));
+    router.push(PATHS.RECEIPT.DETAILS(row.original.cuid));
   };
 
   return (

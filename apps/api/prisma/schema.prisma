@@ -19,7 +19,7 @@ model Account {
   currency   String  @default("NPR")
   acctNumber String?
   bankCode   String?
-  balance    Float     @default(0)
+  balance    Float   @default(0)
 
   Expenses            Expense[]
   AccountTransactions AccountTransaction[]
@@ -147,10 +147,10 @@ model Expense {
   remarks      String?
   extras       Json?        @db.JsonB()
 
-  isReconciled     Boolean @default(false)
-  reconcileDetails Json?   @db.JsonB()
-  isVerified       Boolean @default(false)
-  verificationDetails  Json?   @db.JsonB()
+  isReconciled        Boolean @default(false)
+  reconcileDetails    Json?   @db.JsonB()
+  isVerified          Boolean @default(false)
+  verificationDetails Json?   @db.JsonB()
 
   AccountTransaction AccountTransaction[]
   Salaries           Salary[]
@@ -177,7 +177,7 @@ model SalaryDraft {
   numberOfEmployee     Int
   numberOfEmployeePaid Int         @default(0)
   totalAmountDue       Float?
-  totalAmountPaid      Float?        @default(0)
+  totalAmountPaid      Float?      @default(0)
 
   Salary Salary[]
 
@@ -197,7 +197,7 @@ model Salary {
   employeeId    String?
   salaryDraftId String?
   amountDue     Float?
-  amountPaid    Float?         @default(0)
+  amountPaid    Float?       @default(0)
   isPartial     Boolean      @default(false)
   expenseId     String?
   status        SalaryStatus @default(UNPAID)
@@ -237,20 +237,25 @@ model Invoice {
   description       String
   amount            Float
   categoryId        String
+  projectId         String?
   userId            String
   currency          Currency          @default(NPR)
-  status            InvoiceStatusType @default(PENDING)
-  projectId         String?
-  isApproved        Boolean           @default(false)
-  receipts          Json?             @db.JsonB()
-  approvalChallenge String?           @unique @default(cuid())
   invoiceType       InvoiceType?      @default(ESTIMATE)
   vatAmount         Float?
+  status            InvoiceStatusType @default(PENDING)
+  attachments       Json?             @db.JsonB()
   expenseId         String?
-  reason            String?
-  reimbursedDate    DateTime?
-  reimbursedRemarks String?
-  extras            Json?             @db.JsonB()
+  approvalChallenge String?           @unique @default(cuid())
+
+  approvalDetails  Json? @db.JsonB() //isApproved, date, remarks
+  reimburseDetails Json? @db.JsonB() //date, remarks
+  extras           Json? @db.JsonB()
+
+  // isApproved        Boolean           @default(false)
+  // approvalChallenge String?           @unique @default(cuid())
+  // reason            String?
+  // reimbursedDate    DateTime?
+  // reimbursedRemarks String?
 
   Category Category    @relation(fields: [categoryId], references: [cuid])
   Project  Project?    @relation(fields: [projectId], references: [cuid])
@@ -292,7 +297,7 @@ model UserDetails {
   cuid         String    @unique
   name         String?
   departmentId String?
-  salary       Float       @default(0)
+  salary       Float     @default(0)
   accountId    String?
   userType     UserType?
   managerId    String?

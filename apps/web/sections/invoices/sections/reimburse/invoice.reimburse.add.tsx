@@ -58,7 +58,7 @@
 //         accountId: data.accountId,
 //       };
 //       await mutateAsync({ id: invoiceId, data: payload });
-//       router.push(PATHS.INVOICE.DETAIL(invoiceId));
+//       router.push(PATHS.RECEIPT.DETAIL(invoiceId));
 //     } catch (error) {
 //       console.error('Error reimbursing invoice:', error);
 //     } finally {
@@ -67,7 +67,7 @@
 //   };
 
 //   const handleBackButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-//     router.push(PATHS.INVOICE.DETAIL(invoiceId));
+//     router.push(PATHS.RECEIPT.DETAIL(invoiceId));
 //   };
 
 //   return (

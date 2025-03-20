@@ -49,14 +49,18 @@ export class InvoiceListener {
     if (!receipt) return;
 
     const existingAttachments: FileAttachment[] =
-      (receipt.receipts as FileAttachment[]) || [];
+      (receipt.attachments as FileAttachment[]) || [];
 
     const { file } = await UploadFileToGdrive(attachment, this.gdrive);
 
     const updatedRec = await this.prisma.invoice.update({
       where: { cuid: receipt.cuid },
       data: {
-        receipts: mergeArraysByUniqueKey(existingAttachments, [file], 'hash'),
+        attachments: mergeArraysByUniqueKey(
+          existingAttachments,
+          [file],
+          'hash',
+        ),
       },
     });
 

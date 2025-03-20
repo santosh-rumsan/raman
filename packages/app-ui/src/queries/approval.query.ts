@@ -1,5 +1,5 @@
 import { ApiClient } from '@rumsan/raman/clients';
-import { Category, Invoice } from '@rumsan/raman/types';
+import { Category, Invoice, ReceiptApproval } from '@rumsan/raman/types';
 import { useRumsan } from '@rumsan/ui/providers/query.provider';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { queryClient } from './query.client';
@@ -9,37 +9,10 @@ export const useGetApproval = (id: string): UseQueryResult<Invoice, Error> => {
 
   return useQuery(
     {
-      queryKey: ['invoice', id],
+      queryKey: ['invoice_approval', id],
       queryFn: async () => {
         const { data } = await RsClient.Public.getInvoicesByChallange(id);
         return data;
-      },
-    },
-    queryClient,
-  );
-};
-
-export const useInvoiceRejection = () => {
-  const { RsClient } = useRumsan<ApiClient>();
-
-  return useMutation(
-    {
-      mutationFn: async (payload: { id: string; data: any }) => {
-        const { data } = await RsClient.Public.rejectInvoice(
-          payload.id,
-          payload.data,
-        );
-        return data;
-      },
-      onSuccess: (updatedInvoice) => {
-        queryClient?.setQueryData<Invoice[]>(
-          ['invoice_list'],
-          (oldData = []) => {
-            return oldData.map((invoice) =>
-              invoice.cuid === updatedInvoice.cuid ? updatedInvoice : invoice,
-            );
-          },
-        );
       },
     },
     queryClient,
@@ -51,22 +24,17 @@ export const useInvoiceApproval = () => {
 
   return useMutation(
     {
-      mutationFn: async (payload: { id: string; data: any }) => {
-        const { data } = await RsClient.Public.approveInvoice(
+      mutationFn: async (payload: { id: string; data: ReceiptApproval }) => {
+        const { data } = await RsClient.Public.approveOrRejectReceipt(
           payload.id,
           payload.data,
         );
         return data;
       },
       onSuccess: (updatedInvoice) => {
-        queryClient?.setQueryData<Invoice[]>(
-          ['invoice_list'],
-          (oldData = []) => {
-            return oldData.map((invoice) =>
-              invoice.cuid === updatedInvoice.cuid ? updatedInvoice : invoice,
-            );
-          },
-        );
+        queryClient?.invalidateQueries({
+          queryKey: ['invoice_approval'],
+        });
       },
     },
     queryClient,

@@ -4,7 +4,6 @@ import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
 import { FileAttachment } from '@rumsan/raman/types';
-import { InvoiceStatusType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { createIpfsHash } from '../utils/ipfs.utils';
@@ -59,7 +58,7 @@ export class InvoiceService {
     const newReceipt = await this.prisma.invoice.create({
       data: {
         ...data,
-        receipts: attachments,
+        attachments,
       },
     });
 
@@ -167,9 +166,11 @@ export class InvoiceService {
         Project: {
           select: {
             name: true,
+            owner: true,
             Department: {
               select: {
                 name: true,
+                owner: true,
               },
             },
           },
@@ -193,7 +194,7 @@ export class InvoiceService {
     if (!result) {
       throw new Error('Invoice not found');
     }
-    return result;
+    return { ...result, receipts: result.attachments };
   }
 
   async deleteInvoice(cuid: string, ctx: tRC) {
@@ -210,66 +211,6 @@ export class InvoiceService {
     });
   }
 
-  async reimburseInvoice(cuid: string, payload: UpdateInvoiceDto) {
-    const invoice = await this.findFirstOrThrow(cuid);
-    if (!invoice.isApproved) throw new Error('This invoice is not approved');
-
-    const project = await this.prisma.project.findUnique({
-      where: { cuid: invoice.projectId ?? '' },
-    });
-
-    await this.prisma.$transaction(async (prisma) => {
-      await prisma.invoice.update({
-        where: { cuid },
-        data: {
-          status: InvoiceStatusType.REIMBURSED,
-          categoryId: payload.categoryId,
-          description: payload.description,
-          reimbursedDate: payload.reimbursedDate,
-          reimbursedRemarks: payload.reimbursedRemarks,
-        },
-      });
-      const {
-        amount,
-        projectId,
-        categoryId,
-        invoiceType,
-        receipts,
-        description,
-        currency,
-        vatAmount,
-      } = invoice;
-
-      const expensePayload = {
-        amount: Number(amount),
-        projectId,
-        categoryId,
-        invoiceType,
-        source: 'Invoice Reimbursement',
-        remarks: payload?.reimbursedRemarks,
-        description,
-        currency,
-        vatAmount,
-        attachments: receipts,
-        departmentId: project?.departmentId,
-        date: payload.reimbursedDate,
-        accountId: payload.accountId,
-      };
-
-      const expenseResult = await prisma.expense.create({
-        data: expensePayload,
-      } as any);
-
-      await prisma.invoice.update({
-        where: { cuid },
-        data: {
-          expenseId: expenseResult.cuid,
-        },
-      });
-    });
-    return 'Invoice is reimbursed successfully';
-  }
-
   private async findFirstOrThrow(cuid: string, getDeleted = false) {
     const where = { cuid };
     if (!getDeleted) {
@@ -283,4 +224,64 @@ export class InvoiceService {
         throw new Error('Category does not exists');
       });
   }
+
+  // async reimburseInvoice(cuid: string, payload: UpdateInvoiceDto) {
+  //   const invoice = await this.findFirstOrThrow(cuid);
+  //   if (!invoice.isApproved) throw new Error('This invoice is not approved');
+
+  //   const project = await this.prisma.project.findUnique({
+  //     where: { cuid: invoice.projectId ?? '' },
+  //   });
+
+  //   await this.prisma.$transaction(async (prisma) => {
+  //     await prisma.invoice.update({
+  //       where: { cuid },
+  //       data: {
+  //         status: InvoiceStatusType.REIMBURSED,
+  //         categoryId: payload.categoryId,
+  //         description: payload.description,
+  //         reimbursedDate: payload.reimbursedDate,
+  //         reimbursedRemarks: payload.reimbursedRemarks,
+  //       },
+  //     });
+  //     const {
+  //       amount,
+  //       projectId,
+  //       categoryId,
+  //       invoiceType,
+  //       receipts,
+  //       description,
+  //       currency,
+  //       vatAmount,
+  //     } = invoice;
+
+  //     const expensePayload = {
+  //       amount: Number(amount),
+  //       projectId,
+  //       categoryId,
+  //       invoiceType,
+  //       source: 'Invoice Reimbursement',
+  //       remarks: payload?.reimbursedRemarks,
+  //       description,
+  //       currency,
+  //       vatAmount,
+  //       attachments: receipts,
+  //       departmentId: project?.departmentId,
+  //       date: payload.reimbursedDate,
+  //       accountId: payload.accountId,
+  //     };
+
+  //     const expenseResult = await prisma.expense.create({
+  //       data: expensePayload,
+  //     } as any);
+
+  //     await prisma.invoice.update({
+  //       where: { cuid },
+  //       data: {
+  //         expenseId: expenseResult.cuid,
+  //       },
+  //     });
+  //   });
+  //   return 'Invoice is reimbursed successfully';
+  // }
 }

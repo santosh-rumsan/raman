@@ -8,7 +8,6 @@ import {
 import { CreateInvoice } from '@rumsan/raman/types/invoice.type';
 
 import {
-  IsBoolean,
   IsDate,
   IsEnum,
   IsInt,
@@ -90,14 +89,6 @@ export class CreateInvoiceDto implements CreateInvoice {
   @IsString()
   @IsOptional()
   @ApiProperty({
-    description: 'Invoice rejected',
-    type: String,
-  })
-  reason: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
     description: 'Status Type',
     example: 'pending/verified',
   })
@@ -112,44 +103,14 @@ export class CreateInvoiceDto implements CreateInvoice {
   })
   date: Date;
 
-  @IsDate()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Reimbursed Date',
-    example: '25-11-2024',
-  })
-  reimbursedDate: Date;
-
-  @IsOptional()
-  @IsBoolean()
-  isApproved: boolean;
-
-  @IsOptional()
-  @IsString()
-  approvalChallenge: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    description: 'Remarks',
-    example: 'Testing Remarks',
-  })
-  reimbursedRemarks: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Expense ID',
-    example: 'sssssssss',
-  })
-  expenseId: string;
-
   @IsString()
   @IsOptional()
   accountId: string;
 }
 
-export class CreateMyInvoiceDto extends OmitType(CreateInvoiceDto, ['userId']) {}
+export class CreateMyInvoiceDto extends OmitType(CreateInvoiceDto, [
+  'userId',
+]) {}
 
 export class InvoiceListParamsDto {
   @IsString()

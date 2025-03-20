@@ -6,11 +6,11 @@ import { useAddInvoice } from '@rumsan/raman-ui/queries/invoice.query';
 import { InvoiceType } from '@rumsan/raman/types/enums';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -72,7 +72,7 @@ export default function InvoiceAdd() {
         }
       });
       const { cuid } = await saveInvoice(formData);
-      router.push(PATHS.INVOICE.DETAILS(cuid));
+      router.push(PATHS.RECEIPT.DETAILS(cuid));
     } catch (error) {
       console.error('Error submitting invoice:', error);
     } finally {

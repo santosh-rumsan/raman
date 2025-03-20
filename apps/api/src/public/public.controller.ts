@@ -1,9 +1,6 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  InvoiceApprovalDto,
-  InvoiceRejectionDto,
-} from '../invoice/dto/invoice-approval.dto';
+import { ReceiptApprovalDto } from 'src/invoice/dto/invoice-misc.dto';
 import { PublicService } from './public.service';
 
 @Controller('public')
@@ -26,16 +23,18 @@ export class PublicController {
   @Patch('invoices/:approvalChallenge/reject')
   reject(
     @Param('approvalChallenge') approvalChallenge: string,
-    @Body() dto: InvoiceRejectionDto,
+    @Body() dto: ReceiptApprovalDto,
   ) {
-    return this.approvalService.rejectInvoice(approvalChallenge, dto);
+    dto.status = 'REJECTED';
+    return this.approvalService.invoiceApproval(approvalChallenge, dto);
   }
 
   @Patch('invoices/:approvalChallenge/approve')
   approve(
     @Param('approvalChallenge') approvalChallenge: string,
-    @Body() dto: InvoiceApprovalDto,
+    @Body() dto: ReceiptApprovalDto,
   ) {
-    return this.approvalService.approveInvoice(approvalChallenge, dto);
+    dto.status = 'APPROVED';
+    return this.approvalService.invoiceApproval(approvalChallenge, dto);
   }
 }

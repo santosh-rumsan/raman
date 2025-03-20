@@ -3,17 +3,17 @@
 import { PATHS } from '@/routes/paths';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  useGetInvoice,
-  useInvoiceReimburse,
+    useGetInvoice,
+    useInvoiceReimburse,
 } from '@rumsan/raman-ui/queries/invoice.query';
 import { InvoiceExtended } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -67,7 +67,7 @@ export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
       };
 
       await reimburseInvoice({ id: cuid, data: payload });
-      router.push(PATHS.INVOICE.HOME);
+      router.push(PATHS.RECEIPT.HOME);
     } catch (error) {
       console.error('Error submitting invoice:', error);
     }

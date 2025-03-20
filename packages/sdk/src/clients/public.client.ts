@@ -1,9 +1,5 @@
 import { Category } from '@rumsan/raman/types';
-import {
-  Invoice,
-  InvoiceApprovalDto,
-  InvoiceRejectionDto,
-} from '@rumsan/raman/types/invoice.type';
+import { Invoice, ReceiptApproval } from '@rumsan/raman/types/invoice.type';
 import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -30,29 +26,33 @@ export class PublicClient {
     return formatResponse<Invoice>(response);
   }
 
-  async rejectInvoice(
+  async approveOrRejectReceipt(
     approvalChallenge: string,
-    payload: InvoiceRejectionDto,
+    payload: ReceiptApproval,
     config?: AxiosRequestConfig,
   ) {
-    const response = await this._client.patch(
-      `${this._prefix}/invoices/${approvalChallenge}/reject`,
-      payload,
-      config,
-    );
+    console.log(payload);
+    const action = payload.status === 'APPROVED' ? 'approve' : 'reject';
+    const url = `${this._prefix}/invoices/${approvalChallenge}/${action}`;
+    const response = await this._client.patch(url, payload, config);
     return formatResponse<Invoice>(response);
+  }
+
+  async rejectInvoice(
+    approvalChallenge: string,
+    payload: ReceiptApproval,
+    config?: AxiosRequestConfig,
+  ) {
+    payload.status = 'REJECTED';
+    return this.approveOrRejectReceipt(approvalChallenge, payload, config);
   }
 
   async approveInvoice(
     approvalChallenge: string,
-    payload: InvoiceApprovalDto,
+    payload: ReceiptApproval,
     config?: AxiosRequestConfig,
   ) {
-    const response = await this._client.patch(
-      `${this._prefix}/invoices/${approvalChallenge}/approve`,
-      payload,
-      config,
-    );
-    return formatResponse<Invoice>(response);
+    payload.status = 'APPROVED';
+    return this.approveOrRejectReceipt(approvalChallenge, payload, config);
   }
 }

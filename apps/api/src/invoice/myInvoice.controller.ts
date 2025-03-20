@@ -27,7 +27,7 @@ import { MyInvoiceService } from './myInvoice.service';
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard)
 export class MyInvoiceController {
-  constructor(private readonly invoiceService: MyInvoiceService) { }
+  constructor(private readonly invoiceService: MyInvoiceService) {}
 
   @Post()
   @ApiConsumes('multipart/form-data')
