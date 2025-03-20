@@ -24,11 +24,16 @@ export function CategoryAdd({ children }: { children: ReactNode }) {
     try {
       await addCategory.mutateAsync(data);
       toast({
+        variant: 'success',
         description: 'Category added successfully',
       });
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add category:', error);
+      toast({
+        variant: 'destructive',
+        description: 'Failed to add category',
+      });
     }
   };
 

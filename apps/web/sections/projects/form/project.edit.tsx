@@ -11,7 +11,6 @@ import {
 } from '@rumsan/shadcn-ui/components/dialog';
 import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 
-import { useState } from 'react';
 import { CommonProjectForm } from './project.form';
 
 interface ProjectEditProps {
@@ -21,7 +20,6 @@ interface ProjectEditProps {
 }
 
 export function ProjectEdit({ row, isOpen, onClose }: ProjectEditProps) {
-  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const editProject = useEditProject();
   const { toast } = useToast();
@@ -32,10 +30,11 @@ export function ProjectEdit({ row, isOpen, onClose }: ProjectEditProps) {
         await editProject.mutateAsync({ id: row.cuid, data });
 
         toast({
+          variant: 'success',
           description: 'Project edited successfully',
         });
 
-        setDialogOpen(false);
+        onClose()
       } else {
         console.error('project or its ID is undefined');
       }
@@ -68,7 +67,7 @@ export function ProjectEdit({ row, isOpen, onClose }: ProjectEditProps) {
           }}
           isEdit={true}
           onCancel={() => {
-            setDialogOpen(false);
+            onClose()
           }}
         />
       </DialogContent>
