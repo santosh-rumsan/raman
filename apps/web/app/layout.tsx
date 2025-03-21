@@ -1,3 +1,4 @@
+import { Toaster } from '@rumsan/shadcn-ui/components/toaster';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { Providers } from '@/providers';
@@ -32,7 +33,10 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+            <Toaster />
+        </Providers>
       </body>
     </html>
   );
