@@ -8,7 +8,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@rumsan/shadcn-ui/components/sidebar';
-import { Toaster } from '@rumsan/shadcn-ui/components/toaster';
 import { ReactNode } from 'react';
 
 export default function AdminLayout({
@@ -30,7 +29,6 @@ export default function AdminLayout({
               <div className="text-lg font-bold">{title}</div>
             </div>
           </header>
-          <Toaster />
           <>{children}</>
         </SidebarInset>
       </SidebarProvider>
