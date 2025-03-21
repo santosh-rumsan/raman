@@ -1,3 +1,3 @@
 export const AppStyles = {
-  button: 'm-auto text-sm h-8 px-2',
+  button: 'text-sm h-8 px-4',
 };

@@ -98,7 +98,7 @@ export const useInvoiceReimburse = () => {
   return useMutation(
     {
       mutationFn: async (payload: { id: string; data: any }) => {
-        const { data } = await RsClient.Invoice.reimburseInvoice(
+        const { data } = await RsClient.Invoice.reimburse(
           payload.id,
           payload.data,
         );

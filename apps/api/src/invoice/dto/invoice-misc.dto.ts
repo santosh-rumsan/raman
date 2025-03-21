@@ -7,6 +7,7 @@ import {
   IsDate,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -67,16 +68,25 @@ export class ReceiptApprovalDto implements ReceiptApproval {
 }
 
 export class ReceiptReimbursementDto implements ReceiptReimbursement {
-  @IsString()
-  @IsEnum(['REIMBURSED', 'REJECTED'])
-  @IsNotEmpty()
-  status: 'REIMBURSED' | 'REJECTED';
-
   @IsDate()
-  @IsOptional()
   date: Date;
 
+  @IsNumber()
+  @IsNotEmpty()
+  amount: number;
+
   @IsString()
+  @IsNotEmpty()
+  accountId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
+
+  @IsOptional()
+  @IsNumber()
+  bankTransferFees?: number;
+
   @IsOptional()
   remarks?: string;
 }

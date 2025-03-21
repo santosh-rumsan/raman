@@ -20,6 +20,7 @@ export interface ExpenseBase<T = string> {
   source?: string;
   remarks?: string | null;
   extras?: Record<string, T>;
+  bankTransferFees?: number | 0;
 }
 
 export type Expense<T = string> = ExpenseBase<T> &

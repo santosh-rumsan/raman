@@ -4,12 +4,20 @@ import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatabl
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
-type StatusColors = {
+export type ReceiptStatusColors = {
   PENDING: string;
   REJECTED: string;
   REIMBURSED: string;
   APPROVED: string;
 };
+
+export const invoiceStatusColors: ReceiptStatusColors = {
+  PENDING: 'text-yellow-600',
+  REJECTED: 'text-red-600',
+  REIMBURSED: 'text-green-500',
+  APPROVED: 'text-purple-600',
+};
+
 function extractInitials(fullName: string): string {
   if (!fullName) return 'RS';
 
@@ -22,13 +30,6 @@ function extractInitials(fullName: string): string {
 
   return firstInitial + lastInitial;
 }
-
-export const invoiceStatusColors: StatusColors = {
-  PENDING: 'bg-yellow-100 text-yellow-700',
-  REJECTED: 'bg-red-50 text-red-600',
-  REIMBURSED: 'bg-green-50 text-green-800',
-  APPROVED: 'bg-blue-50 text-blue-500',
-};
 
 export function useColumns<T>(): ColumnDef<T>[] {
   const { lookupByCuid } = useSelectLookUp();
@@ -133,10 +134,8 @@ export function useColumns<T>(): ColumnDef<T>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex space-x-2 h-7 w-[80px] bg-gray-100 items-center justify-center rounded-2xl p-2">
-            <span className="truncate text-xs text-gray-600">
-              {row.getValue('invoiceType')}
-            </span>
+          <div className="flex space-x-2 h-7 w-[80px] items-center justify-center p-2">
+            <span className="text-xs">{row.getValue('invoiceType')}</span>
           </div>
         );
       },
@@ -153,8 +152,10 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div
-            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${
-              invoiceStatusColors[row.getValue('status') as keyof StatusColors]
+            className={`flex space-x-2 h-7 w-[100px] items-center justify-center p-2 font-medium ${
+              invoiceStatusColors[
+                row.getValue('status') as keyof ReceiptStatusColors
+              ]
             }`}
           >
             <span className="truncate text-xs">{row.getValue('status')}</span>

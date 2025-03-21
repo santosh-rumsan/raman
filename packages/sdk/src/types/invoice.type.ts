@@ -14,7 +14,7 @@ export type InvoiceBase<T = string> = {
   categoryId: string;
   vatAmount?: number | 0;
   projectId?: string | null;
-  invoiceType?: InvoiceType;
+  invoiceType: InvoiceType;
   extras?: Record<string, T>;
 };
 
@@ -64,7 +64,11 @@ export type ReceiptApproval = {
 };
 
 export type ReceiptReimbursement = {
-  status: 'REIMBURSED' | 'REJECTED';
+  date: Date;
+  amount: number;
+  categoryId: string;
+  accountId: string;
+  bankTransferFees?: number;
   remarks?: string;
-  date?: Date;
+  attachments?: Record<string, any>[];
 };

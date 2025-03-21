@@ -1,39 +1,90 @@
+import { useWebSocketEvent } from '@/hooks/ws-event.hook';
+import { AppStyles } from '@/misc/app.style';
 import { useGetInvoice } from '@rumsan/raman-ui/queries/invoice.query';
+import { EVENTS } from '@rumsan/raman/constants/events';
 import { InvoiceExtended } from '@rumsan/raman/types';
+import { Button } from '@rumsan/shadcn-ui/components/button';
+import { useEffect, useState } from 'react';
+import { invoiceStatusColors, ReceiptStatusColors } from '../list/list.column';
 import ReceiptViewer from './attachment';
 import InvoiceDetails from './details';
+import ReimbursementForm from './invoice.reimburse';
+import { Reimbursement } from './schema';
 
 export default function ReceiptDetails(props: { receiptId: string }) {
+  const [showReimburseForm, setShowReimburseForm] = useState(false);
+  const [formData, setFormData] = useState<Reimbursement | null>(null);
   const receiptDetails = useGetInvoice(props.receiptId);
+  useWebSocketEvent(EVENTS.INVOICE.UPLOAD, receiptDetails.refetch);
   const receipt: InvoiceExtended =
     receiptDetails?.data as unknown as InvoiceExtended;
-  const statusColor =
-    receipt?.status === 'REJECTED' ? 'text-red-600' : 'text-green-600';
+
+  useEffect(() => {
+    if (!showReimburseForm) {
+      setFormData(null);
+    }
+  }, [showReimburseForm]);
 
   return (
     <div className="grid grid-cols-4 gap-6 px-6 h-screen">
-      <div className="col-span-2 relative">
-        <InvoiceDetails
-          className="col-span-2 sticky top-4 self-start"
-          receipt={receipt}
-        />
-        <div className="flex justify-end mt-2 w-full">
-          {receipt ? (
-            receipt?.status === 'REJECTED' || receipt?.status === 'APPROVED' ? (
-              <div className="mt-1 mr-4">
+      {receipt ? (
+        <>
+          <div className="col-span-2 relative">
+            <InvoiceDetails
+              className="col-span-2 sticky top-4 self-start"
+              receipt={receipt}
+            />
+            <div className="flex justify-between mt-4 w-full">
+              <div className="ml-1">
                 This receipt has been{' '}
-                <b className={statusColor}> {receipt?.status}</b>
+                <b
+                  className={
+                    invoiceStatusColors[
+                      receipt.status as keyof ReceiptStatusColors
+                    ]
+                  }
+                >
+                  {' '}
+                  {receipt?.status}
+                </b>
                 {'.'}
               </div>
+              {receipt ? (
+                receipt?.status === 'APPROVED' ? (
+                  !showReimburseForm ? (
+                    <Button
+                      className={`mr-1 bg-green-700 ${AppStyles.button}`}
+                      onClick={() => setShowReimburseForm(true)}
+                    >
+                      Reimburse
+                    </Button>
+                  ) : (
+                    <Button
+                      className={`mr-1 ${AppStyles.button}`}
+                      onClick={() => setShowReimburseForm(false)}
+                    >
+                      View Receipt
+                    </Button>
+                  )
+                ) : null
+              ) : null}
+            </div>
+          </div>
+          <div className="col-span-2 flex flex-col gap-4 overflow-y-auto">
+            {showReimburseForm ? (
+              <ReimbursementForm
+                cuid={receipt.cuid}
+                formData={formData}
+                setFormData={setFormData}
+              />
             ) : (
-              <div className="flex gap-2 py-2 px-2"></div>
-            )
-          ) : null}
-        </div>
-      </div>
-      <div className="col-span-2 flex flex-col gap-4 overflow-y-auto">
-        <ReceiptViewer receipt={receipt} />
-      </div>
+              <ReceiptViewer receipt={receipt} />
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="col-span-1 mx-auto">Receipt not found.</div>
+      )}
     </div>
   );
 }

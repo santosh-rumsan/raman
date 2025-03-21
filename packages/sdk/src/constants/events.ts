@@ -31,6 +31,7 @@ export const EVENTS = {
     UPDATED: 'invoice.updated',
     ARCHIVED: 'invoice.archived',
     UPLOAD: 'invoice.upload',
+    REIMBURSED: 'invoice.reimburse',
   },
   EXPENSE: {
     CREATED: 'expense.created',

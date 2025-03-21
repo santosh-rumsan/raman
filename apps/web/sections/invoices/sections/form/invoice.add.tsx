@@ -6,11 +6,11 @@ import { useAddInvoice } from '@rumsan/raman-ui/queries/invoice.query';
 import { InvoiceType } from '@rumsan/raman/types/enums';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@rumsan/shadcn-ui/components/card';
 import { Loader2, Receipt } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -30,7 +30,6 @@ const defaultValues: Invoice = {
   date: new Date(),
   receipts: [] as unknown as Record<string, string>[],
   vatAmount: undefined,
-  approvalChallenge: '',
 };
 
 export default function InvoiceAdd() {

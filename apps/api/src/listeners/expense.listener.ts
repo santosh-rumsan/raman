@@ -30,36 +30,28 @@ export class ExpenseListener {
   ) {
     if (!expense) return;
 
-    for (const attachment of attachments) {
-      await this.uploadAttachment(expense, attachment, meta?.clientId);
-    }
-  }
-
-  async uploadAttachment(
-    expense: Expense,
-    attachment: FileAttachmentWithBuffer,
-    clientId?: string,
-  ) {
-    if (!expense) return;
-
     const existingAttachments: FileAttachment[] =
       (expense.attachments as FileAttachment[]) || [];
 
-    const { file } = await UploadFileToGdrive(attachment, this.gdrive);
+    const newAttachments: FileAttachment[] = [];
+    for (const attachment of attachments) {
+      const { file } = await UploadFileToGdrive(attachment, this.gdrive);
+      newAttachments.push(file);
+    }
 
     const updatedRec = await this.prisma.expense.update({
       where: { cuid: expense.cuid },
       data: {
         attachments: mergeArraysByUniqueKey(
           existingAttachments,
-          [file],
+          newAttachments,
           'hash',
         ),
       },
     });
 
-    if (clientId) {
-      this.ws.sendToClient(clientId, EVENTS.EXPENSE.UPLOAD, {
+    if (meta?.clientId) {
+      this.ws.sendToClient(meta?.clientId, EVENTS.EXPENSE.UPLOAD, {
         cuid: updatedRec.cuid,
       });
     }

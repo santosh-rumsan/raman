@@ -76,7 +76,7 @@ export default function ExpenseBase({
   const [fileName, setFileName] = useState<string | null>(null);
   const [showVat, setShowVat] = useState(
     defaultValues?.invoiceType === 'VAT' &&
-    defaultValues?.vatAmount !== undefined,
+      defaultValues?.vatAmount !== undefined,
   );
   const { accounts, categories, departments, projects } = useSelectLookUp();
   const projectList = useProjectList({ page: 1, limit: 500 });
@@ -176,8 +176,9 @@ export default function ExpenseBase({
                             <FormControl>
                               <Button
                                 variant="outline"
-                                className={`w-full pl-3 text-left font-normal ${!field.value && 'text-muted-foreground'
-                                  }`}
+                                className={`w-full pl-3 text-left font-normal ${
+                                  !field.value && 'text-muted-foreground'
+                                }`}
                               >
                                 {field.value ? (
                                   format(field.value, 'PPP')
@@ -338,7 +339,7 @@ export default function ExpenseBase({
               {mode === 'add' && (
                 <ExpenseAttachment
                   files={files ?? []}
-                  setFiles={setFiles || (() => { })}
+                  setFiles={setFiles || (() => {})}
                   id="attachments"
                 />
               )}
@@ -356,9 +357,7 @@ export default function ExpenseBase({
                 >
                   Cancel
                 </Button>
-                <Button type="submit"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin h-5 w-5 text-white" />

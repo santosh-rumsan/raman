@@ -2,6 +2,7 @@ import {
   CreateInvoice,
   EditInvoice,
   Invoice,
+  ReceiptReimbursement,
 } from '@rumsan/raman/types/invoice.type';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
 import { formatResponse } from '@rumsan/sdk/utils';
@@ -63,16 +64,16 @@ export class InvoiceClient {
     return formatResponse<Invoice>(response);
   }
 
-  async reimburseInvoice(
+  async reimburse(
     id: string,
-    data: EditInvoice,
+    payload: ReceiptReimbursement,
     config?: AxiosRequestConfig,
   ) {
-    const response = await this._client.patch(
+    const { data } = await this._client.patch(
       `${this._prefix}/${id}/reimburse`,
-      data,
+      payload,
       config,
     );
-    return formatResponse<Invoice>(response);
+    return data;
   }
 }
