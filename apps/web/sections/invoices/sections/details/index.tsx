@@ -1,9 +1,11 @@
 import { useWebSocketEvent } from '@/hooks/ws-event.hook';
 import { AppStyles } from '@/misc/app.style';
+import { PATHS } from '@/routes/paths';
 import { useGetInvoice } from '@rumsan/raman-ui/queries/invoice.query';
 import { EVENTS } from '@rumsan/raman/constants/events';
 import { InvoiceExtended } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { invoiceStatusColors, ReceiptStatusColors } from '../list/list.column';
 import ReceiptViewer from './attachment';
@@ -12,6 +14,7 @@ import ReimbursementForm from './invoice.reimburse';
 import { Reimbursement } from './schema';
 
 export default function ReceiptDetails(props: { receiptId: string }) {
+  const router = useRouter();
   const [showReimburseForm, setShowReimburseForm] = useState(false);
   const [formData, setFormData] = useState<Reimbursement | null>(null);
   const receiptDetails = useGetInvoice(props.receiptId);
@@ -66,6 +69,15 @@ export default function ReceiptDetails(props: { receiptId: string }) {
                       View Receipt
                     </Button>
                   )
+                ) : receipt?.status === 'REIMBURSED' ? (
+                  <Button
+                    className={`mr-1 bg-blue-700 ${AppStyles.button}`}
+                    onClick={() =>
+                      router.push(PATHS.EXPENSE.DETAILS(receipt?.Expense.cuid))
+                    }
+                  >
+                    Go to Expense
+                  </Button>
                 ) : null
               ) : null}
             </div>

@@ -103,7 +103,7 @@ export default function ExpenseBase({
   const handleShowVat = (value: string) => {
     setShowVat(value === InvoiceType.VAT);
     if (value !== InvoiceType.VAT) {
-      form.setValue('vatAmount', '0');
+      form.setValue('vatAmount', null);
     }
   };
 

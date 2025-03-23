@@ -363,8 +363,6 @@ export class ExpenseService {
       where: { cuid },
     });
 
-    console.log(params);
-
     if (!expense) {
       throw new Error('Expense not found');
     }
@@ -375,7 +373,7 @@ export class ExpenseService {
         invoiceType: params.receiptType,
         isVerified: true,
         verificationDetails: {
-          approvedAt: new Date(),
+          date: new Date(),
           verifiedBy,
         },
       },

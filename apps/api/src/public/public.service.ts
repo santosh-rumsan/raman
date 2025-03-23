@@ -46,7 +46,6 @@ export class PublicService {
     approvalChallenge: string,
     payload: ReceiptApprovalDto,
   ) {
-    console.log('payload', payload);
     const status =
       payload.status === 'APPROVED'
         ? InvoiceStatusType.APPROVED

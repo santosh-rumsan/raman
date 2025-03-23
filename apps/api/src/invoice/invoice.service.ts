@@ -179,11 +179,7 @@ export class InvoiceService {
         },
         Expense: {
           select: {
-            Account: {
-              select: {
-                name: true,
-              },
-            },
+            cuid: true,
           },
         },
         User: {
@@ -248,16 +244,6 @@ export class InvoiceService {
       throw new Error('This invoice is not associated with any project');
 
     const receiptExpense = await this.prisma.$transaction(async (prisma) => {
-      await prisma.invoice.update({
-        where: { cuid },
-        data: {
-          status: InvoiceStatusType.REIMBURSED,
-          categoryId: payload.categoryId,
-          description: receipt.description,
-          reimburseDetails: { ...payload },
-        },
-      });
-
       const {
         amount,
         projectId,
@@ -269,11 +255,17 @@ export class InvoiceService {
         vatAmount,
       } = receipt;
 
+      const bankTransferFees = Number(payload.bankTransferFees) || 0;
+
       const expensePayload: Expense = {
         isVerified: true,
+        verificationDetails: {
+          date: new Date(),
+          verifiedBy: ctx.currentUser?.cuid,
+        },
         isReconciled: false,
         cuid: createId(),
-        amount: Number(payload.amount),
+        amount: payload.amount + bankTransferFees,
         projectId,
         categoryId: payload.categoryId,
         invoiceType,
@@ -286,12 +278,10 @@ export class InvoiceService {
         departmentId: project.departmentId,
         date: payload.date,
         accountId: payload.accountId,
-        //bankTransferFees: payload.bankTransferFees,
+        bankTransferFees,
         createdBy: ctx.currentUser?.cuid,
         updatedBy: ctx.currentUser?.cuid,
-        extras: {
-          invoiceId: cuid,
-        },
+        receiptId: receipt.cuid,
       };
 
       const expense = (await prisma.expense.create({
@@ -301,7 +291,10 @@ export class InvoiceService {
       receipt = (await prisma.invoice.update({
         where: { cuid },
         data: {
-          expenseId: expense.cuid,
+          status: InvoiceStatusType.REIMBURSED,
+          categoryId: payload.categoryId,
+          description: receipt.description,
+          reimburseDetails: { ...payload, expenseId: expensePayload.cuid },
         },
       })) as Invoice;
 

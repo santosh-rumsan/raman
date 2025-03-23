@@ -14,22 +14,9 @@ export type ReceiptStatusColors = {
 export const invoiceStatusColors: ReceiptStatusColors = {
   PENDING: 'text-yellow-600',
   REJECTED: 'text-red-600',
-  REIMBURSED: 'text-green-500',
-  APPROVED: 'text-purple-600',
+  REIMBURSED: 'text-purple-500',
+  APPROVED: 'text-green-600',
 };
-
-function extractInitials(fullName: string): string {
-  if (!fullName) return 'RS';
-
-  // Split the name into parts
-  const nameParts = fullName.trim().split(/\s+/);
-
-  // Extract initials from the first and last parts
-  const firstInitial = nameParts[0]?.[0]?.toUpperCase() || '';
-  const lastInitial = nameParts[nameParts.length - 1]?.[0]?.toUpperCase() || '';
-
-  return firstInitial + lastInitial;
-}
 
 export function useColumns<T>(): ColumnDef<T>[] {
   const { lookupByCuid } = useSelectLookUp();
@@ -46,15 +33,6 @@ export function useColumns<T>(): ColumnDef<T>[] {
         return (
           <div className="flex items-center space-x-2 gap-1">
             <div className="h-6 w-6  flex items-center justify-center rounded-full">
-              {/* <Avatar className="h-8 w-8 ">
-                <AvatarImage alt={userName?.name} />
-                <AvatarFallback
-                  style={{ fontWeight: 500 }}
-                  className="bg-blue-50"
-                >
-                  {extractInitials(userName?.name || '')}
-                </AvatarFallback>
-              </Avatar> */}
               <IconByName
                 name={item?.meta?.icon}
                 defaultIcon="ReceiptIndianRupee"

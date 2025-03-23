@@ -131,34 +131,36 @@ enum Currency {
 }
 
 model Expense {
-  cuid         String       @id @unique @default(cuid())
-  date         DateTime
-  description  String
-  departmentId String
-  categoryId   String
-  amount       Float
-  currency     Currency     @default(NPR)
-  vatAmount    Float?
-  projectId    String?
-  invoiceType  InvoiceType? @default(ESTIMATE)
-  accountId    String?
-  attachments  Json?        @db.JsonB()
-  source       String       @default("manual")
-  remarks      String?
-  extras       Json?        @db.JsonB()
+  cuid             String       @id @unique @default(cuid())
+  date             DateTime
+  description      String
+  departmentId     String
+  categoryId       String
+  amount           Float
+  currency         Currency     @default(NPR)
+  vatAmount        Float?
+  bankTransferFees Float?
+  projectId        String?
+  invoiceType      InvoiceType? @default(ESTIMATE)
+  accountId        String?
+  attachments      Json?        @db.JsonB()
+  source           String       @default("manual")
+  remarks          String?
+  extras           Json?        @db.JsonB()
 
   isReconciled        Boolean @default(false)
   reconcileDetails    Json?   @db.JsonB()
   isVerified          Boolean @default(false)
   verificationDetails Json?   @db.JsonB()
+  receiptId           String? @unique
 
   AccountTransaction AccountTransaction[]
   Salaries           Salary[]
-  Invoices           Invoice[]
   Project            Project?             @relation(fields: [projectId], references: [cuid])
   Category           Category?            @relation(fields: [categoryId], references: [cuid])
   Account            Account?             @relation(fields: [accountId], references: [cuid])
   Department         Department           @relation(fields: [departmentId], references: [cuid])
+  Receipt            Invoice?             @relation(fields: [receiptId], references: [cuid])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -242,31 +244,25 @@ model Invoice {
   currency          Currency          @default(NPR)
   invoiceType       InvoiceType?      @default(ESTIMATE)
   vatAmount         Float?
+  bankTransferFees  Float?
   status            InvoiceStatusType @default(PENDING)
   attachments       Json?             @db.JsonB()
-  expenseId         String?
   approvalChallenge String?           @unique @default(cuid())
 
   approvalDetails  Json? @db.JsonB() //isApproved, date, remarks
   reimburseDetails Json? @db.JsonB() //date, remarks
   extras           Json? @db.JsonB()
 
-  // isApproved        Boolean           @default(false)
-  // approvalChallenge String?           @unique @default(cuid())
-  // reason            String?
-  // reimbursedDate    DateTime?
-  // reimbursedRemarks String?
-
   Category Category    @relation(fields: [categoryId], references: [cuid])
   Project  Project?    @relation(fields: [projectId], references: [cuid])
   User     UserDetails @relation(fields: [userId], references: [cuid])
-  Expense  Expense?    @relation(fields: [expenseId], references: [cuid])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   createdBy String?
   updatedBy String?
+  Expense   Expense?
 
   @@map("tbl_invoices")
 }

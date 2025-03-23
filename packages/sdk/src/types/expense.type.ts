@@ -27,9 +27,10 @@ export type Expense<T = string> = ExpenseBase<T> &
   CommonFields & {
     cuid: string;
     attachments?: Record<string, any>[];
-    verificationDetails?: Record<string, string>;
+    verificationDetails?: ExpenseVerificationDetails | Record<string, any>;
     isVerified: boolean;
     reconcileDetails?: Record<string, string>;
+    receiptId?: string | null;
     isReconciled: boolean;
   };
 
@@ -40,6 +41,12 @@ export type ExpenseExtended<T = string> = Expense<T> & {
   Category?: Category;
   Account?: Account;
   Department?: Department;
+};
+
+export type ExpenseVerificationDetails = {
+  date: Date;
+  verifiedBy: string;
+  remarks?: string;
 };
 
 export type CreateExpense = ExpenseBase;

@@ -16,7 +16,7 @@ const defaultValues: Expense = {
   categoryId: '',
   departmentId: '',
   accountId: '',
-  vatAmount: '',
+  vatAmount: null,
   attachments: [],
   invoiceType: InvoiceType.ESTIMATE,
   date: new Date(),

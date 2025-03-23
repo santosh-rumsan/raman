@@ -16,11 +16,13 @@ export type InvoiceBase<T = string> = {
   projectId?: string | null;
   invoiceType: InvoiceType;
   extras?: Record<string, T>;
+  bankTransferFees?: number | 0;
 };
 
 export type InvoiceApprovalDetails = {
   isApproved: boolean;
   date: Date;
+  approvedBy: string;
   remarks?: string;
 };
 
@@ -71,4 +73,5 @@ export type ReceiptReimbursement = {
   bankTransferFees?: number;
   remarks?: string;
   attachments?: Record<string, any>[];
+  expenseId?: string;
 };

@@ -62,7 +62,6 @@ export default function ExpenseDetailCard({
               {expense?.Account?.name}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Category
@@ -71,7 +70,6 @@ export default function ExpenseDetailCard({
               {expense?.Category?.name}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Department
@@ -80,14 +78,12 @@ export default function ExpenseDetailCard({
               {expense?.Department?.name}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">Project</Label>
             <p className="text-black font-normal text-sm">
               {expense?.Project?.name}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               {' '}
@@ -97,7 +93,6 @@ export default function ExpenseDetailCard({
               {expense?.invoiceType}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Reconcilation Status
@@ -126,7 +121,6 @@ export default function ExpenseDetailCard({
               )}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Verification
@@ -148,7 +142,6 @@ export default function ExpenseDetailCard({
               )}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Verified By
@@ -160,19 +153,26 @@ export default function ExpenseDetailCard({
             </p>
           </div>
 
-          {expense?.vatAmount && expense.vatAmount > 0 ? (
-            <>
-              <div>
-                <Label className="text-xs font-normal text-gray-400">
-                  VAT Amount
-                </Label>
-                <p className="text-black font-normal text-sm">
-                  {expense?.vatAmount}
-                </p>
-              </div>
-            </>
+          <div>
+            <Label className="text-xs font-normal text-gray-400">
+              VAT Amount
+            </Label>
+            <p className="text-black font-normal text-sm">
+              {expense?.vatAmount}
+            </p>
+          </div>
+
+          {expense?.bankTransferFees && expense.bankTransferFees > 0 ? (
+            <div>
+              <Label className="text-xs font-normal text-gray-400">
+                Bank Transfer Fees
+              </Label>
+              <p className="text-black font-normal text-sm">
+                {expense?.bankTransferFees}
+              </p>
+            </div>
           ) : (
-            ''
+            <div></div>
           )}
         </div>
 
