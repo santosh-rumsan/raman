@@ -84,6 +84,7 @@ export default function ExpenseBase({
   const form = useForm<Expense>({
     resolver: zodResolver(expenseSchema),
     defaultValues: defaultValues,
+    mode:'onChange'
   });
 
   const onProjectChange = (value: string) => {
@@ -112,9 +113,14 @@ export default function ExpenseBase({
     handleShowVat(value);
   };
 
-  const handleSubmit = form.handleSubmit((data) => {
-    saveForm(data);
-  });
+    const handleSubmit = form.handleSubmit(
+    (data) => {
+      saveForm(data);
+    },
+    (errors) => {
+      console.log('Validation errors:', errors);
+    },
+  );
 
   useEffect(() => {
     if (!defaultValues) return;
@@ -309,6 +315,7 @@ export default function ExpenseBase({
                               e.target.value
                                 ? String(e.target.value)
                                 : undefined,
+                                form.trigger('vatAmount'),
                             )
                           }
                         />
