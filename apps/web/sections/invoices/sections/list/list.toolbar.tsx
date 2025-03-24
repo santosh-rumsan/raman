@@ -36,7 +36,7 @@ export function DataTableToolbar<TData>({
     }
   }, [debouncedSearchTerm]);
   const redirectToInvoiceCreate = () => {
-    router.push(PATHS.INVOICE.ADD);
+    router.push(PATHS.RECEIPT.ADD);
   };
 
   return (

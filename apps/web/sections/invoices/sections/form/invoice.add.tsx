@@ -30,7 +30,6 @@ const defaultValues: Invoice = {
   date: new Date(),
   receipts: [] as unknown as Record<string, string>[],
   vatAmount: undefined,
-  approvalChallenge: '',
 };
 
 export default function InvoiceAdd() {
@@ -46,6 +45,7 @@ export default function InvoiceAdd() {
   });
 
   const handleInvoiceSubmit = async (data: any) => {
+    if (isLoading) return;
     setIsLoading(true);
 
     try {
@@ -72,7 +72,7 @@ export default function InvoiceAdd() {
         }
       });
       const { cuid } = await saveInvoice(formData);
-      router.push(PATHS.INVOICE.DETAILS(cuid));
+      router.push(PATHS.RECEIPT.DETAILS(cuid));
     } catch (error) {
       console.error('Error submitting invoice:', error);
     } finally {

@@ -5,8 +5,8 @@ import {
   InvoiceType,
 } from '@rumsan/raman/types';
 import { Pagination } from '@rumsan/raman/types/pagination.type';
-import { formatResponse } from '@rumsan/sdk/utils';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { formatResponse } from './response.utils';
 
 export class ExpenseClient {
   private _client: AxiosInstance;

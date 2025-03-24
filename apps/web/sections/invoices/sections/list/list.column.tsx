@@ -4,30 +4,18 @@ import { DataTableColumnHeader } from '@rumsan/ui/components/data-table/datatabl
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
-type StatusColors = {
+export type ReceiptStatusColors = {
   PENDING: string;
   REJECTED: string;
   REIMBURSED: string;
   APPROVED: string;
 };
-function extractInitials(fullName: string): string {
-  if (!fullName) return 'RS';
 
-  // Split the name into parts
-  const nameParts = fullName.trim().split(/\s+/);
-
-  // Extract initials from the first and last parts
-  const firstInitial = nameParts[0]?.[0]?.toUpperCase() || '';
-  const lastInitial = nameParts[nameParts.length - 1]?.[0]?.toUpperCase() || '';
-
-  return firstInitial + lastInitial;
-}
-
-export const invoiceStatusColors: StatusColors = {
-  PENDING: 'bg-yellow-100 text-yellow-700',
-  REJECTED: 'bg-red-50 text-red-600',
-  REIMBURSED: 'bg-green-50 text-green-800',
-  APPROVED: 'bg-blue-50 text-blue-500',
+export const invoiceStatusColors: ReceiptStatusColors = {
+  PENDING: 'text-yellow-600',
+  REJECTED: 'text-red-600',
+  REIMBURSED: 'text-purple-500',
+  APPROVED: 'text-green-600',
 };
 
 export function useColumns<T>(): ColumnDef<T>[] {
@@ -45,15 +33,6 @@ export function useColumns<T>(): ColumnDef<T>[] {
         return (
           <div className="flex items-center space-x-2 gap-1">
             <div className="h-6 w-6  flex items-center justify-center rounded-full">
-              {/* <Avatar className="h-8 w-8 ">
-                <AvatarImage alt={userName?.name} />
-                <AvatarFallback
-                  style={{ fontWeight: 500 }}
-                  className="bg-blue-50"
-                >
-                  {extractInitials(userName?.name || '')}
-                </AvatarFallback>
-              </Avatar> */}
               <IconByName
                 name={item?.meta?.icon}
                 defaultIcon="ReceiptIndianRupee"
@@ -133,10 +112,8 @@ export function useColumns<T>(): ColumnDef<T>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="flex space-x-2 h-7 w-[80px] bg-gray-100 items-center justify-center rounded-2xl p-2">
-            <span className="truncate text-xs text-gray-600">
-              {row.getValue('invoiceType')}
-            </span>
+          <div className="flex space-x-2 h-7 w-[80px] items-center justify-center p-2">
+            <span className="text-xs">{row.getValue('invoiceType')}</span>
           </div>
         );
       },
@@ -153,8 +130,10 @@ export function useColumns<T>(): ColumnDef<T>[] {
       cell: ({ row }) => {
         return (
           <div
-            className={`flex space-x-2 h-7 w-[100px] items-center justify-center rounded-2xl p-2 ${
-              invoiceStatusColors[row.getValue('status') as keyof StatusColors]
+            className={`flex space-x-2 h-7 w-[100px] items-center justify-center p-2 font-medium ${
+              invoiceStatusColors[
+                row.getValue('status') as keyof ReceiptStatusColors
+              ]
             }`}
           >
             <span className="truncate text-xs">{row.getValue('status')}</span>

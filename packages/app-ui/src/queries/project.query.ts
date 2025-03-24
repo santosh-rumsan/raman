@@ -70,8 +70,6 @@ export const useAddProject = () => {
             'Content-Type': 'application/json',
           },
         });
-        console.log(data, 'data in query');
-
         return data;
       },
       onSuccess: (newProject) => {

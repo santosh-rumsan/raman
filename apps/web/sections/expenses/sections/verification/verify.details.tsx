@@ -139,7 +139,7 @@ export default function ExpenseVerificationDetails({
                 VAT Amount
               </Label>
               <p className="text-black font-normal text-sm">
-                {expense?.vatAmount}
+                {expense?.vatAmount || ''}
               </p>
             </div>
           )}

@@ -6,6 +6,11 @@ import { EVENTS } from '@rumsan/raman/constants';
 import { FileAttachment, InvoiceType } from '@rumsan/raman/types';
 import { Expense } from '@rumsan/raman/types/expense.type';
 import { tRC } from '@rumsan/sdk/types';
+import {
+  validateBankTransferFees,
+  validateVAT,
+  validateVATandBankTransferFees,
+} from 'src/utils/validate.utils';
 import { mergeArraysByUniqueKey } from '../utils/array.utils';
 import { GDriveService } from '../utils/gdrive.utils';
 import { createIpfsHash } from '../utils/ipfs.utils';
@@ -33,6 +38,14 @@ export class ExpenseService {
     files: Express.Multer.File[],
     ctx: tRC,
   ): Promise<Expense> {
+    console.log(expenseData);
+    validateVATandBankTransferFees(
+      expenseData.vatAmount,
+      expenseData.amount,
+      expenseData.invoiceType,
+      expenseData.bankTransferFees,
+    );
+
     const data: Expense = {
       cuid: createId(),
       ...expenseData,
@@ -87,7 +100,22 @@ export class ExpenseService {
   }
 
   async update(cuid: string, payload: UpdateExpenseDto, ctx: tRC) {
-    await this.findFirstOrThrow(cuid);
+    const expense = await this.findFirstOrThrow(cuid);
+
+    if (payload.vatAmount || payload.amount) {
+      validateVAT(
+        payload.vatAmount || expense.vatAmount || 0,
+        payload.amount || expense.amount,
+        payload.invoiceType || (expense.invoiceType as InvoiceType),
+      );
+    }
+
+    if (payload.bankTransferFees || payload.amount) {
+      validateBankTransferFees(
+        payload.bankTransferFees || expense.bankTransferFees || 0,
+        payload.amount || expense.amount,
+      );
+    }
 
     const data = {
       ...payload,
@@ -363,8 +391,6 @@ export class ExpenseService {
       where: { cuid },
     });
 
-    console.log(params);
-
     if (!expense) {
       throw new Error('Expense not found');
     }
@@ -375,7 +401,7 @@ export class ExpenseService {
         invoiceType: params.receiptType,
         isVerified: true,
         verificationDetails: {
-          approvedAt: new Date(),
+          date: new Date(),
           verifiedBy,
         },
       },

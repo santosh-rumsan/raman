@@ -11,7 +11,6 @@ import {
 import { EVENTS } from '@rumsan/raman/constants/events';
 import { Expense } from '@rumsan/raman/types';
 import { Button } from '@rumsan/shadcn-ui/components/button';
-import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { AttachmentCard } from './attachment.card';
 import ExpenseDetailCard from './details.card';
@@ -55,12 +54,6 @@ export default function ExpensesDetails({ expenseId }: ExpensesDetailsProps) {
         <div className="flex items-start gap-1"></div>
 
         <div className="flex gap-2">
-          {!(expense?.isVerified || expense?.isReconciled) && (
-            <Button className={AppStyles.button} onClick={handleEditButton}>
-              <SquarePen />
-              Edit
-            </Button>
-          )}
           {expense?.isVerified === false && (
             <Button
               className={AppStyles.button}

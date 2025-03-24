@@ -72,6 +72,12 @@ export class CreateExpenseDto implements CreateExpense {
   })
   vatAmount?: number;
 
+  @IsNumber()
+  @ApiProperty({
+    example: 5,
+  })
+  bankTransferFees?: number;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({

@@ -45,7 +45,7 @@ export default function InvoiceDetails({ invoiceId }: InvoiceDetailsProps) {
     if (invoice?.status === 'PENDING' || invoice?.status === 'REJECTED') {
       setIsRejected(!isRejected);
     } else {
-      router.push(PATHS.INVOICE.REIMBURSE(invoiceId));
+      router.push(PATHS.RECEIPT.REIMBURSE(invoiceId));
     }
   };
 

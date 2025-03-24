@@ -50,7 +50,7 @@ const data = {
   ],
   navMain: [
     {
-      title: 'Transactions',
+      title: 'Rumsan Finance',
       url: 'https://rumsan.com',
       icon: SquareTerminal,
       isActive: true,
@@ -61,7 +61,7 @@ const data = {
         },
         {
           title: 'Receipts',
-          url: '/invoices',
+          url: '/receipts',
         },
         {
           title: 'Bank Accounts',

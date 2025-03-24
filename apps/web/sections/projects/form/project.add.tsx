@@ -27,9 +27,9 @@ export function ProjectAdd({ children }: { children: ReactNode }) {
     try {
       await addProject.mutateAsync(data);
       toast({
+        variant: 'success',
         description: 'Project added successfully',
       });
-
       setDialogOpen(false);
     } catch (error) {
       console.error('Failed to add project:', error);

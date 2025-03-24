@@ -1,9 +1,8 @@
 {
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "always",
-    "editor.formatOnSave": "always"
+    "source.organizeImports": "always"
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "prettier.embeddedLanguageFormatting": "off",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,

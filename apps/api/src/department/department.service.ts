@@ -38,7 +38,6 @@ export class DepartmentService {
       this.eventMgr.emit(EVENTS.DEPARTMENT.CREATED, result);
       return result as Department;
     } catch (error) {
-      console.log(error?.message);
       throw error?.message;
     }
   }

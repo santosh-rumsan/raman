@@ -39,6 +39,7 @@ export const useExpenseList = (
         filters = booleanFilters(filters, 'isReconciled');
 
         const { response } = await RsClient.Expense.search(pagination, filters);
+
         return {
           data: response.data,
           meta: response.meta,
@@ -55,21 +56,13 @@ export const useAddExpense = () => {
   return useMutation(
     {
       mutationFn: async (payload: any) => {
-        const { data } = await RsClient.Expense.create(payload, {
+        const response = await RsClient.Expense.create(payload, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
-        return data;
-      },
-      onSuccess: (newExpense) => {
-        queryClient?.setQueryData<Expense[]>(
-          ['expense_list'],
-          (oldData = []) => {
-            return [newExpense, ...oldData];
-          },
-        );
+        return response;
       },
     },
     queryClient,
@@ -97,14 +90,6 @@ export const useUploadAttachments = () => {
         queryClient?.invalidateQueries({
           queryKey: ['expense_get'],
         });
-        queryClient?.setQueryData<Expense[]>(
-          ['expense_list'],
-          (oldData = []) => {
-            return oldData.map((expense) =>
-              expense.cuid === updatedExpense.cuid ? updatedExpense : expense,
-            );
-          },
-        );
       },
     },
     queryClient,
@@ -139,24 +124,16 @@ export const useEditExpense = () => {
   return useMutation(
     {
       mutationFn: async (payload: { id: string; data: any }) => {
-        const { data } = await RsClient.Expense.update(
+        const { response } = await RsClient.Expense.update(
           payload.id,
           payload.data,
         );
-        return data;
+        return response;
       },
       onSuccess: (updatedExpense) => {
         queryClient?.invalidateQueries({
           queryKey: ['expense_get'],
         });
-        queryClient?.setQueryData<Expense[]>(
-          ['expense_list'],
-          (oldData = []) => {
-            return oldData.map((expense) =>
-              expense.cuid === updatedExpense.cuid ? updatedExpense : expense,
-            );
-          },
-        );
       },
     },
     queryClient,
@@ -199,14 +176,6 @@ export const useVerifyExpense = () => {
         queryClient?.invalidateQueries({
           queryKey: ['expense_get'],
         });
-        queryClient?.setQueryData<Expense[]>(
-          ['expense_list'],
-          (oldData = []) => {
-            return oldData.map((expense) =>
-              expense.cuid === updatedExpense.cuid ? updatedExpense : expense,
-            );
-          },
-        );
       },
     },
     queryClient,

@@ -19,7 +19,7 @@ model Account {
   currency   String  @default("NPR")
   acctNumber String?
   bankCode   String?
-  balance    Float     @default(0)
+  balance    Float   @default(0)
 
   Expenses            Expense[]
   AccountTransactions AccountTransaction[]
@@ -131,34 +131,36 @@ enum Currency {
 }
 
 model Expense {
-  cuid         String       @id @unique @default(cuid())
-  date         DateTime
-  description  String
-  departmentId String
-  categoryId   String
-  amount       Float
-  currency     Currency     @default(NPR)
-  vatAmount    Float?
-  projectId    String?
-  invoiceType  InvoiceType? @default(ESTIMATE)
-  accountId    String?
-  attachments  Json?        @db.JsonB()
-  source       String       @default("manual")
-  remarks      String?
-  extras       Json?        @db.JsonB()
+  cuid             String       @id @unique @default(cuid())
+  date             DateTime
+  description      String
+  departmentId     String
+  categoryId       String
+  amount           Float
+  currency         Currency     @default(NPR)
+  vatAmount        Float?
+  bankTransferFees Float?
+  projectId        String?
+  invoiceType      InvoiceType? @default(ESTIMATE)
+  accountId        String?
+  attachments      Json?        @db.JsonB()
+  source           String       @default("manual")
+  remarks          String?
+  extras           Json?        @db.JsonB()
 
-  isReconciled     Boolean @default(false)
-  reconcileDetails Json?   @db.JsonB()
-  isVerified       Boolean @default(false)
-  verificationDetails  Json?   @db.JsonB()
+  isReconciled        Boolean @default(false)
+  reconcileDetails    Json?   @db.JsonB()
+  isVerified          Boolean @default(false)
+  verificationDetails Json?   @db.JsonB()
+  receiptId           String? @unique
 
   AccountTransaction AccountTransaction[]
   Salaries           Salary[]
-  Invoices           Invoice[]
   Project            Project?             @relation(fields: [projectId], references: [cuid])
   Category           Category?            @relation(fields: [categoryId], references: [cuid])
   Account            Account?             @relation(fields: [accountId], references: [cuid])
   Department         Department           @relation(fields: [departmentId], references: [cuid])
+  Receipt            Invoice?             @relation(fields: [receiptId], references: [cuid])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -177,7 +179,7 @@ model SalaryDraft {
   numberOfEmployee     Int
   numberOfEmployeePaid Int         @default(0)
   totalAmountDue       Float?
-  totalAmountPaid      Float?        @default(0)
+  totalAmountPaid      Float?      @default(0)
 
   Salary Salary[]
 
@@ -197,7 +199,7 @@ model Salary {
   employeeId    String?
   salaryDraftId String?
   amountDue     Float?
-  amountPaid    Float?         @default(0)
+  amountPaid    Float?       @default(0)
   isPartial     Boolean      @default(false)
   expenseId     String?
   status        SalaryStatus @default(UNPAID)
@@ -237,31 +239,30 @@ model Invoice {
   description       String
   amount            Float
   categoryId        String
+  projectId         String?
   userId            String
   currency          Currency          @default(NPR)
-  status            InvoiceStatusType @default(PENDING)
-  projectId         String?
-  isApproved        Boolean           @default(false)
-  receipts          Json?             @db.JsonB()
-  approvalChallenge String?           @unique @default(cuid())
   invoiceType       InvoiceType?      @default(ESTIMATE)
   vatAmount         Float?
-  expenseId         String?
-  reason            String?
-  reimbursedDate    DateTime?
-  reimbursedRemarks String?
-  extras            Json?             @db.JsonB()
+  bankTransferFees  Float?
+  status            InvoiceStatusType @default(PENDING)
+  attachments       Json?             @db.JsonB()
+  approvalChallenge String?           @unique @default(cuid())
+
+  approvalDetails  Json? @db.JsonB() //isApproved, date, remarks
+  reimburseDetails Json? @db.JsonB() //date, remarks
+  extras           Json? @db.JsonB()
 
   Category Category    @relation(fields: [categoryId], references: [cuid])
   Project  Project?    @relation(fields: [projectId], references: [cuid])
   User     UserDetails @relation(fields: [userId], references: [cuid])
-  Expense  Expense?    @relation(fields: [expenseId], references: [cuid])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   createdBy String?
   updatedBy String?
+  Expense   Expense?
 
   @@map("tbl_invoices")
 }
@@ -292,7 +293,7 @@ model UserDetails {
   cuid         String    @unique
   name         String?
   departmentId String?
-  salary       Float       @default(0)
+  salary       Float     @default(0)
   accountId    String?
   userType     UserType?
   managerId    String?

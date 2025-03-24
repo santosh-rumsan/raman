@@ -48,18 +48,15 @@ export const WebSocketProvider: React.FC<WebSocketContextProvider> = ({
     newSocket.on('connect', () => {
       setIsConnected(true);
       setClientId(newSocket.id as string);
-      console.log('Connected to WebSocket server:', newSocket.id);
     });
 
     // Handle disconnection and attempt reconnection
     newSocket.on('disconnect', () => {
       setIsConnected(false);
-      console.log('Disconnected from WebSocket server');
     });
 
     // Handle unauthorized connection attempts
     newSocket.on('unauthorized', (message) => {
-      console.log('Unauthorized connection:', message);
       newSocket.disconnect();
     });
 

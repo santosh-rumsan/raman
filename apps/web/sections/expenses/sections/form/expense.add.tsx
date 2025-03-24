@@ -3,6 +3,7 @@
 import { useExpenseStore } from '@/utils/expense.store';
 import { useAddExpense } from '@rumsan/raman-ui/queries/expense.query';
 import { InvoiceType } from '@rumsan/raman/types/enums';
+import { Expense as ExpenseType } from '@rumsan/raman/types/expense.type';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ExpenseBase from './expense.form';
@@ -16,7 +17,8 @@ const defaultValues: Expense = {
   categoryId: '',
   departmentId: '',
   accountId: '',
-  vatAmount: '',
+  vatAmount: 0,
+  bankTransferFees: 0,
   attachments: [],
   invoiceType: InvoiceType.ESTIMATE,
   date: new Date(),
@@ -31,6 +33,7 @@ export default function ExpenseAdd() {
   const [fileChoose, setFileChoose] = useState(false);
 
   const handleAddExpenses = async (data: Expense) => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     try {
       const payload = {
@@ -54,8 +57,12 @@ export default function ExpenseAdd() {
         }
       });
 
-      const { cuid } = await addExpense.mutateAsync(formData); // Query execution
-      router.push(`/expenses/${cuid}`);
+      const { success, response } = await addExpense.mutateAsync(formData); // Query execution
+
+      if (success) {
+        let exp = response.data as ExpenseType;
+        router.push(`/expenses/${exp.cuid}`);
+      }
     } catch (error) {
       console.error('Failed to add expense:', error);
     } finally {

@@ -1,6 +1,5 @@
 'use client';
 
-import { PATHS } from '@/routes/paths';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   useGetInvoice,
@@ -55,22 +54,21 @@ export default function InvoiceReimburse({ cuid }: InvoiceAddProps) {
   });
 
   const handleInvoiceSubmit = async (data: InvoiceExtended) => {
-    try {
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-      const payload = {
-        ...data,
-        reimbursedDate: data.reimbursedDate
-          ? new Date(data.reimbursedDate).toISOString()
-          : null,
-        reimbursedRemarks: data.reimbursedRemarks,
-        accountId: data.accountId,
-      };
-
-      await reimburseInvoice({ id: cuid, data: payload });
-      router.push(PATHS.INVOICE.HOME);
-    } catch (error) {
-      console.error('Error submitting invoice:', error);
-    }
+    // try {
+    //   // await new Promise((resolve) => setTimeout(resolve, 2000));
+    //   const payload = {
+    //     ...data,
+    //     reimbursedDate: data.reimbursedDate
+    //       ? new Date(data.reimbursedDate).toISOString()
+    //       : null,
+    //     reimbursedRemarks: data.reimbursedRemarks,
+    //     accountId: data.accountId,
+    //   };
+    //   await reimburseInvoice({ id: cuid, data: payload });
+    //   router.push(PATHS.RECEIPT.HOME);
+    // } catch (error) {
+    //   console.error('Error submitting invoice:', error);
+    // }
   };
 
   return (

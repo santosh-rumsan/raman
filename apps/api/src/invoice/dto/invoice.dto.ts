@@ -8,7 +8,6 @@ import {
 import { CreateInvoice } from '@rumsan/raman/types/invoice.type';
 
 import {
-  IsBoolean,
   IsDate,
   IsEnum,
   IsInt,
@@ -37,6 +36,14 @@ export class CreateInvoiceDto implements CreateInvoice {
   currency: Currency;
 
   @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'User ID',
+    example: 'cm4cx64px0002qp1mh85t02f0',
+  })
+  userId: string;
+
+  @IsString()
   @IsOptional()
   @ApiProperty({
     description: 'Project ID',
@@ -51,14 +58,6 @@ export class CreateInvoiceDto implements CreateInvoice {
     example: 'cm4cx64qk0005qp1mc7tak2io',
   })
   categoryId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'User ID',
-    example: 'cm4cx64px0002qp1mh85t02f0',
-  })
-  userId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -90,14 +89,6 @@ export class CreateInvoiceDto implements CreateInvoice {
   @IsString()
   @IsOptional()
   @ApiProperty({
-    description: 'Invoice rejected',
-    type: String,
-  })
-  reason: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
     description: 'Status Type',
     example: 'pending/verified',
   })
@@ -112,46 +103,14 @@ export class CreateInvoiceDto implements CreateInvoice {
   })
   date: Date;
 
-  @IsDate()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Reimbursed Date',
-    example: '25-11-2024',
-  })
-  reimbursedDate: Date;
-
-  @IsOptional()
-  @IsBoolean()
-  isApproved: boolean;
-
-  @IsOptional()
-  @IsString()
-  approvalChallenge: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    description: 'Remarks',
-    example: 'Testing Remarks',
-  })
-  reimbursedRemarks: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    description: 'Expense ID',
-    example: 'sssssssss',
-  })
-  expenseId: string;
-
   @IsString()
   @IsOptional()
   accountId: string;
 }
 
-export class CreateInvoiceForInvoiceAppDto extends OmitType(CreateInvoiceDto, [
+export class CreateMyInvoiceDto extends OmitType(CreateInvoiceDto, [
   'userId',
-] as const) {}
+]) {}
 
 export class InvoiceListParamsDto {
   @IsString()

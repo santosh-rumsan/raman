@@ -103,7 +103,6 @@ export const useDepartmentGet = (
       queryKey: ['department_get'],
       queryFn: async () => {
         const { data } = await RsClient.Department.get(id);
-        console.log(data, 'data');
         return data;
       },
     },

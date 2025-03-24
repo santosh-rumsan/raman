@@ -3,12 +3,8 @@ import { ExpenseBase } from '@rumsan/raman/types/expense.type';
 
 import * as z from 'zod';
 
-export type Expense = Omit<
-  ExpenseBase,
-  'amount' | 'vatAmount' | 'attachments'
-> & {
+export type Expense = Omit<ExpenseBase, 'amount' | 'attachments'> & {
   amount?: string | null;
-  vatAmount?: string | null;
   attachments?: string[];
 };
 
@@ -40,6 +36,10 @@ export const expenseSchema = z
     vatAmount: z.coerce.number({
       required_error: 'Amount is required',
       invalid_type_error: 'Amount must be a number',
+    }),
+    bankTransferFees: z.coerce.number({
+      required_error: 'Bank transfer fees is required',
+      invalid_type_error: 'Bank transfer fees must be a number',
     }),
   })
   .superRefine((data, ctx) => {

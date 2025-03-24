@@ -25,7 +25,7 @@ export function TitleProvider({ children }: { children: ReactNode }) {
   const [title, setTitle] = useState('');
 
   const throwError = (message: string) => {
-    console.log('Custom Mani Error:', message);
+    console.log(message);
   };
 
   return (

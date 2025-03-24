@@ -83,10 +83,6 @@ export function InvoiceForm({
     handleShowVat(value);
   };
 
-  const onAccountTypeChange = (value: any) => {
-    form.setValue('accountId', value);
-  };
-
   const handleSubmit = form.handleSubmit(
     (data) => {
       saveForm(data);

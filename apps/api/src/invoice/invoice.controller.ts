@@ -19,6 +19,7 @@ import { tRC } from '@rumsan/sdk/types';
 import { AbilitiesGuard, CheckAbilities, JwtGuard } from '@rumsan/user';
 
 import { InvoiceFile } from '../decorator/invoiceBody';
+import { ReceiptReimbursementDto } from './dto/invoice-misc.dto';
 import { CreateInvoiceDto } from './dto/invoice.dto';
 import {
   // ReimburseInvoiceDto,
@@ -32,7 +33,7 @@ import { InvoiceService } from './invoice.service';
 @ApiBearerAuth(APP.JWT_BEARER)
 @UseGuards(JwtGuard, AbilitiesGuard)
 export class InvoiceController {
-  constructor(private readonly invoiceService: InvoiceService) { }
+  constructor(private readonly invoiceService: InvoiceService) {}
 
   @Post()
   @CheckAbilities({ actions: ACTIONS.CREATE, subject: SUBJECTS.INVOICE })
@@ -60,13 +61,17 @@ export class InvoiceController {
 
   @Patch(':invoiceId/reimburse')
   @CheckAbilities({ actions: ACTIONS.UPDATE, subject: SUBJECTS.INVOICE })
+  @ApiConsumes('multipart/form-data')
+  @InvoiceFile()
+  @UseInterceptors(FilesInterceptor('attachments'))
   reimburseInvoice(
     @Param('invoiceId') invoiceId: string,
-    @Body() dto: UpdateInvoiceDto,
+    @UploadedFiles() files: Array<Express.Multer.File>, // Accept an array of files
+    @Body() dto: ReceiptReimbursementDto,
+    @xRC() rc: tRC,
   ) {
-    return this.invoiceService.reimburseInvoice(invoiceId, dto);
+    return this.invoiceService.reimburseInvoice(invoiceId, dto, files, rc);
   }
-
 
   @Get()
   @CheckAbilities({ actions: ACTIONS.READ, subject: SUBJECTS.INVOICE })

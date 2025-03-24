@@ -5,7 +5,7 @@ const ROOTS = {
   PROJECT: '/projects',
   CATEGORY: '/category',
   EXPENSE: '/expenses',
-  INVOICE: '/invoices',
+  RECEIPT: '/receipts',
   PUBLIC: '/public',
   ACCOUNTS: '/accounts',
 };
@@ -37,13 +37,13 @@ export const PATHS = {
     VERIFY: (cuid: string) => `${ROOTS.EXPENSE}/${cuid}/verification`,
     EDIT: (cuid: string) => `${ROOTS.EXPENSE}/${cuid}`,
   },
-  INVOICE: {
-    HOME: `${ROOTS.INVOICE}`,
-    ADD: `${ROOTS.INVOICE}/add`,
-    DETAILS: (cuid: string) => `${ROOTS.INVOICE}/${cuid}`,
-    EDIT: (cuid: string) => `${ROOTS.INVOICE}/${cuid}`,
+  RECEIPT: {
+    HOME: `${ROOTS.RECEIPT}`,
+    ADD: `${ROOTS.RECEIPT}/add`,
+    DETAILS: (cuid: string) => `${ROOTS.RECEIPT}/${cuid}`,
+    EDIT: (cuid: string) => `${ROOTS.RECEIPT}/${cuid}`,
     DISPOSITION: (challenge: string) =>
-      `${ROOTS.PUBLIC}/invoices/${challenge}/disposition`,
-    REIMBURSE: (cuid: string) => `${ROOTS.INVOICE}/${cuid}/reimburse`,
+      `${ROOTS.PUBLIC}/receipts/${challenge}/disposition`,
+    REIMBURSE: (cuid: string) => `${ROOTS.RECEIPT}/${cuid}/reimburse`,
   },
 };

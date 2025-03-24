@@ -14,6 +14,7 @@ import {
   CardHeader,
 } from '@rumsan/shadcn-ui/components/card';
 import { Label } from '@rumsan/shadcn-ui/components/label';
+import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 import { CheckCircle, FileQuestion, XCircle } from 'lucide-react';
 
 export default function ExpenseDetailCard({
@@ -23,6 +24,7 @@ export default function ExpenseDetailCard({
   className?: string;
   expense: ExpenseExtended;
 }) {
+  const { toast } = useToast();
   const { lookupByCuid, accounts, categories, departments, projects, users } =
     useSelectLookUp();
   const editExpense = useEditExpense();
@@ -34,12 +36,19 @@ export default function ExpenseDetailCard({
         : 'text-red-600';
   const category = lookupByCuid('categories', expense?.categoryId);
 
-  const handleUpdateField = async (field: string, value: string) => {
+  const handleUpdateField = async <T = string,>(field: string, value: T) => {
     try {
-      await editExpense.mutateAsync({
+      const { success } = await editExpense.mutateAsync({
         id: expense.cuid,
         data: { [field]: value },
       });
+      if (success) {
+        toast({
+          variant: 'success',
+          title: 'Success',
+          description: `${field} updated successfully`,
+        });
+      }
     } catch (error) {
       console.error('Failed to update field:', error);
     }
@@ -151,7 +160,6 @@ export default function ExpenseDetailCard({
               )}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Verification
@@ -176,7 +184,6 @@ export default function ExpenseDetailCard({
               )}
             </p>
           </div>
-
           <div>
             <Label className="text-xs font-normal text-gray-400">
               Verified By
@@ -195,15 +202,25 @@ export default function ExpenseDetailCard({
             )}
           </div>
 
-          {expense?.vatAmount && expense.vatAmount > 0 ? (
-            <EditableTextField
-              label="VAT Amount"
-              value={expense?.vatAmount || ''}
-              type="number"
-              onSave={(value: string) => handleUpdateField('vatAmount', value)}
-              isEditable={!expense?.isVerified}
-            />
-          ) : null}
+          <EditableTextField
+            label="VAT Amount"
+            value={expense?.vatAmount || 0}
+            type="number"
+            onSave={(value: string) =>
+              handleUpdateField<Number>('vatAmount', Number(value) || 0)
+            }
+            isEditable={!expense?.isVerified}
+          />
+
+          <EditableTextField
+            label="Bank Transfer Fees"
+            value={expense?.bankTransferFees || 0}
+            type="number"
+            onSave={(value: string) =>
+              handleUpdateField<Number>('bankTransferFees', Number(value) || 0)
+            }
+            isEditable={!expense?.isVerified}
+          />
         </div>
 
         <div className="mt-6">

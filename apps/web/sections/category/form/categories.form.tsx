@@ -83,7 +83,7 @@ export function CommonCategoryForm({
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select category name" />
+                    <SelectValue placeholder="Select group" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: {{url}}/invoices
+  url: {{url}}/me/invoices?page=1&limit=10
   body: none
   auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
 }

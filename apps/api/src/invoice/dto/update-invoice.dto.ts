@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateInvoiceDto } from './invoice.dto';
 
-export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) { }
+export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {}
 
 export class ListInvoiceDto {
   @ApiPropertyOptional({ example: 1 })
@@ -46,6 +46,4 @@ export class InvoiceFilterDto {
   @IsOptional()
   @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   status?: string[];
-
 }
-

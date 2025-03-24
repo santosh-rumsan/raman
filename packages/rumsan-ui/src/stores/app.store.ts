@@ -76,8 +76,6 @@ export const useRumsanAppStore = createZustandStore<RumsanAppStore>(
           isAuthenticated: true,
         });
       }
-
-      if (data.log) console.log(`RumsanAppStore: ${data.log}`);
       if (data.callback) data.callback();
     },
     setClientId: (clientId: string | null) => {
@@ -127,7 +125,6 @@ export const useRumsanAppStore = createZustandStore<RumsanAppStore>(
     },
 
     logout: () => {
-      console.log('xxxxxxxxxxx');
       set({
         accessToken: null,
         currentUser: null,

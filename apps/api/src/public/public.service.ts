@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@rumsan/prisma';
 import { InvoiceStatusType } from '@rumsan/raman/types/enums';
-import { UpdatePublicDto } from './dto/update-public.dto';
+import { ReceiptApprovalDto } from 'src/invoice/dto/invoice-misc.dto';
 
 @Injectable()
 export class PublicService {
@@ -24,6 +24,13 @@ export class PublicService {
           Project: {
             select: {
               name: true,
+              owner: true,
+              Department: {
+                select: {
+                  name: true,
+                  owner: true,
+                },
+              },
             },
           },
           User: true,
@@ -35,25 +42,23 @@ export class PublicService {
     }
   }
 
-  async rejectInvoice(approvalChallenge: string, payload: UpdatePublicDto) {
+  async invoiceApproval(
+    approvalChallenge: string,
+    payload: ReceiptApprovalDto,
+  ) {
+    const status =
+      payload.status === 'APPROVED'
+        ? InvoiceStatusType.APPROVED
+        : InvoiceStatusType.REJECTED;
     const updatedInvoice = await this.prisma.invoice.update({
       where: { approvalChallenge },
       data: {
-        reason: payload.reason,
-        isApproved: false,
-        status: InvoiceStatusType.REJECTED,
-      },
-    });
-    return updatedInvoice;
-  }
-
-  async approveInvoice(approvalChallenge: string, payload: UpdatePublicDto) {
-    const updatedInvoice = await this.prisma.invoice.update({
-      where: { approvalChallenge },
-      data: {
-        ...payload,
-        isApproved: true,
-        status: InvoiceStatusType.APPROVED,
+        status,
+        approvalDetails: {
+          date: new Date(),
+          isApproved: payload.status === 'APPROVED',
+          remarks: payload.remarks,
+        },
       },
     });
     return updatedInvoice;

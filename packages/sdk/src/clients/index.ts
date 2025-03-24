@@ -26,7 +26,7 @@ export class ApiClient extends RumsanClient {
           name: err?.response?.statusText,
           data: err?.response?.data,
         });
-        //throw err;
+        return err?.response;
       },
     );
     //this.apiClient = axios.create(config);

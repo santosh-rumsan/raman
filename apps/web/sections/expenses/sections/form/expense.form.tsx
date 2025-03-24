@@ -36,7 +36,7 @@ import { CurrencyAmountField } from '@rumsan/ui/components/currency-amount.field
 import { SelectField } from '@rumsan/ui/components/select.field';
 import { StandardFormField } from '@rumsan/ui/components/standard.field';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import ExpenseAttachment from './expense.attachments';
 import { Expense, expenseSchema } from './schema';
 
@@ -103,7 +103,7 @@ export default function ExpenseBase({
   const handleShowVat = (value: string) => {
     setShowVat(value === InvoiceType.VAT);
     if (value !== InvoiceType.VAT) {
-      form.setValue('vatAmount', '0');
+      form.setValue('vatAmount', 0);
     }
   };
 
@@ -290,34 +290,60 @@ export default function ExpenseBase({
                 </StandardFormField>
 
                 {/* VAT Amount */}
-                {showVat && (
-                  <FormField
-                    control={form.control}
-                    name="vatAmount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>VAT Amount</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="text-right"
-                            type="number"
-                            {...field}
-                            value={field.value ?? ''}
-                            onFocus={(e) => e.target.select()}
-                            onChange={(e) =>
-                              field.onChange(
-                                e.target.value
-                                  ? String(e.target.value)
-                                  : undefined,
-                              )
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
+
+                <FormField
+                  control={form.control}
+                  name="vatAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>VAT Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="text-right"
+                          type="number"
+                          {...field}
+                          value={field.value ?? ''}
+                          onFocus={(e) => e.target.select()}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? String(e.target.value)
+                                : undefined,
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="bankTransferFees"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bank Transfer Fees</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="text-right"
+                          type="number"
+                          {...field}
+                          value={field.value ?? ''}
+                          onFocus={(e) => e.target.select()}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? String(e.target.value)
+                                : undefined,
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               {/* Remarks */}
@@ -353,14 +379,29 @@ export default function ExpenseBase({
                     e.preventDefault();
                     history.back();
                   }}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
-                <Button type="submit">Save Expense</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin h-5 w-5 text-white" />
+                      <span>Saving....</span>
+                    </>
+                  ) : (
+                    'Add Expense'
+                  )}
+                </Button>
               </div>
             </form>
           </Form>
         </CardContent>
+        {isSubmitting && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+            <Loader2 className="animate-spin h-10 w-10 text-gray-500" />
+          </div>
+        )}
       </Card>
     </div>
   );

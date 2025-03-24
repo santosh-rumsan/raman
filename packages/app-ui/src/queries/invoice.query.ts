@@ -20,7 +20,6 @@ export const useInvoiceList = (
     {
       queryKey: ['invoice_list', { ...pagination, ...filters }],
       queryFn: async () => {
-        console.log(filters);
         const { response } = await RsClient.Invoice.search(pagination, filters);
         return {
           data: response.data,
@@ -98,7 +97,7 @@ export const useInvoiceReimburse = () => {
   return useMutation(
     {
       mutationFn: async (payload: { id: string; data: any }) => {
-        const { data } = await RsClient.Invoice.reimburseInvoice(
+        const { data } = await RsClient.Invoice.reimburse(
           payload.id,
           payload.data,
         );

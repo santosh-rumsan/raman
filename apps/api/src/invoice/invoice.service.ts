@@ -3,12 +3,14 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createId } from '@paralleldrive/cuid2';
 import { paginator, PaginatorTypes, PrismaService } from '@rumsan/prisma';
 import { EVENTS } from '@rumsan/raman/constants';
-import { FileAttachment } from '@rumsan/raman/types';
-import { InvoiceStatusType } from '@rumsan/raman/types/enums';
+import { Expense, FileAttachment } from '@rumsan/raman/types';
+import { InvoiceStatusType, InvoiceType } from '@rumsan/raman/types/enums';
 import { Invoice } from '@rumsan/raman/types/invoice.type';
 import { tRC } from '@rumsan/sdk/types';
 import { createIpfsHash } from '../utils/ipfs.utils';
 import { FileAttachmentWithBuffer } from '../utils/types';
+import { validateVAT } from '../utils/validate.utils';
+import { ReceiptReimbursementDto } from './dto/invoice-misc.dto';
 import { CreateInvoiceDto } from './dto/invoice.dto';
 import {
   InvoiceFilterDto,
@@ -37,6 +39,8 @@ export class InvoiceService {
       updatedBy: ctx.currentUser?.cuid,
     };
 
+    validateVAT(data.vatAmount || 0, data.amount, data.invoiceType);
+
     const attachmentsWithBuffer: FileAttachmentWithBuffer[] = [];
     const attachments: FileAttachment[] = [];
 
@@ -59,7 +63,7 @@ export class InvoiceService {
     const newReceipt = await this.prisma.invoice.create({
       data: {
         ...data,
-        receipts: attachments,
+        attachments,
       },
     });
 
@@ -77,6 +81,14 @@ export class InvoiceService {
   }
 
   async updateInvoice(cuid: string, payload: UpdateInvoiceDto, ctx: tRC) {
+    const receipt = await this.findFirstOrThrow(cuid);
+    if (payload.vatAmount || payload.amount) {
+      validateVAT(
+        payload.vatAmount || receipt.vatAmount || 0,
+        payload.amount || receipt.amount,
+        payload.invoiceType || (receipt.invoiceType as InvoiceType),
+      );
+    }
     const data = { ...payload, updatedBy: ctx.currentUserId };
     this.eventEmitter.emit(EVENTS.INVOICE.UPDATED, {
       data,
@@ -150,9 +162,14 @@ export class InvoiceService {
     );
   }
 
-  async findOne(cuid: string) {
+  async findOne(cuid: string, userId?: string) {
+    const where = { cuid };
+    if (userId) {
+      where['userId'] = userId;
+    }
+
     const result = await this.prisma.invoice.findUnique({
-      where: { cuid },
+      where,
       include: {
         Category: {
           select: {
@@ -162,20 +179,18 @@ export class InvoiceService {
         Project: {
           select: {
             name: true,
+            owner: true,
             Department: {
               select: {
                 name: true,
+                owner: true,
               },
             },
           },
         },
         Expense: {
           select: {
-            Account: {
-              select: {
-                name: true,
-              },
-            },
+            cuid: true,
           },
         },
         User: {
@@ -188,7 +203,7 @@ export class InvoiceService {
     if (!result) {
       throw new Error('Invoice not found');
     }
-    return result;
+    return { ...result, receipts: result.attachments };
   }
 
   async deleteInvoice(cuid: string, ctx: tRC) {
@@ -205,66 +220,6 @@ export class InvoiceService {
     });
   }
 
-  async reimburseInvoice(cuid: string, payload: UpdateInvoiceDto) {
-    const invoice = await this.findFirstOrThrow(cuid);
-    if (!invoice.isApproved) throw new Error('This invoice is not approved');
-
-    const project = await this.prisma.project.findUnique({
-      where: { cuid: invoice.projectId ?? '' },
-    });
-
-    await this.prisma.$transaction(async (prisma) => {
-      await prisma.invoice.update({
-        where: { cuid },
-        data: {
-          status: InvoiceStatusType.REIMBURSED,
-          categoryId: payload.categoryId,
-          description: payload.description,
-          reimbursedDate: payload.reimbursedDate,
-          reimbursedRemarks: payload.reimbursedRemarks,
-        },
-      });
-      const {
-        amount,
-        projectId,
-        categoryId,
-        invoiceType,
-        receipts,
-        description,
-        currency,
-        vatAmount,
-      } = invoice;
-
-      const expensePayload = {
-        amount: Number(amount),
-        projectId,
-        categoryId,
-        invoiceType,
-        source: 'Invoice Reimbursement',
-        remarks: payload?.reimbursedRemarks,
-        description,
-        currency,
-        vatAmount,
-        attachments: receipts,
-        departmentId: project?.departmentId,
-        date: payload.reimbursedDate,
-        accountId: payload.accountId,
-      };
-
-      const expenseResult = await prisma.expense.create({
-        data: expensePayload,
-      } as any);
-
-      await prisma.invoice.update({
-        where: { cuid },
-        data: {
-          expenseId: expenseResult.cuid,
-        },
-      });
-    });
-    return 'Invoice is reimbursed successfully';
-  }
-
   private async findFirstOrThrow(cuid: string, getDeleted = false) {
     const where = { cuid };
     if (!getDeleted) {
@@ -275,7 +230,115 @@ export class InvoiceService {
         where,
       })
       .catch((error) => {
-        throw new Error('Category does not exists');
+        throw new Error('Receipt does not exists');
       });
+  }
+
+  async reimburseInvoice(
+    cuid: string,
+    payload: ReceiptReimbursementDto,
+    files: Express.Multer.File[],
+    ctx: tRC,
+  ) {
+    const record = await this.findFirstOrThrow(cuid);
+    let receipt = record as Invoice;
+    if (receipt.status !== InvoiceStatusType.APPROVED)
+      throw new Error('This invoice is not approved');
+    if (!receipt.projectId)
+      throw new Error('This invoice is not associated with any project');
+
+    const project = await this.prisma.project.findUnique({
+      where: { cuid: receipt.projectId },
+    });
+
+    if (!project)
+      throw new Error('This invoice is not associated with any project');
+
+    const receiptExpense = await this.prisma.$transaction(async (prisma) => {
+      const {
+        amount,
+        projectId,
+        categoryId,
+        invoiceType,
+        attachments,
+        description,
+        currency,
+        vatAmount,
+      } = receipt;
+
+      const bankTransferFees = Number(payload.bankTransferFees) || 0;
+
+      const expensePayload: Expense = {
+        isVerified: true,
+        verificationDetails: {
+          date: new Date(),
+          verifiedBy: ctx.currentUser?.cuid,
+        },
+        isReconciled: false,
+        cuid: createId(),
+        amount: payload.amount + bankTransferFees,
+        projectId,
+        categoryId: payload.categoryId,
+        invoiceType,
+        source: 'Invoice Reimbursement',
+        remarks: payload.remarks,
+        description,
+        currency: receipt.currency,
+        vatAmount,
+        attachments,
+        departmentId: project.departmentId,
+        date: payload.date,
+        accountId: payload.accountId,
+        bankTransferFees,
+        createdBy: ctx.currentUser?.cuid,
+        updatedBy: ctx.currentUser?.cuid,
+        receiptId: receipt.cuid,
+      };
+
+      const expense = (await prisma.expense.create({
+        data: expensePayload,
+      })) as Expense;
+
+      receipt = (await prisma.invoice.update({
+        where: { cuid },
+        data: {
+          status: InvoiceStatusType.REIMBURSED,
+          categoryId: payload.categoryId,
+          description: receipt.description,
+          reimburseDetails: { ...payload, expenseId: expensePayload.cuid },
+        },
+      })) as Invoice;
+
+      return { expense, receipt };
+    });
+
+    const attachmentsWithBuffer: FileAttachmentWithBuffer[] = [];
+    const attachments: FileAttachment[] = [];
+    for (const file of files) {
+      const hash = await createIpfsHash(file.buffer);
+      const attachment: FileAttachment = {
+        hash,
+        url: 'pending',
+        filename: file.originalname,
+        size: file.size,
+        mimeType: file.mimetype,
+      };
+      attachments.push(attachment);
+      attachmentsWithBuffer.push({
+        ...attachment,
+        buffer: file.buffer,
+      });
+    }
+    this.eventEmitter.emit(
+      EVENTS.INVOICE.REIMBURSED,
+      receiptExpense,
+      attachmentsWithBuffer,
+      {
+        clientId: ctx.clientId,
+        currentUser: ctx.currentUser,
+      },
+    );
+
+    return receiptExpense;
   }
 }

@@ -1,0 +1,30 @@
+meta {
+  name: Receipts - Reimburse
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{url}}/invoices/l3cqm1semz4q8l7iexszzkgm/reimburse
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  amount: 20000
+  categoryId: tdh47ad6q3ognyfazwzy79mg
+  date: 2025-03-04
+  currency: GBP
+  accountId: yko6tl52n5sa2e1nv5ydrjaz
+  bankTransferFees: 200
+  remarks: test cool
+  attachments: @file(/Users/patti/Documents/rumee_kite.jpg)
+}
+
+script:post-response {
+  var data = res.getBody().data;
+  if(data)
+  {
+    bru.setVar("receipt-cuid", data.cuid);
+  }
+}

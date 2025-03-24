@@ -20,30 +20,6 @@ export const ReceiptCard = ({ className, invoice }: Props) => {
     }
   };
 
-  //   const handleAddAttachment = async () => {
-  //     const input = document.createElement('input');
-  //     input.type = 'file';
-  //     input.multiple = true;
-  //     input.onchange = (e: any) => {
-  //       const files = e.target.files;
-
-  //       if (files && addAttachmentHandler) {
-  //         console.log(files);
-  //         addAttachmentHandler(files);
-  //       }
-  //     };
-  //     input.click();
-  //   };
-
-  //   const handleDeleteAttachment = (hash: string) => {
-  //     if (
-  //       expense?.cuid &&
-  //       window.confirm('Are you sure you want to remove this attachment?')
-  //     ) {
-  //       deleteAttachmentHandler?.({ attachmentId: hash, id: expense.cuid });
-  //     }
-  //   };
-
   return (
     <Card className={cn('rounded-lg shadow-sm relative', className)}>
       {/* {loadingState && (
