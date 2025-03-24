@@ -36,7 +36,7 @@ export const expenseSchema = z
     vatAmount: z.coerce.number({
       required_error: 'Amount is required',
       invalid_type_error: 'Amount must be a number',
-    }),
+    }).nonnegative('Number must be greater than 0'),
     bankTransferFees: z.coerce.number({
       required_error: 'Bank transfer fees is required',
       invalid_type_error: 'Bank transfer fees must be a number',
