@@ -1,6 +1,5 @@
 'use client';
 
-import { RSErrorInfo } from '@rumsan/sdk';
 import { Button } from '@rumsan/shadcn-ui/components/button';
 import {
   Form,
@@ -11,6 +10,7 @@ import {
 } from '@rumsan/shadcn-ui/components/form';
 import { Input } from '@rumsan/shadcn-ui/components/input';
 import { Label } from '@rumsan/shadcn-ui/components/label';
+import { useToast } from '@rumsan/shadcn-ui/hooks/use-toast';
 import { useRequestOtp } from '@rumsan/ui/queries/auth.query';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -29,17 +29,27 @@ export const AuthLogin: React.FC<AuthLoginProps> = ({ setEmail }) => {
       email: '',
     },
   });
+  const {toast} = useToast();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setEmail(data.email);
-    await requestOtp(data.email)
-      .then((data: any) => {})
-      .catch((error) => {
-        const err = error?.response?.data as RSErrorInfo;
+    try {
+      await requestOtp(data.email)
+        .then((data: any) => {
+          toast({
+            variant: 'success',
+            description: 'OTP sent successfully',
+          });
+        })
+    }
+      catch(error) {
         form.setError('email', {
-          message: err.message || 'An unexpected error occurred.',
+          message: 'Invalid email address',
         });
-      });
+        toast({
+          variant: 'destructive',
+          description: 'Failed to send OTP',})
+      };
   };
 
   return (
@@ -53,7 +63,8 @@ export const AuthLogin: React.FC<AuthLoginProps> = ({ setEmail }) => {
               <p className="flex flex-col text-gray-500 text-sm text-center tracking-tight">
                 Enter your email to request OTP code
               </p>
-              <Label htmlFor="email" className="flex text-sm font-bold">
+              <Label htmlFor="email" className={`flex text-sm font-bold ${form.formState.errors.email ? 'text-red-500' : ''}`}
+>
                 Email
               </Label>
               <FormControl>
